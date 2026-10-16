@@ -15,6 +15,10 @@ const strings = {
     mk: 'Приближна позиција на Мостот на уметноста: ќе се прецизира по теренската проверка.',
     en: 'Approximate position on the Art Bridge: to be confirmed on site.',
   },
+  estimated: {
+    mk: 'Позицијата е проценета од фотографии и може да отстапува за неколку десетици метри.',
+    en: 'Position estimated from photos; it may be off by a few dozen metres.',
+  },
   loading: { mk: 'Се вчитува…', en: 'Loading…' },
   photo: { mk: 'Фотографија: Wikimedia Commons', en: 'Photo: Wikimedia Commons' },
 } satisfies Record<string, Record<Lang, string>>

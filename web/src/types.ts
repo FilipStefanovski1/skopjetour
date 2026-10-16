@@ -16,6 +16,7 @@ export interface StatueProps {
   side: 'left' | 'right' | 'centre' | null
   position: 'mapped' | 'walked' | 'approximate'
   themes: string[]
+  aliases: string[]
   sources: string[]
 }
 

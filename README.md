@@ -6,7 +6,10 @@ Every statue in the city on one map, in Macedonian and English, grouped into the
 
 ## What works now
 
-- City map of **114 statues and monuments** merged from OpenStreetMap, Wikidata and English Wikipedia's Art Bridge list
+- City map of **132 statues and monuments** merged from OpenStreetMap, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list
+- All 27 named Art Bridge statues, with photos of the statues themselves
+
+See [TODO.md](TODO.md) for what's done and what's left.
 - Five themed routes: Antiquity, Letters and faith, Revolutionaries, Artists, Everyday Skopje
 - Statue card with a Wikimedia Commons photo and the Wikipedia summary in MK or EN
 - Installable offline web app (PWA): viewed map tiles, photos and summaries are cached
@@ -27,7 +30,7 @@ npm run data          # fetch OSM, Wikidata and Wikipedia; caches raw responses 
 npm run data:offline  # rebuild from the cache only
 ```
 
-The script writes `web/public/statues.geojson` and `web/public/themes.json`.
+The script writes `web/public/statues.geojson` and `web/public/themes.json`. Statues found in several sources are merged by Wikidata ID, by name (Cyrillic and Latin spellings are folded together) within 150 m, or by a reviewed pair in `data/same.json`. Positions estimated from Commons photos are marked `"position": "approximate"`.
 
 ### After the Art Bridge walk
 
@@ -61,6 +64,7 @@ The card prefers this over the Wikipedia summary.
 | --- | --- |
 | OpenStreetMap | ODbL |
 | Wikidata | CC0 |
+| Wikimedia Commons category names and coordinates | CC BY-SA 4.0 (page content) |
 | Wikipedia text | CC BY-SA 4.0 |
 | Wikimedia Commons photos | per file (shown with attribution) |
 

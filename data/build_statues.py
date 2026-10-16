@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build web/public/statues.geojson from OpenStreetMap, Wikidata and the Art Bridge list.
+"""Build web/public/statues.geojson from OpenStreetMap, Wikidata, Wikimedia Commons and the Art Bridge list.
 
 Usage:
     python3 data/build_statues.py            # fetch fresh data, cache it in data/raw/
@@ -21,7 +21,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "raw"
 OUT = ROOT.parent / "web" / "public" / "statues.geojson"
-UA = "skopje-statues/0.1 (Hacktoberfest 2026 Fix My City)"
+UA = "skopje-statues/0.2 (Hacktoberfest 2026 Fix My City; https://github.com/FilipStefanovski1)"
 
 # Greater Skopje (south, west, north, east) and the city centre.
 BBOX = (41.94, 21.30, 42.06, 21.56)
@@ -30,6 +30,9 @@ ART_BRIDGE_NAME = "Мост на уметноста"
 
 OVERPASS_URLS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"]
 WDQS_URL = "https://query.wikidata.org/sparql"
+COMMONS_API = "https://commons.wikimedia.org/w/api.php"
+# Commons category trees that hold one subcategory per statue in the city.
+COMMONS_ROOTS = ["Category:Statues in Skopje", "Category:Sculptures in Skopje", "Category:Busts in Skopje"]
 
 # Wikidata classes: statue, sculpture, monument, memorial, and one found in the first test query.
 WD_CLASSES = ["Q179700", "Q860861", "Q4989906", "Q5003624", "Q1779653"]
@@ -64,8 +67,8 @@ def fetch_osm():
     b = f"{s},{w},{n},{e}"
     query = f"""[out:json][timeout:120];
 (
-  nwr({b})["tourism"="artwork"]["artwork_type"~"statue|sculpture|bust"];
-  nwr({b})["historic"="memorial"]["memorial"~"statue|bust|sculpture"];
+  nwr({b})["tourism"="artwork"]["artwork_type"~"statue|sculpture|bust|stele|relief"];
+  nwr({b})["historic"="memorial"]["memorial"!~"plaque|stolperstein|street_art|cannon|blue_plaque"];
   nwr({b})["historic"="monument"];
 );
 out tags center;
@@ -137,16 +140,93 @@ def fetch_art_bridge():
     return people
 
 
+def commons(**params):
+    args = ["-G", COMMONS_API]
+    for k, v in {**params, "format": "json"}.items():
+        args += ["--data-urlencode", f"{k}={v}"]
+    return curl(args)
+
+
+# A category whose name reads as a group ("Statues in Skopje", "City Park statues (Skopje)")
+# is walked into; anything else is taken as one statue.
+COMMONS_GROUP = re.compile(r"^Category:(Statues|Sculptures|Busts|Reliefs|Equestrian statues)\b"
+                           r"|statues \(Skopje\)$|sculptures \(Skopje\)$|in Skopje$", re.I)
+
+
+def fetch_commons():
+    """One record per statue category under COMMONS_ROOTS: its English name, Wikidata item,
+    a location (the category's own, else the median of its photos' locations) and a photo."""
+    seen, queue, leaves = set(), list(COMMONS_ROOTS), []
+    depth = {c: 0 for c in queue}
+    while queue:
+        cat = queue.pop(0)
+        if cat in seen:
+            continue
+        seen.add(cat)
+        if COMMONS_GROUP.search(cat) and depth[cat] < 3:
+            members = commons(action="query", list="categorymembers", cmtitle=cat, cmtype="subcat", cmlimit=200)
+            for m in members["query"]["categorymembers"]:
+                depth.setdefault(m["title"], depth[cat] + 1)
+                queue.append(m["title"])
+        else:
+            leaves.append(cat)
+
+    records = []
+    for i in range(0, len(leaves), 50):
+        res = commons(action="query", titles="|".join(leaves[i:i + 50]), prop="coordinates|pageprops",
+                      ppprop="wikibase_item", coprimary="all")
+        for page in res["query"]["pages"].values():
+            co = (page.get("coordinates") or [None])[0]
+            records.append({"category": page["title"], "qid": page.get("pageprops", {}).get("wikibase_item"),
+                            "lat": co and co["lat"], "lon": co and co["lon"], "located_by": co and "category"})
+
+    for r in records:
+        files = commons(action="query", generator="categorymembers", gcmtitle=r["category"], gcmtype="file",
+                        gcmlimit=40, prop="coordinates", coprimary="all", colimit="max")
+        pages = sorted(files.get("query", {}).get("pages", {}).values(), key=lambda p: p["title"])
+        r["image"] = pages[0]["title"] if pages else None
+        if r["lat"] is None:
+            pts = [(c["lat"], c["lon"]) for p in pages for c in p.get("coordinates", [])]
+            if pts:
+                lats, lons = sorted(p[0] for p in pts), sorted(p[1] for p in pts)
+                r.update(lat=lats[len(lats) // 2], lon=lons[len(lons) // 2], located_by="photos")
+
+    qids = sorted({r["qid"] for r in records if r["qid"]})
+    labels = {}
+    for i in range(0, len(qids), 50):
+        ents = curl(["-G", "https://www.wikidata.org/w/api.php", "--data-urlencode", "action=wbgetentities",
+                     "--data-urlencode", "ids=" + "|".join(qids[i:i + 50]), "--data-urlencode", "props=labels",
+                     "--data-urlencode", "languages=mk|en", "--data-urlencode", "format=json"])["entities"]
+        labels.update({q: {l: v["value"] for l, v in e.get("labels", {}).items()} for q, e in ents.items()})
+    for r in records:
+        r["labels"] = labels.get(r["qid"], {})
+    return records
+
+
 # ---------------------------------------------------------------- helpers
 
+MK_TO_LATIN = dict(zip("абвгдѓежзѕијклљмнњопрстќуфхцчџш",
+                       ["a", "b", "v", "g", "d", "gj", "e", "z", "z", "dz", "i", "j", "k", "l", "lj", "m", "n",
+                        "nj", "o", "p", "r", "s", "t", "kj", "u", "f", "h", "c", "c", "dz", "s"]))
+# Romanisations of the same Macedonian name vary (Delchev / Delčev / Делчев): fold them together.
+SPELLING_FOLDS = [("dzh", "dz"), ("zh", "z"), ("ch", "c"), ("sh", "s"), ("kh", "h"), ("ts", "c"), ("y", "j")]
+# Names Wikipedia and Commons give the same Art Bridge statue that no rule can fold together.
+ART_BRIDGE_ALIASES = {"miladinovci": "miladinov brothers"}
+
+
 def norm(name):
-    """Comparable form of a statue or person name across OSM and Wikidata spellings."""
+    """Comparable form of a statue or person name across OSM, Wikidata and Commons spellings."""
     if not name:
         return ""
-    s = unicodedata.normalize("NFKD", name.lower())
+    s = "".join(MK_TO_LATIN.get(c, c) for c in name.lower())
+    s = unicodedata.normalize("NFKD", s)
     s = "".join(c for c in s if not unicodedata.combining(c))
-    s = re.sub(r"[„“”\"'()]", " ", s)
-    s = re.sub(r"\b(споменик на|споменик|спомен-обележје на|statue of|monument of|monument to|monument)\b", " ", s)
+    for a, b in SPELLING_FOLDS:
+        s = s.replace(a, b)
+    s = re.sub(r"[„“”\"'()\-–—,.]", " ", s)
+    s = re.sub(r"\((skopje|bridge of arts)\)|, skopje", " ", s)
+    s = re.sub(r"\b(споменик на|споменик|спомен-обележје на|statue of|statue|monument of|monument to|monument|"
+               r"bust of|sculpture of|the)\b", " ", s)
     return re.sub(r"\s+", " ", s).strip()
 
 
@@ -178,7 +258,7 @@ def qid(url_or_id):
 def blank(source):
     return {"id": None, "name_mk": None, "name_en": None, "subject_qid": None, "subject_mk": None,
             "subject_en": None, "statue_qid": None, "image": None, "wiki_mk": None, "wiki_en": None,
-            "group": None, "order": None, "side": None, "position": "mapped", "themes": [],
+            "group": None, "order": None, "side": None, "position": "mapped", "themes": [], "aliases": [],
             "sources": [source]}
 
 
@@ -270,33 +350,86 @@ def from_art_bridge(people, bridge):
         s.update(id=f"ab-{p['qid'] or norm(p['en']).replace(' ', '-')}", lat=lat, lon=lon,
                  name_mk=p["mk"], name_en=p["en"], subject_qid=p["qid"], subject_mk=p["mk"],
                  subject_en=p["en"], image=commons_file(p["image"]), wiki_mk=p["wiki_mk"],
-                 wiki_en=p["wiki_en"], group="art-bridge", order=order, side=side,
+                 wiki_en=p["wiki_en"], group="art-bridge", order=order, side=side, aliases=[p["title"]],
                  position="walked" if walked else "approximate")
+        statues.append(s)
+    return statues
+
+
+def from_commons(records):
+    statues = []
+    lo_lat, lo_lon, hi_lat, hi_lon = BBOX
+    for r in records:
+        title = r["category"].removeprefix("Category:")
+        on_bridge = title.endswith("(Bridge of Arts)")
+        located = r["lat"] is not None and lo_lat < r["lat"] < hi_lat and lo_lon < r["lon"] < hi_lon
+        if not located and not on_bridge:
+            continue  # no usable location, or photos geotagged outside the city
+        # An unlocated Art Bridge statue still lends its photo to the matching bridge entry.
+        s = blank("commons")
+        s["aliases"] = [title]
+        s.update(id=f"cm-{r['qid'] or norm(title).replace(' ', '-')}",
+                 lat=r["lat"] if located else None, lon=r["lon"] if located else None,
+                 name_mk=r["labels"].get("mk"), name_en=r["labels"].get("en") or re.sub(r" \((Skopje|Bridge of Arts)\)$|, Skopje$", "", title),
+                 statue_qid=r["qid"], image=commons_file(r["image"]),
+                 group="art-bridge" if on_bridge else None,
+                 position="mapped" if r["located_by"] == "category" else "approximate")
         statues.append(s)
     return statues
 
 
 # ---------------------------------------------------------------- merge
 
+def skeleton(token):
+    return re.sub(r"[aeiou]", "", token)
+
+
+def names(s):
+    out = {norm(s[k]) for k in ("name_mk", "name_en", "subject_mk", "subject_en")} | {norm(a) for a in s["aliases"]}
+    return {ART_BRIDGE_ALIASES.get(n, n) for n in out} - {""}
+
+
+def known_pairs():
+    """Reviewed pairs of names (data/same.json) that are one monument under two names."""
+    return [(norm(x), norm(y)) for x, y in json.loads((ROOT / "same.json").read_text())]
+
+
+KNOWN_PAIRS = known_pairs()
+
+
 def same(a, b):
     if a["statue_qid"] and a["statue_qid"] == b["statue_qid"]:
         return True
+    names_a, names_b = names(a), names(b)
+    if a["group"] == b["group"] == "art-bridge":
+        if names_a & names_b:
+            return True
+        # Same surname, however it was romanised: Prličev / Parlichev, Džinot / Dzhinot.
+        last_a = {skeleton(n.split()[-1]) for n in names_a}
+        last_b = {skeleton(n.split()[-1]) for n in names_b}
+        return any(x.startswith(y) or y.startswith(x) for x in last_a for y in last_b if min(len(x), len(y)) >= 3)
+    if a["lat"] is None or b["lat"] is None:
+        return False
     d = dist_m((a["lat"], a["lon"]), (b["lat"], b["lon"]))
     if d < 6 and "art-bridge" not in (a["group"], b["group"]):
         return True  # OSM and Wikidata pins for one monument sit within a few metres
     if a["subject_qid"] and a["subject_qid"] == b["subject_qid"] and d < 150:
         return True
-    names_a = {norm(a[k]) for k in ("name_mk", "name_en", "subject_mk", "subject_en")} - {""}
-    names_b = {norm(b[k]) for k in ("name_mk", "name_en", "subject_mk", "subject_en")} - {""}
+    if any((x in names_a and y in names_b) or (y in names_a and x in names_b) for x, y in KNOWN_PAIRS):
+        return d < 800  # reviewed by hand; photo-estimated positions can sit a few hundred metres off
     return bool(names_a & names_b) and d < 150
 
 
 def merge(base, extra):
     for key, value in extra.items():
-        if key == "sources":
+        if key == "aliases":
+            base["aliases"] = sorted(set(base["aliases"]) | set(value))
+        elif key == "sources":
             base["sources"] = sorted(set(base["sources"]) | set(value))
-        elif key in ("lat", "lon", "id", "position"):
-            continue  # first source wins on position: OSM, then Art Bridge, then Wikidata
+        elif key in ("lat", "lon", "id", "position") and base["lat"] is not None:
+            continue  # first source wins on position: OSM, then Art Bridge, then Wikidata, then Commons
+        elif key == "image" and value and "commons" in extra["sources"] and base["group"] == "art-bridge":
+            base["image"] = value  # the statue on the bridge, not a portrait of the person
         elif base.get(key) in (None, [], "") and value not in (None, [], ""):
             base[key] = value
 
@@ -304,9 +437,10 @@ def merge(base, extra):
 def apply_themes(statues):
     themes = json.loads((ROOT / "themes.json").read_text())
     for s in statues:
-        names = " ".join(norm(s[k]) for k in ("name_mk", "name_en", "subject_mk", "subject_en"))
+        names = " ".join(norm(s[k]) for k in ("name_mk", "name_en", "subject_mk", "subject_en")) + " " + \
+            " ".join(norm(a) for a in s["aliases"])
         for theme in themes:
-            if s["group"] in theme.get("groups", []) or any(norm(m) in names for m in theme["match"]):
+            if s["group"] in theme.get("groups", []) or any(re.search(rf"\b{re.escape(norm(m))}\b", names) for m in theme["match"]):
                 s["themes"].append(theme["id"])
 
 
@@ -324,14 +458,18 @@ def main():
     print("Wikidata…")
     wd_statues = from_wikidata(cached("wikidata", fetch_wikidata, args.offline))
     print(f"  {len(wd_statues)} labelled items")
+    print("Wikimedia Commons…")
+    cm_statues = from_commons(cached("commons", fetch_commons, args.offline))
+    print(f"  {len(cm_statues)} located statue categories")
 
     statues = []
-    for s in osm_statues + ab_statues + wd_statues:
+    for s in osm_statues + ab_statues + wd_statues + cm_statues:
         match = next((t for t in statues if same(t, s)), None)
         if match:
             merge(match, s)
         else:
             statues.append(s)
+    statues = [s for s in statues if s["lat"] is not None]  # an unmatched, unlocated photo category
     apply_themes(statues)
 
     features = [{"type": "Feature",

@@ -53,7 +53,9 @@ export function StatueCard({ statue, lang, themes, onClose }: Props) {
             })}
           </ul>
         )}
-        {statue.position === 'approximate' && <p className="card__note">{t('approximate', lang)}</p>}
+        {statue.position === 'approximate' && (
+          <p className="card__note">{t(statue.group === 'art-bridge' ? 'approximate' : 'estimated', lang)}</p>
+        )}
         {story === undefined && <p className="card__muted">{t('loading', lang)}</p>}
         {story === null && <p className="card__muted">{t('noStory', lang)}</p>}
         {story && (

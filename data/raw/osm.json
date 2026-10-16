@@ -2,7 +2,7 @@
  "version": 0.6,
  "generator": "Overpass API 0.7.62.11 87bfad18",
  "osm3s": {
-  "timestamp_osm_base": "2026-10-16T17:39:21Z",
+  "timestamp_osm_base": "2026-10-16T17:56:48Z",
   "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
  },
  "elements": [
@@ -349,6 +349,15 @@
   },
   {
    "type": "node",
+   "id": 5317046322,
+   "lat": 42.0229063,
+   "lon": 21.4188415,
+   "tags": {
+    "historic": "memorial"
+   }
+  },
+  {
+   "type": "node",
    "id": 5503460521,
    "lat": 41.9943422,
    "lon": 21.4184573,
@@ -405,6 +414,24 @@
   },
   {
    "type": "node",
+   "id": 6054035627,
+   "lat": 41.9953188,
+   "lon": 21.4274744,
+   "tags": {
+    "historic": "memorial"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6054036213,
+   "lat": 41.9995885,
+   "lon": 21.4195816,
+   "tags": {
+    "historic": "memorial"
+   }
+  },
+  {
+   "type": "node",
    "id": 6054048485,
    "lat": 41.9957342,
    "lon": 21.4305961,
@@ -443,6 +470,15 @@
     "name:en": "Statue of Hristo Uzunov",
     "source": "survey",
     "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6054049798,
+   "lat": 42.0072121,
+   "lon": 21.3655391,
+   "tags": {
+    "historic": "memorial"
    }
   },
   {
@@ -765,6 +801,16 @@
   },
   {
    "type": "node",
+   "id": 9200216569,
+   "lat": 42.0043082,
+   "lon": 21.4185013,
+   "tags": {
+    "historic": "memorial",
+    "name": "Dane kraptzew"
+   }
+  },
+  {
+   "type": "node",
    "id": 10543733398,
    "lat": 42.0040428,
    "lon": 21.4104669,
@@ -959,6 +1005,22 @@
   },
   {
    "type": "node",
+   "id": 11862975637,
+   "lat": 42.0378954,
+   "lon": 21.4353299,
+   "tags": {
+    "historic": "memorial",
+    "memorial": "war_memorial",
+    "name": "Меморијален комплекс Бутел",
+    "name:en": "Butel Memorial Complex",
+    "name:mk": "Меморијален комплекс Бутел",
+    "wikidata": "Q3081365",
+    "wikimedia_commons": "Category:World War II memorials in North Macedonia",
+    "wikipedia": "mk:Список на споменици на НОБ во Македонија"
+   }
+  },
+  {
+   "type": "node",
    "id": 12147004224,
    "lat": 42.0058262,
    "lon": 21.4167987,
@@ -1038,6 +1100,18 @@
   },
   {
    "type": "node",
+   "id": 13301796430,
+   "lat": 41.9922244,
+   "lon": 21.4320141,
+   "tags": {
+    "historic": "memorial",
+    "name": "Robert Gajdík – Slavko",
+    "wikidata": "Q20966633",
+    "wikipedia": "cs:Robert Gajdík"
+   }
+  },
+  {
+   "type": "node",
    "id": 13306457968,
    "lat": 41.9923254,
    "lon": 21.4335525,
@@ -1045,6 +1119,18 @@
     "description": "on the fasade of the building",
     "historic": "monument",
     "name": "Monument"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13308387070,
+   "lat": 41.9919231,
+   "lon": 21.4364226,
+   "tags": {
+    "historic": "memorial",
+    "inscription": "НА ОВА МЕСТО, НА 12 ЈУЛИ  \n1942 ВО НЕРАВНА БОРБА  \nСО БУГАРСКИОТ ОКУПАТОР  \n- СПАСУВАЈЌИ ДВАЈЦА ДРУГАРИ  \nСЕ САМОУБИЈ ПРВОБОРЕЦОТ  \nСЛАВЕ ГЕОРГИЕВСКИ  \n- ШНАЈДЕРОТ  \nРОДЕН ВО СКОПЈЕ 1925",
+    "name": "Slave Georgievski Snajderot",
+    "name:mk": "Славе Георгиевски Шнајдерот"
    }
   },
   {

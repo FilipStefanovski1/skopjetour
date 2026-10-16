@@ -19,6 +19,182 @@
    {
     "item": {
      "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1890632"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Millennium_Cross"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9C%D0%B8%D0%BB%D0%B5%D0%BD%D0%B8%D1%83%D0%BC%D1%81%D0%BA%D0%B8_%D0%BA%D1%80%D1%81%D1%82"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Милениумски крст"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.965027"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.39441"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20Millennium%20Cross%201.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Millennium Cross"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3497603"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Warrior_on_Horseback"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%92%D0%BE%D0%B8%D0%BD_%D0%BD%D0%B0_%D0%BA%D0%BE%D1%9A_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Воин на коњ (Скопје)"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995833333"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.431388888"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20-%20Warrior%20on%20a%20Horse%20%289451253725%29.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Warrior on Horseback"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8409"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Alexander the Great"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Александар III Македонски"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3497603"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Warrior_on_Horseback"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%92%D0%BE%D0%B8%D0%BD_%D0%BD%D0%B0_%D0%BA%D0%BE%D1%9A_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Воин на коњ (Скопје)"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995833333"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.431388888"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20-%20Warrior%20on%20a%20Horse%20%289451253725%29.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Warrior on Horseback"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8409"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Alexander the Great"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Александар III Македонски"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4680067"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Adam_of_Macedonia"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%90%D0%B4%D0%B0%D0%BC_%D0%BE%D0%B4_%D0%9C%D0%B0%D0%BA%D0%B5%D0%B4%D0%BE%D0%BD%D0%B8%D1%98%D0%B0"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Адам од Македонија"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.991"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.4289"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Adam of Macedonia"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
      "value": "http://www.wikidata.org/entity/Q12289741"
     },
     "wmk": {
@@ -1675,182 +1851,6 @@
      "xml:lang": "en",
      "type": "literal",
      "value": "Yigit-Pasha Mosque"
-    }
-   },
-   {
-    "item": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q1890632"
-    },
-    "wen": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Millennium_Cross"
-    },
-    "wmk": {
-     "type": "uri",
-     "value": "https://mk.wikipedia.org/wiki/%D0%9C%D0%B8%D0%BB%D0%B5%D0%BD%D0%B8%D1%83%D0%BC%D1%81%D0%BA%D0%B8_%D0%BA%D1%80%D1%81%D1%82"
-    },
-    "mk": {
-     "xml:lang": "mk",
-     "type": "literal",
-     "value": "Милениумски крст"
-    },
-    "lat": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "41.965027"
-    },
-    "lon": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "21.39441"
-    },
-    "img": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20Millennium%20Cross%201.jpg"
-    },
-    "en": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Millennium Cross"
-    }
-   },
-   {
-    "item": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q3497603"
-    },
-    "wen": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Warrior_on_Horseback"
-    },
-    "wmk": {
-     "type": "uri",
-     "value": "https://mk.wikipedia.org/wiki/%D0%92%D0%BE%D0%B8%D0%BD_%D0%BD%D0%B0_%D0%BA%D0%BE%D1%9A_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
-    },
-    "mk": {
-     "xml:lang": "mk",
-     "type": "literal",
-     "value": "Воин на коњ (Скопје)"
-    },
-    "lat": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "41.995833333"
-    },
-    "lon": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "21.431388888"
-    },
-    "img": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20-%20Warrior%20on%20a%20Horse%20%289451253725%29.jpg"
-    },
-    "en": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Warrior on Horseback"
-    },
-    "depicts": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q8409"
-    },
-    "depEn": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Alexander the Great"
-    },
-    "depMk": {
-     "xml:lang": "mk",
-     "type": "literal",
-     "value": "Александар III Македонски"
-    }
-   },
-   {
-    "item": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q3497603"
-    },
-    "wen": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Warrior_on_Horseback"
-    },
-    "wmk": {
-     "type": "uri",
-     "value": "https://mk.wikipedia.org/wiki/%D0%92%D0%BE%D0%B8%D0%BD_%D0%BD%D0%B0_%D0%BA%D0%BE%D1%9A_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
-    },
-    "mk": {
-     "xml:lang": "mk",
-     "type": "literal",
-     "value": "Воин на коњ (Скопје)"
-    },
-    "lat": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "41.995833333"
-    },
-    "lon": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "21.431388888"
-    },
-    "img": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20-%20Warrior%20on%20a%20Horse%20%289451253725%29.jpg"
-    },
-    "en": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Warrior on Horseback"
-    },
-    "depicts": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q8409"
-    },
-    "depEn": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Alexander the Great"
-    },
-    "depMk": {
-     "xml:lang": "mk",
-     "type": "literal",
-     "value": "Александар III Македонски"
-    }
-   },
-   {
-    "item": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q4680067"
-    },
-    "wen": {
-     "type": "uri",
-     "value": "https://en.wikipedia.org/wiki/Adam_of_Macedonia"
-    },
-    "wmk": {
-     "type": "uri",
-     "value": "https://mk.wikipedia.org/wiki/%D0%90%D0%B4%D0%B0%D0%BC_%D0%BE%D0%B4_%D0%9C%D0%B0%D0%BA%D0%B5%D0%B4%D0%BE%D0%BD%D0%B8%D1%98%D0%B0"
-    },
-    "mk": {
-     "xml:lang": "mk",
-     "type": "literal",
-     "value": "Адам од Македонија"
-    },
-    "lat": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "41.991"
-    },
-    "lon": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "21.4289"
-    },
-    "en": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Adam of Macedonia"
     }
    }
   ]
