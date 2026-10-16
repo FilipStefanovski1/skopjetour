@@ -1,0 +1,33 @@
+[
+  {
+    "id": "antiquity",
+    "mk": "Антика",
+    "en": "Antiquity",
+    "match": ["Филип II", "Philip II", "Олимпија", "Olympias", "Воин на коњ", "Warrior on Horseback", "Александар", "Alexander", "Јустинијан", "Justinian", "Самоил", "Samuel", "Пајонска", "Paeonian"]
+  },
+  {
+    "id": "faith",
+    "mk": "Писменост и вера",
+    "en": "Letters and faith",
+    "match": ["Кирил", "Cyril", "Методиј", "Methodius", "Климент", "Clement", "Наум", "Naum", "Доситеј", "Dosithe", "Мајка Тереза", "Mother Teresa"]
+  },
+  {
+    "id": "revolution",
+    "mk": "Револуционери",
+    "en": "Revolutionaries",
+    "match": ["Гоце Делчев", "Goce Delchev", "Gotse Delchev", "Даме Груев", "Dame Gruev", "Питу Гули", "Pitu Guli", "Гемиџии", "Gemidzii", "Gemidžii", "Татарчев", "Tatarchev", "Шатев", "Shatev", "Šatev", "Узунов", "Uzunov", "Чаулев", "Chaulev", "Никола Карев", "Nikola Karev", "Карпош", "Karpos", "Беровски", "Berovski", "Чуповски", "Chupovski", "Пулевски", "Pulevski", "Ченто", "Chento", "Сарафов", "Sarafov", "ВМРО", "АСНОМ"]
+  },
+  {
+    "id": "artists",
+    "mk": "Уметници",
+    "en": "Artists",
+    "groups": ["art-bridge"],
+    "match": ["Тоше Проески", "Toše Proeski", "Кочо Рацин", "Kočo Racin", "Славко Јаневски", "Slavko Janevski"]
+  },
+  {
+    "id": "everyday",
+    "mk": "Секојдневно Скопје",
+    "en": "Everyday Skopje",
+    "match": ["Просјак", "Beggar", "Пливач", "Swimmer", "Shoe Cleaner", "Музичари", "Musicians", "Шмизла", "Šmizla"]
+  }
+]

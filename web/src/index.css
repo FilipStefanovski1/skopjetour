@@ -1,0 +1,267 @@
+:root {
+  --ink: #1f2a37;
+  --paper: #f6f3ee;
+  --muted: #6b7280;
+  --accent: #e8b04a;
+  --bridge: #c2410c;
+  --line: rgba(31, 42, 55, 0.12);
+  --shadow: 0 8px 28px rgba(15, 23, 42, 0.18);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+.app {
+  margin: 0;
+  height: 100%;
+}
+
+.app {
+  position: relative;
+  overflow: hidden;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+/* Header and theme chips float over the map. */
+.bar {
+  position: absolute;
+  z-index: 1000;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.bar h1 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.bar__count {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .bar h1 {
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
+  .bar__count {
+    display: none;
+  }
+
+  .lang {
+    margin-left: auto;
+  }
+}
+
+.lang {
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lang button {
+  border: 0;
+  padding: 4px 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.lang button[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.themes {
+  position: absolute;
+  z-index: 1000;
+  top: calc(70px + env(safe-area-inset-top));
+  left: 12px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.themes button {
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+}
+
+.themes button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Map pins */
+.pin {
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.pin--bridge {
+  background: var(--bridge);
+}
+
+.pin--selected {
+  background: var(--accent);
+  transform: scale(1.35);
+}
+
+/* Statue card: bottom sheet on phones, side panel on wide screens. */
+.card {
+  position: absolute;
+  z-index: 1100;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 62%;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 18px 18px 0 0;
+  box-shadow: var(--shadow);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (min-width: 768px) {
+  .card {
+    left: auto;
+    top: 120px;
+    right: 12px;
+    bottom: 12px;
+    width: 380px;
+    max-height: none;
+    border-radius: 18px;
+  }
+}
+
+.card__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(31, 42, 55, 0.75);
+  color: #fff;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.card__photo {
+  margin: 0;
+  position: relative;
+}
+
+.card__photo img {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  background: var(--paper);
+}
+
+.card__photo figcaption {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  font-size: 0.65rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.card__body {
+  padding: 16px 18px 20px;
+}
+
+.card__body h2 {
+  margin: 0 40px 4px 0;
+  font-size: 1.3rem;
+}
+
+.card__subject,
+.card__muted {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.card__themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.card__themes li {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 0.8rem;
+}
+
+.card__note {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--bridge);
+  background: #fff7ed;
+  font-size: 0.85rem;
+}
+
+.card__story {
+  line-height: 1.55;
+}
+
+.card audio {
+  width: 100%;
+  margin: 4px 0 12px;
+}
+
+.card__link {
+  color: var(--bridge);
+  font-weight: 600;
+  text-decoration: none;
+}

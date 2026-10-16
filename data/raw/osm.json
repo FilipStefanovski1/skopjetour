@@ -1,0 +1,1306 @@
+{
+ "version": 0.6,
+ "generator": "Overpass API 0.7.62.11 87bfad18",
+ "osm3s": {
+  "timestamp_osm_base": "2026-10-16T17:39:21Z",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+ },
+ "elements": [
+  {
+   "type": "node",
+   "id": 367853384,
+   "lat": 41.9936737,
+   "lon": 21.433319,
+   "tags": {
+    "artist_name": "Кристина Пауновска",
+    "cost": "272.792 euro",
+    "description": "Историско значење Питу Гули (1865 - 12 август 1903) — македонски револуционер со влашко потекло, учесник во македонското револуционерно движење, член и војвода на Македонската револуционерна организација.\nСовременици сведочат дека Питу Гули имал завршено",
+    "historic": "monument",
+    "investitor": "Општина Центар",
+    "learnica": "Уметничка леарница Јеремиќ",
+    "name": "Питу Гули",
+    "start_date": "2012"
+   }
+  },
+  {
+   "type": "node",
+   "id": 367860262,
+   "lat": 42.0033372,
+   "lon": 21.4233948,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Гоце Делчев",
+    "name:en": "Goce Delčev",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 908273421,
+   "lat": 41.9959278,
+   "lon": 21.431478,
+   "tags": {
+    "artist_name": "Валентина Стефановска",
+    "artwork_type": "statue",
+    "height": "24.5",
+    "historic": "monument",
+    "int_name": "Voin na Konj (Aleksandar Makedonski)",
+    "layer": "2",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Воин на коњ (Александар Македонски)",
+    "name:en": "Warrior on Horseback (Alexander the Great of Macedon)",
+    "start_date": "08.09.2011",
+    "tourism": "artwork",
+    "wikidata": "Q3497603",
+    "wikimedia_commons": "Category:Warrior on Horseback (Skopje)",
+    "wikipedia": "mk:Воин на коњ (Скопје)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1857486060,
+   "lat": 42.0017469,
+   "lon": 21.4618242,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "layer": "1",
+    "material": "bronze",
+    "name": "Филип II Македонски",
+    "name:en": "Philip II of Macedon",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1859114111,
+   "lat": 41.9984512,
+   "lon": 21.4349753,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Philip_II_of_Macedon_monument_in_Skopje.JPG",
+    "inscription": "Филип II Македонски",
+    "memorial": "statue",
+    "name": "Филип II Македонски",
+    "name:de": "Philipp II. (Makedonien)",
+    "name:en": "Philip II of Macedon",
+    "name:pl": "Filip II Macedoński",
+    "subject:wikidata": "Q130650",
+    "subject:wikipedia": "mk:Филип II Македонски",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1866944575,
+   "lat": 41.9983725,
+   "lon": 21.4254941,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "inscription": "Св. Климент Охридски",
+    "int_name": "Sv. Kliment Ohridski",
+    "memorial": "statue",
+    "name": "Св. Климент Охридски",
+    "name:en": "Clement of Ohrid",
+    "subject:wikidata": "Q158504",
+    "subject:wikipedia": "mk:Свети Климент Охридски",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 1867151652,
+   "lat": 41.9993163,
+   "lon": 21.437162,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "inscription": "Скендербег",
+    "memorial": "statue",
+    "name": "Скендербег",
+    "name:de": "Skanderbeg",
+    "name:en": "Skanderbeg",
+    "name:sq": "Skënderbeu",
+    "tourism": "artwork",
+    "wikidata": "Q12289741",
+    "wikimedia_commons": "Category:Skenderbeg Monument (Skopje)",
+    "wikipedia": "en:Skanderbeg"
+   }
+  },
+  {
+   "type": "node",
+   "id": 3713662739,
+   "lat": 41.9952169,
+   "lon": 21.426153,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "material": "metal",
+    "memorial": "statue",
+    "name": "Јосип Броз - Тито",
+    "name:en": "Josip Broz - Tito",
+    "subject:wikidata": "Q9161",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4128156209,
+   "lat": 41.9977424,
+   "lon": 21.4339762,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "inscription": "Св. Кирил и Методиј",
+    "int_name": "Sv. Kiril i Metodi",
+    "memorial": "statue",
+    "name": "Св. Кирил и Методиј",
+    "name:de": "Kyrill und Method",
+    "name:en": "Saints Cyril and Methodius",
+    "subject:wikidata": "Q239925",
+    "subject:wikipedia": "mk:Св. Кирил и Методиј",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4128156210,
+   "lat": 41.9975949,
+   "lon": 21.4341513,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "inscription": "Св. Климент Охридски и Наум Охридски Чудотворец",
+    "memorial": "statue",
+    "name": "Св. Климент Охридски и Наум Охридски Чудотворец",
+    "name:en": "Saints Clement of Ohrid and Naum",
+    "tourism": "artwork",
+    "wikipedia": "mk:Свети Климент Охридски;mk:Свети Наум Охридски Чудотворец"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4149143991,
+   "lat": 41.995384,
+   "lon": 21.4312416,
+   "tags": {
+    "artist_name": "Димитар Филиповски",
+    "historic": "memorial",
+    "inscription": "Цар Самоил",
+    "material": "marble",
+    "memorial": "statue",
+    "name": "Цар Самоил",
+    "name:de": "Zar Samuil",
+    "name:en": "Tsar Samuel",
+    "start_date": "28.06.2011",
+    "wikidata": "Q12910631",
+    "wikimedia_commons": "Category:Samuel's Monument (Skopje)",
+    "wikipedia": "mk:Споменик на Цар Самоил (Скопје)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4161113452,
+   "lat": 41.9965251,
+   "lon": 21.4321439,
+   "tags": {
+    "historic": "memorial",
+    "inscription": "Даме Груев",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Даме Груев",
+    "name:de": "Dame Gruew",
+    "name:en": "Dame Gruev",
+    "name:fr": "Damé Grouev",
+    "name:mk": "Даме Груев",
+    "name:sr": "Даме Груев",
+    "wikidata": "Q20566163",
+    "wikimedia_commons": "File:Gruev, spomenik u Skoplju.JPG",
+    "wikipedia": "mk:Споменик на Даме Груев (плоштад Македонија)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4161113453,
+   "lat": 41.996887,
+   "lon": 21.4322543,
+   "tags": {
+    "artist_name": "Роза Павлеска",
+    "historic": "memorial",
+    "inscription": "Јустинијан I",
+    "int_name": "Justinian I",
+    "material": "marble",
+    "memorial": "statue",
+    "name": "Јустинијан I",
+    "name:de": "Justinian I.",
+    "name:en": "Justinian I",
+    "name:fr": "Justinien Ier",
+    "name:grc": "Ἰουστινιανός Α'",
+    "start_date": "16.06.2011",
+    "wikidata": "Q12910626",
+    "wikimedia_commons": "Category:Monument of Iustinianus I (Skopje)",
+    "wikipedia": "mk:Споменик на Јустинијан I"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4161249330,
+   "lat": 41.9979153,
+   "lon": 21.4343783,
+   "tags": {
+    "artwork_type": "statue",
+    "historic": "memorial",
+    "inscription": "Олимпија",
+    "memorial": "statue",
+    "name": "Олимпија",
+    "name:de": "Olympias von Epirus",
+    "name:en": "Olympias",
+    "subject:wikidata": "Q223134",
+    "subject:wikipedia": "mk:Олимпија",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4183631289,
+   "lat": 41.993303,
+   "lon": 21.4337226,
+   "tags": {
+    "historic": "monument",
+    "name": "Прометеј",
+    "name:en": "Prometheus",
+    "name:tr": "Prometheus"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4242928035,
+   "lat": 41.9834333,
+   "lon": 21.439106,
+   "tags": {
+    "historic": "monument",
+    "name": "Тодор Александров"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4271160712,
+   "lat": 41.9936684,
+   "lon": 21.4317487,
+   "tags": {
+    "historic": "monument",
+    "name": "Бегова кула",
+    "name:de": "Turm des Bey",
+    "name:en": "Bey's Tower",
+    "name:fr": "Tour du Bey",
+    "name:tr": "Bey kulesi",
+    "tourism": "attraction"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4380846206,
+   "lat": 41.9949279,
+   "lon": 21.4108745,
+   "tags": {
+    "historic": "monument",
+    "name": "Споменик на Јуриј Гагарин",
+    "name:en": "Yuri Gagarin Monument"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4386764089,
+   "lat": 41.9930188,
+   "lon": 21.4332009,
+   "tags": {
+    "historic": "monument",
+    "name": "Никола Карев"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4440746389,
+   "lat": 41.9930933,
+   "lon": 21.4298952,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Wall Street Bull",
+    "name:de": "Bronzedenkmal des Großen Bullen",
+    "name:en": "Wall Street Bull",
+    "source": "survey",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4477202789,
+   "lat": 42.0016804,
+   "lon": 21.4283664,
+   "tags": {
+    "historic": "monument",
+    "name": "Вера Јоциќ",
+    "name:en": "Vera Jocik",
+    "name:mk": "Вера Јоциќ"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5503460521,
+   "lat": 41.9943422,
+   "lon": 21.4184573,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик на Васил Чакаларов",
+    "name:en": "Monument Vasil Chakalarov",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5711419372,
+   "lat": 41.9963635,
+   "lon": 21.4323421,
+   "tags": {
+    "historic": "memorial",
+    "inscription": "Гоце Делчев",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Гоце Делчев",
+    "name:de": "Goze Deltschew",
+    "name:en": "Goce Delchev",
+    "name:fr": "Gotsé Deltchev",
+    "name:mk": "Гоце Делчев",
+    "name:sr": "Гоце Делчев",
+    "wikidata": "Q20569889",
+    "wikimedia_commons": "File:Goce Delčev, spomenik u Skoplju.JPG",
+    "wikipedia": "mk:Споменик на Гоце Делчев (плоштад Македонија)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5812672954,
+   "lat": 42.0169571,
+   "lon": 21.4434502,
+   "tags": {
+    "historic": "monument",
+    "name": "Doma",
+    "name:tr": "Evim"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5841674945,
+   "lat": 41.9963717,
+   "lon": 21.4339472,
+   "tags": {
+    "historic": "memorial",
+    "memorial": "statue",
+    "name:en": "The Bridge of Civilizations in Macedonia",
+    "name:it": "Ponte della civilizzazione della Macedonia"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6054048485,
+   "lat": 41.9957342,
+   "lon": 21.4305961,
+   "tags": {
+    "artwork_type": "statue",
+    "int_name": "Metodija Andonov Čento",
+    "material": "marble",
+    "name": "Методија Андонов Ченто",
+    "name:en": "Metodija Andonov Chento",
+    "name:mk": "Методија Андонов Ченто",
+    "tourism": "artwork",
+    "wikidata": "Q20570666",
+    "wikimedia_commons": "Category:Čento Monument (Skopje)",
+    "wikipedia": "mk:Споменик на Методија Андонов Ченто (Скопје)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6054048488,
+   "lat": 41.9954408,
+   "lon": 21.4267608,
+   "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6054048494,
+   "lat": 41.99499,
+   "lon": 21.4293341,
+   "tags": {
+    "artwork_type": "statue",
+    "memorial": "statue",
+    "name": "Споменик на Христо Узунов",
+    "name:en": "Statue of Hristo Uzunov",
+    "source": "survey",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6054049805,
+   "lat": 41.9959384,
+   "lon": 21.4331831,
+   "tags": {
+    "historic": "memorial",
+    "memorial": "statue"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6602681335,
+   "lat": 42.0004366,
+   "lon": 21.4323309,
+   "tags": {
+    "architect": "Jordan Grabulovski - Grabul",
+    "historic": "monument",
+    "name": "Сила, Слава и Победа",
+    "name:en": "Strength, Glory and Victory",
+    "start_date": "1954",
+    "wikidata": "Q12910338",
+    "wikipedia": "mk:Споменик „Сила, Слава и Победа“ - Скопје"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6821158694,
+   "lat": 41.9943288,
+   "lon": 21.4307922,
+   "tags": {
+    "historic": "memorial",
+    "memorial": "statue",
+    "name": "2 musicians and one dancing man"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8433354043,
+   "lat": 41.9998597,
+   "lon": 21.4292565,
+   "tags": {
+    "access": "yes",
+    "historic": "monument",
+    "name": "Ослободителите на Скопје",
+    "name:en": "Monument to the Liberators of Skopje"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8464321299,
+   "lat": 42.0045279,
+   "lon": 21.4182143,
+   "tags": {
+    "artwork_type": "statue",
+    "material": "metal",
+    "name": "Дане Крапчев",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8507800396,
+   "lat": 42.0038675,
+   "lon": 21.4135021,
+   "tags": {
+    "artwork_type": "bust",
+    "material": "metal",
+    "name": "Христијан Тодоровски Карпош",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8883349543,
+   "lat": 41.9988251,
+   "lon": 21.4506665,
+   "tags": {
+    "artwork_type": "statue",
+    "int_name": "General Mihajlo Apostolski",
+    "memorial": "statue",
+    "name": "Генерал Михајло Апостолски",
+    "name:en": "General Mihajlo Apostolski",
+    "name:mk": "Генерал Михајло Апостолски",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8883349544,
+   "lat": 41.996874,
+   "lon": 21.4413899,
+   "tags": {
+    "historic": "monument",
+    "name": "Крсте Петков Мисирков",
+    "name:en": "Krste Petkov Misirkov",
+    "name:mk": "Крсте Петков Мисирков"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8883349545,
+   "lat": 41.9960276,
+   "lon": 21.440969,
+   "tags": {
+    "historic": "monument",
+    "name": "Блаже Конески",
+    "name:en": "Blazhe Koneski",
+    "name:mk": "Блаже Конески"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9026624343,
+   "lat": 41.9945072,
+   "lon": 21.4326458,
+   "tags": {
+    "historic": "memorial",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Павел Шатев",
+    "name:en": "Pavel Shatev",
+    "name:mk": "Павел Шатев",
+    "wikidata": "Q139770561",
+    "wikimedia_commons": "File:Споменик на Павел Шатев.jpg",
+    "wikipedia": "mk:Споменик на Павел Шатев"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9077950817,
+   "lat": 41.9942061,
+   "lon": 21.4330139,
+   "tags": {
+    "Learnica": "Љеваоница Умјетнина Ујевиќ Загреб",
+    "artist_name": "Кирил Мукаетов",
+    "artwork_type": "statue",
+    "cost": "318.317 euro",
+    "description": "посветен на загинатите припадници на Вооружените сили на Македонија во војната од 2001 година, кој свечено се открил на 23 октомври 2011 година.",
+    "investitors": "Општина Центар",
+    "material": "bronze",
+    "material:de": "stone",
+    "name": "Македонски бранители",
+    "start_date": "23.09.2011",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078062172,
+   "lat": 41.9940194,
+   "lon": 21.433845,
+   "tags": {
+    "artist_name": "Томе Серафимовски",
+    "artwork_type": "statue",
+    "description": "Тарас Шевченко (украински Тарас Григорович Шевченко; 9 март 1814 – 10 март 1861) — познат украински писател.\nРоден е во с. Моринци, Киевска губернија, во тоа време дел од Руската Империја. Бил член на Братството на Кирил и Методиј. По обвинувањето во анти",
+    "material": "copper",
+    "name": "Тарас Шевченко",
+    "start_date": "2008",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078062188,
+   "lat": 41.9940981,
+   "lon": 21.4337313,
+   "tags": {
+    "artist_name": "Томе Серафимовски",
+    "artwork_type": "statue",
+    "description": "Славко Јаневски (Скопје, 11 јануари 1920 — Скопје, 20 јануари 2000) — истакнат македонски раскажувач, романописец, поет, филмски сценарист, есеист и сликар. Долги години бил член на МАНУ и Друштвото на писатели на Македонија. Тој припаѓа на првата генерац",
+    "name": "Славко Јаневски",
+    "name:en": "Slavko Janevski",
+    "start_date": "2010",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078062189,
+   "lat": 41.993726,
+   "lon": 21.4332709,
+   "tags": {
+    "historic": "memorial",
+    "inscription": "Невена Николова Георгиева-Дуња (25 јули 1925 во Скопје — 16 декември 1942 во Нежилово) — македонска комунистка, припадничка на младинското, синдикалното и работничкото движење меѓу двете светски војни, учесник во НОВ од 1941 година. Со своите 16 години би",
+    "memorial": "statue",
+    "name": "Невена Георгиева-Дуња"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078062190,
+   "lat": 41.9939364,
+   "lon": 21.433093,
+   "tags": {
+    "artist_name": "Љиндита Беќири",
+    "artwork_type": "statue",
+    "cost": "153.516 euro",
+    "description": "Историско значење Петар Богдани — римокатолички бискуп скадарски (1656 — 1671) и надбискуп скопски (1671 — 1689). Се бавел со книжевна работа, а творел на албански, италијански и латински јазик.\nИзлеан во бронза, висок 5 метри, поставен на триметарски пос",
+    "investitor": "Општина Центар",
+    "learnica": "Фондериа Артистика Гуастини",
+    "material": "bronze",
+    "name": "Петар Богданов",
+    "start_date": "2014",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078062191,
+   "lat": 41.9940383,
+   "lon": 21.4330051,
+   "tags": {
+    "artist_name": "Жарко Башески",
+    "artwork_type": "statue",
+    "cost": "214.921 euro",
+    "description": "Историско значење: Кузман Јосифоски - Питу (Прилеп, 23 јуни 1915 - Скопје, 25 февруари 1944) — македонски правник, комунист, еден од главните организатори на антифашистичкото движење (1938-1941) и на НОБ во Македонија (1941-1944).\n\nСтанува член на КПЈ во",
+    "investitors": "Општина центар",
+    "learnica": "Фондериа Артистика Гуастини",
+    "material": "metal",
+    "name": "Кузман Јосифоски-Питу",
+    "start_date": "10.7.2012",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078062192,
+   "lat": 41.9940199,
+   "lon": 21.4332951,
+   "tags": {
+    "artwork_type": "statue",
+    "description": "Историската позадина на овој споменик е поврзана со жените и женската младина од Скопје и цела Македонија активно учествувале во многу акции организирани од СКОЈ и синдикатите. Во 1940 година била основана „Женска набавна задруга“ во која членувале околу",
+    "name": "Татковина - Копнеж за прогонатите",
+    "start_date": "1988",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078207072,
+   "lat": 41.9933258,
+   "lon": 21.4335226,
+   "tags": {
+    "artist_name": "Ангел Коруновски",
+    "artwork_type": "statue",
+    "cost": "1.235.461",
+    "description": "Споменикот е посветен на шестмината основачи на Македонската револуционерна организација односно револуционерно-националноослободителна организација на македонскиот народ: Даме Груев, Христо Татарчев, Петар Поп Арсов, Иван Хаџи Николов, Андон Димитров и Х",
+    "investitors": "Општина Центар",
+    "learnica": "Фондериа Ф. Маринели",
+    "material": "steel",
+    "name": "Основачите на Македонската револуционерна организација",
+    "start_date": "25 јуни 2012",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9078207073,
+   "lat": 41.9931516,
+   "lon": 21.4336429,
+   "tags": {
+    "artist_name": "Слободан Милошевски.",
+    "artwork_type": "statue",
+    "cost": "1.667.265 euro",
+    "description": "Композицијата, изработена во бронза, е составена од 10 скулптури од кои три се во седечка позиција со димензии од 3,20 метри и седум во стоечка позиција со димензии од четири метри.\nТие ги претставуваат учесниците на АСНОМ, првото Собрание на Република Ма",
+    "investitor": "Општина центар",
+    "learnica": "Фондериа Ф. Маринели",
+    "material": "bronze",
+    "name": "Првото заседание на АСНОМ",
+    "start_date": "2012",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9079063679,
+   "lat": 41.9936316,
+   "lon": 21.4340468,
+   "tags": {
+    "artist_name": "Боро Митричевски",
+    "artwork_type": "statue",
+    "description": "Жените и женската младина од Скопје и цела Македонија активно учествувале во многу акции организирани од СКОЈ и синдикатите. Во 1940 година била основана „Женска набавна задруга“ во која членувале околу 150 жени домаќинки, работнички, студентки и други мл",
+    "material": "marble",
+    "name": "Споменик на жената борец",
+    "start_date": "8 март 1970",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9121296388,
+   "lat": 41.9933504,
+   "lon": 21.4338554,
+   "tags": {
+    "artist_name": "Томе Аџиевски",
+    "artwork_type": "statue",
+    "cost": "2.361.438 euro",
+    "description": "Значење на споменикот\nСпоред авторот на ова спомен-обележје, Томе Аџиевски, тој се состои од неколку сегменти кои носат своја симболика. Агората е претставена со фонтана и концентричен форум што го означува светот на живите. На средината на фонтаната е по",
+    "investitor": "Општина Центар",
+    "learnica": "Уметничка леарница Јеремиќ",
+    "material": "metal",
+    "name": "Паднати херои за Македонија",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9200216072,
+   "lat": 41.9986089,
+   "lon": 21.4378329,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик на Петар Чаулев",
+    "name:en": "Statue of Petar Chaulev",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10543733398,
+   "lat": 42.0040428,
+   "lon": 21.4104669,
+   "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10543733399,
+   "lat": 42.0038797,
+   "lon": 21.4104321,
+   "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10543733400,
+   "lat": 42.0039341,
+   "lon": 21.4104586,
+   "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10543733401,
+   "lat": 42.0039914,
+   "lon": 21.4104586,
+   "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10543733402,
+   "lat": 42.0038509,
+   "lon": 21.410369,
+   "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10913747004,
+   "lat": 41.9961118,
+   "lon": 21.4309878,
+   "tags": {
+    "historic": "memorial",
+    "int_name": "Dimitrija Chupovski",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Димитрија Чуповски",
+    "name:en": "Dimitrija Chupovski",
+    "name:mk": "Димитрија Чуповски",
+    "wikimedia_commons": "Category:Monument of Dimitrija Čupovski (Skopje)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10913797907,
+   "lat": 41.9966814,
+   "lon": 21.4331314,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик Пливач",
+    "name:de": "Denkmaltaucher",
+    "source": "survey",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10913797908,
+   "lat": 41.9975108,
+   "lon": 21.4335157,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик „Ѓорѓија Пулевски“",
+    "name:de": "Denkmal „Gjorgjija Pulevski“",
+    "source": "survey",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10913797909,
+   "lat": 41.9972261,
+   "lon": 21.4337566,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик „Карпош“",
+    "name:de": "Denkmal „Karpoš“",
+    "source": "survey",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10913830732,
+   "lat": 41.9981848,
+   "lon": 21.4262452,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик „Архиепископ г.г. Доситеј“",
+    "name:de": "Denkmal Archiepiskop",
+    "source": "survey",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10913830733,
+   "lat": 41.9939923,
+   "lon": 21.4307711,
+   "tags": {
+    "historic": "memorial",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Мајка Тереза",
+    "name:de": "Mutter Theresa",
+    "name:en": "Mother Teresa"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10913830734,
+   "lat": 41.9952833,
+   "lon": 21.431175,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Shoe Cleaner Statue",
+    "name:de": "Schuhputzer-Statue",
+    "source": "survey",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11104116737,
+   "lat": 41.9990754,
+   "lon": 21.440827,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Пере Тошев",
+    "name:en": "Pere Toshev",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11104116738,
+   "lat": 41.9984451,
+   "lon": 21.440016,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик на Пере Тошев",
+    "name:en": "Statue of Pere Toshev",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11116151647,
+   "lat": 41.9944202,
+   "lon": 21.4278344,
+   "tags": {
+    "artwork_type": "statue",
+    "material": "concrete",
+    "name": "Спомен-обележје на Благоја Деспотовски Шовељ",
+    "name:en": "Statue of Blagoja Despotovski Šovelj",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11770740925,
+   "lat": 42.0276728,
+   "lon": 21.5137269,
+   "tags": {
+    "artwork_type": "bust",
+    "material": "concrete",
+    "name": "Бобан Ивановиќ",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12147004224,
+   "lat": 42.0058262,
+   "lon": 21.4167987,
+   "tags": {
+    "artwork_type": "sculpture",
+    "name": "Жирафа",
+    "name:en": "Giraffe",
+    "name:mk": "Жирафа",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12151684560,
+   "lat": 42.0062114,
+   "lon": 21.4131748,
+   "tags": {
+    "artwork_type": "bust",
+    "name": "Орце Николов",
+    "name:en": "Orce Nikolov",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12444573099,
+   "lat": 41.9895738,
+   "lon": 21.4762983,
+   "tags": {
+    "artwork_type": "sculpture",
+    "image": "http://http://www.aerodrom.gov.mk/upload/images/04%20april.jpg",
+    "name": "Авион",
+    "name:en": "Airplane",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12529064217,
+   "lat": 41.9988692,
+   "lon": 21.4299845,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Лав",
+    "name:en": "Lion",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12529064218,
+   "lat": 41.9992545,
+   "lon": 21.4299219,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Лав",
+    "name:en": "Lion",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12656020031,
+   "lat": 41.9943666,
+   "lon": 21.4322307,
+   "tags": {
+    "historic": "memorial",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Христо Татарчев",
+    "name:en": "Hristo Tatarchev",
+    "name:mk": "Христо Татарчев",
+    "wikidata": "Q139784985",
+    "wikimedia_commons": "Category:Monument of Hristo Tatarčev (Skopje)",
+    "wikipedia": "mk:Споменик на Христо Татарчев"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13306457968,
+   "lat": 41.9923254,
+   "lon": 21.4335525,
+   "tags": {
+    "description": "on the fasade of the building",
+    "historic": "monument",
+    "name": "Monument"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13413888380,
+   "lat": 41.9953652,
+   "lon": 21.4310866,
+   "tags": {
+    "artist_name": "Наташа Божарова - Пијанманова",
+    "artwork_type": "statue",
+    "material": "bronze",
+    "name": "Просјак",
+    "name:en": "Beggar",
+    "source": "survey",
+    "tourism": "artwork",
+    "wikidata": "Q12909806",
+    "wikipedia": "mk:Просјак (скулптура во Скопје)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13441858135,
+   "lat": 41.9991356,
+   "lon": 21.4511109,
+   "tags": {
+    "artwork_type": "statue",
+    "level": "0",
+    "material": "bronze",
+    "name": "Споменик на Андон Лазов Јанев - Ќосето",
+    "name:en": "Statue of Andon Lazov Janev - Kjoseto",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13706903845,
+   "lat": 41.9976163,
+   "lon": 21.4409757,
+   "tags": {
+    "historic": "monument",
+    "name": "Васил Антевски - Дрен",
+    "name:en": "Vasil Antevski - Dren"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14213844963,
+   "lat": 41.9961022,
+   "lon": 21.4324164,
+   "tags": {
+    "historic": "memorial",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Димитар Поп-Георгиев Беровски",
+    "name:en": "Dimitar Pop-Georgiev Berovski",
+    "name:mk": "Димитар Поп-Георгиев Беровски"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14213844964,
+   "lat": 41.9964099,
+   "lon": 21.43284,
+   "tags": {
+    "historic": "memorial",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Гемиџии",
+    "name:en": "Gemidzii",
+    "name:mk": "Гемиџии",
+    "wikidata": "Q12910627",
+    "wikimedia_commons": "Category:Gemidžii (Skopje)",
+    "wikipedia": "mk:Споменик на Гемиџиите (Скопје)"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14232148801,
+   "lat": 41.9983802,
+   "lon": 21.4388991,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик на Св. Климент Охридски",
+    "name:en": "Monument of St. Clement of Ohrid",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14232158601,
+   "lat": 41.9985276,
+   "lon": 21.4385361,
+   "tags": {
+    "artwork_type": "statue",
+    "name": "Споменик на Никола Петров Русински",
+    "name:en": "Statue of Nikola Petrov Rusinski",
+    "tourism": "artwork"
+   }
+  },
+  {
+   "type": "way",
+   "id": 32885596,
+   "center": {
+    "lat": 42.008356,
+    "lon": 21.4298358
+   },
+   "tags": {
+    "historic": "monument",
+    "int_name": "Francuski Grobišta",
+    "landuse": "cemetery",
+    "name": "Француски воени гробишта",
+    "name:en": "French military cemeteries",
+    "name:fr": "Cimetière militaire français",
+    "name:pl": "Cmentarz francuski",
+    "wikidata": "Q83365913",
+    "wikimedia_commons": "Category:French Cemetery (Skopje)",
+    "wikipedia": "mk:Француски воени гробишта (Скопје)"
+   }
+  },
+  {
+   "type": "way",
+   "id": 229939246,
+   "center": {
+    "lat": 41.9650199,
+    "lon": 21.394421
+   },
+   "tags": {
+    "alt_name": "Крст Водно;Krst Vodno",
+    "height": "66",
+    "historic": "monument",
+    "int_name": "Mileniumski Krst",
+    "man_made": "cross",
+    "name": "Милениумски крст",
+    "name:de": "Milleniumskreuz",
+    "name:en": "Millennium Cross",
+    "name:it": "Croce del millennio",
+    "name:pl": "Krzyż milenijny",
+    "tourism": "attraction",
+    "wheelchair": "no",
+    "wikidata": "Q1890632",
+    "wikimedia_commons": "File:Skopje Millennium Cross 1.jpg",
+    "wikipedia": "mk:Милениумски крст"
+   }
+  },
+  {
+   "type": "way",
+   "id": 239422349,
+   "center": {
+    "lat": 41.9944508,
+    "lon": 21.4324403
+   },
+   "tags": {
+    "addr:city": "Cкoпje",
+    "addr:city:en": "Skopje",
+    "addr:country": "MK",
+    "addr:housenumber": "4А",
+    "addr:postcode": "1000",
+    "addr:street": "11 Октомври",
+    "building": "yes",
+    "email": "PortaMK@mmb.org.mk",
+    "historic": "monument",
+    "int_name": "Porta Makedonija",
+    "name": "Порта Македонија",
+    "name:en": "Porta Macedonia",
+    "name:it": "Porta Macedonia",
+    "name:lt": "Triumfo arka",
+    "name:tr": "Porta Macedonia",
+    "phone": "+389 2 3151141",
+    "wikidata": "Q3078453",
+    "wikimedia_commons": "Category:Porta Makedonija",
+    "wikipedia": "en:Porta Macedonia"
+   }
+  },
+  {
+   "type": "way",
+   "id": 553070358,
+   "center": {
+    "lat": 41.9963896,
+    "lon": 21.4357375
+   },
+   "tags": {
+    "historic": "monument",
+    "name": "Колонада - Независна Македонија",
+    "name:en": "Colonnade – Independent Macedonia"
+   }
+  },
+  {
+   "type": "way",
+   "id": 1301527595,
+   "center": {
+    "lat": 41.9831969,
+    "lon": 21.471094
+   },
+   "tags": {
+    "historic": "memorial",
+    "image": "https://mk.wikipedia.org/wiki/%D0%9F%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D1%82%D0%B5%D0%BA%D0%B0:%D0%AF%D0%BD%D0%B5_%D0%A1%D0%B0%D0%BD%D0%B4%D0%B0%D0%BD%D1%81%D0%BA%D0%B8_(1872-1915).jpg#/media/%D0%9F%D0%BE%D0%B4%D0%B0%D1%82%D0%BE%D1%82%D0%B5%D0%BA%D0%B0:%D0%AF",
+    "material": "bronze",
+    "memorial": "statue",
+    "name": "Јане Сандански - споменик",
+    "name:en": "Jane Sandanski - spomenik",
+    "wikidata": "Q983638",
+    "wikimedia_commons": "Category:Yane Sandanski",
+    "wikipedia": "mk:Јане Сандански"
+   }
+  },
+  {
+   "type": "way",
+   "id": 1363929289,
+   "center": {
+    "lat": 41.9969699,
+    "lon": 21.4425131
+   },
+   "tags": {
+    "architect": "Aleksandar Nikoljski;Vladimir Pota",
+    "historic": "monument",
+    "name": "Бомба",
+    "name:en": "Bomb Monument",
+    "name:mk": "Бомба"
+   }
+  },
+  {
+   "type": "way",
+   "id": 177049423,
+   "bounds": {
+    "minlat": 41.9953681,
+    "minlon": 21.4357157,
+    "maxlat": 41.9960221,
+    "maxlon": 21.4360878
+   },
+   "geometry": [
+    {
+     "lat": 41.9953681,
+     "lon": 21.4357157
+    },
+    {
+     "lat": 41.9953976,
+     "lon": 21.4357326
+    },
+    {
+     "lat": 41.9959935,
+     "lon": 21.4360743
+    },
+    {
+     "lat": 41.9960221,
+     "lon": 21.4360878
+    }
+   ],
+   "tags": {
+    "bridge": "yes",
+    "highway": "pedestrian",
+    "layer": "1",
+    "lit": "yes",
+    "name": "Мост на уметноста",
+    "name:en": "Bridge of the Arts",
+    "surface": "paving_stones"
+   }
+  }
+ ]
+}

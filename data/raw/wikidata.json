@@ -1,0 +1,1858 @@
+{
+ "head": {
+  "vars": [
+   "item",
+   "lat",
+   "lon",
+   "mk",
+   "en",
+   "img",
+   "depicts",
+   "depMk",
+   "depEn",
+   "wmk",
+   "wen"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12289741"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%A1%D0%BA%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B1%D0%B5%D0%B3_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Скендербег (Скопје)"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.999166666"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.436944444"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20%D0%A1%D0%BA%D0%B5%D0%BD%D0%B4%D0%B5%D1%80%D0%B1%D0%B5%D0%B3%20%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Skanderbeg Monument"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12905165"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%91%D0%B5%D1%81%D0%BA%D0%BE%D0%BD%D0%B5%D1%87%D0%BD%D0%B0_%D1%86%D0%B8%D1%80%D0%BA%D1%83%D0%BB%D0%B0%D1%86%D0%B8%D1%98%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0_%D0%B2%D0%BE_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Бесконечна циркулација"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995179506"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.435865766"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5-Skulptura.jpg"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12906239"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%94%D1%80%D0%B2%D0%BE_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0_%D0%B2%D0%BE_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Дрво"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.997010704"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432021631"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20%24%20%2861%29.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Tree"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12908768"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9C%D1%83%D0%B7%D0%B8%D0%BA%D0%B0%D0%BD%D1%82%D0%B8_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0_%D0%B2%D0%BE_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Музиканти"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996034435"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.429859324"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Vesela%20dru%C5%BEina%20-%20panoramio.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Musicians"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909479"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Пајонска свештеничка"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "42.002753476"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.436461628"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0%20-%20%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0%20%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0%20%28%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5%29.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Paeonian Priestess"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909479"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Пајонска свештеничка"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996366529"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433948981"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0%20-%20%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0%20%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0%20%28%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5%29.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Paeonian Priestess"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909479"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Пајонска свештеничка"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "42.002753476"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.436461628"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0%20%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Paeonian Priestess"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909479"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Пајонска свештеничка"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996366529"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433948981"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0%20%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Paeonian Priestess"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909806"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D1%81%D1%98%D0%B0%D0%BA_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0_%D0%B2%D0%BE_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Просјак"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995215851"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.431147197"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20prosja%C4%8Dko%20blje%C5%A1tavilo.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Beggar"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909988"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A0%D0%B8%D0%B1%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0_%D0%B2%D0%BE_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Риба"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.992220551"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.43741165"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Riba%20na%20ulica%20Makedonija.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Fish"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909988"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A0%D0%B8%D0%B1%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0_%D0%B2%D0%BE_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Риба"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.991932428"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.429870412"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Riba%20na%20ulica%20Makedonija.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Fish"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910338"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%E2%80%9E%D0%A1%D0%B8%D0%BB%D0%B0,_%D0%A1%D0%BB%D0%B0%D0%B2%D0%B0_%D0%B8_%D0%9F%D0%BE%D0%B1%D0%B5%D0%B4%D0%B0%E2%80%9C_-_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Сила, Слава и Победа"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "42.000456473"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432338914"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20kale%20spomenik.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Strength, Glory and Victory"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910613"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%83%D0%BE%D1%80%D1%93%D0%B8%D1%98%D0%B0_%D0%9F%D1%83%D0%BB%D0%B5%D0%B2%D1%81%D0%BA%D0%B8_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Ѓорѓија Пулевски"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.997397414"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433329618"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Monument%20of%20%C7%B4or%C7%B5ija%20Pulevski%20in%20Skopje%2C%20Macedonia.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Ǵorǵija Pulevski"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3103765"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Georgi Pulevski"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Ѓорѓија Пулевски"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910613"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%83%D0%BE%D1%80%D1%93%D0%B8%D1%98%D0%B0_%D0%9F%D1%83%D0%BB%D0%B5%D0%B2%D1%81%D0%BA%D0%B8_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Ѓорѓија Пулевски"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.997397414"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433329618"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Monument%20of%20%C7%B4or%C7%B5ija%20Pulevski%20in%20Skopje%2C%20Macedonia.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Ǵorǵija Pulevski"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3103765"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Georgi Pulevski"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Ѓорѓија Пулевски"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910616"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%83%D0%BE%D1%80%D1%87%D0%B5_%D0%9F%D0%B5%D1%82%D1%80%D0%BE%D0%B2_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5-%D0%83%D0%BE%D1%80%D1%87%D0%B5_%D0%9F%D0%B5%D1%82%D1%80%D0%BE%D0%B2)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Ѓорче Петров"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "42.007219108"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.365538031"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20%D0%83%D0%BE%D1%80%D1%87%D0%B5%20%D0%9F%D0%B5%D1%82%D1%80%D0%BE%D0%B2%202.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Statue of Ǵorče Petrov"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2497361"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Gyorche Petrov"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Ѓорче Петров"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910626"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%88%D1%83%D1%81%D1%82%D0%B8%D0%BD%D0%B8%D1%98%D0%B0%D0%BD_I"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Јустинијан I"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996876"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432261"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Monument%20of%20Iustinianus%20I%20%28Skopje%29.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Iustinianus I"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q41866"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Justinian I"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Јустинијан I"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910626"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%88%D1%83%D1%81%D1%82%D0%B8%D0%BD%D0%B8%D1%98%D0%B0%D0%BD_I"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Јустинијан I"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996876"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432261"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Monument%20of%20Iustinianus%20I%20%28Skopje%29.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Iustinianus I"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q41866"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Justinian I"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Јустинијан I"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910627"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%93%D0%B5%D0%BC%D0%B8%D1%9F%D0%B8%D0%B8%D1%82%D0%B5_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Гемиџиите"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996399488"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432847271"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Gemidžii Monument"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910627"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%93%D0%B5%D0%BC%D0%B8%D1%9F%D0%B8%D0%B8%D1%82%D0%B5_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Гемиџиите"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996399488"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432847271"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Gemidžii Monument"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910630"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%9F%D0%B8%D1%82%D1%83_%D0%93%D1%83%D0%BB%D0%B8_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Питу Гули"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.993690152"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433291341"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20-%20%D0%9F%D0%B8%D1%82%D1%83%20%D0%93%D1%83%D0%BB%D0%B8.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Pitu Guli"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3393353"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Pitu Guli"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Питу Гули"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910631"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%A6%D0%B0%D1%80_%D0%A1%D0%B0%D0%BC%D0%BE%D0%B8%D0%BB_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Цар Самоил (Скопје)"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995387817"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.431250583"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Samuel's Monument"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q270740"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Samuel of Bulgaria"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Цар Самоил"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910628"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%91%D1%80%D0%B0%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D0%B8%D1%82%D0%B5_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Бранителите"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.994222"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433056"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Monument%20of%20the%20Defenders%20of%20Macedonia.JPG"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12910632"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%B3.%D0%B3._%D0%94%D0%BE%D1%81%D0%B8%D1%82%D0%B5%D1%98_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на г.г. Доситеј"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.998184622"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.426260465"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20-%20%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B8%D0%BD%20%D0%94%D0%BE%D1%81%D0%B8%D1%82%D0%B5%D1%98%201.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument to Dositheus II of Ohrid and Macedonia"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q259539"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Archbishop Dositheus II"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Архиепископ Охридски и Македонски г.г. Доситеј II"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12912155"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A8%D0%BC%D0%B8%D0%B7%D0%BB%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0_%D0%B2%D0%BE_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Шмизла"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.9931971"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.430267916"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%22Smizla%22%2C%20Makedonija%20Street.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Šmizla"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q15241217"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%E2%80%9E%D0%9E%D1%81%D0%BB%D0%BE%D0%B1%D0%BE%D0%B4%D0%B8%D1%82%D0%B5%D0%BB%D0%B8_%D0%BD%D0%B0_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5%E2%80%9C"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик „Ослободители на Скопје“"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.999861111"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.42925"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Monument%20of%20Skopje%27s%20Liberators%205.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Skopje's Liberators"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q16087907"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%9F%D1%80%D0%B5%D0%B7%D0%B8%D0%B4%D0%B8%D1%83%D0%BC%D0%BE%D1%82_%D0%BD%D0%B0_%D0%90%D0%A1%D0%9D%D0%9E%D0%9C"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Президиумот на АСНОМ"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.993147936"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433686487"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20566163"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%94%D0%B0%D0%BC%D0%B5_%D0%93%D1%80%D1%83%D0%B5%D0%B2_(%D0%BF%D0%BB%D0%BE%D1%88%D1%82%D0%B0%D0%B4_%D0%9C%D0%B0%D0%BA%D0%B5%D0%B4%D0%BE%D0%BD%D0%B8%D1%98%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Даме Груев"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.99652194"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432158981"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Gruev%2C%20spomenik%20u%20Skoplju.JPG"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q983917"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Dame Gruev"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Даме Груев"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20566163"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%94%D0%B0%D0%BC%D0%B5_%D0%93%D1%80%D1%83%D0%B5%D0%B2_(%D0%BF%D0%BB%D0%BE%D1%88%D1%82%D0%B0%D0%B4_%D0%9C%D0%B0%D0%BA%D0%B5%D0%B4%D0%BE%D0%BD%D0%B8%D1%98%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Даме Груев"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.99652194"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432158981"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Gruev%2C%20spomenik%20u%20Skoplju.JPG"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q983917"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Dame Gruev"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Даме Груев"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20569889"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%93%D0%BE%D1%86%D0%B5_%D0%94%D0%B5%D0%BB%D1%87%D0%B5%D0%B2_(%D0%BF%D0%BB%D0%BE%D1%88%D1%82%D0%B0%D0%B4_%D0%9C%D0%B0%D0%BA%D0%B5%D0%B4%D0%BE%D0%BD%D0%B8%D1%98%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Гоце Делчев"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.99637443"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432356123"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Goce%20Del%C4%8Dev%2C%20spomenik%20u%20Skoplju.JPG"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q360160"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Gotse Delchev"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Гоце Делчев"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20569889"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%93%D0%BE%D1%86%D0%B5_%D0%94%D0%B5%D0%BB%D1%87%D0%B5%D0%B2_(%D0%BF%D0%BB%D0%BE%D1%88%D1%82%D0%B0%D0%B4_%D0%9C%D0%B0%D0%BA%D0%B5%D0%B4%D0%BE%D0%BD%D0%B8%D1%98%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Гоце Делчев"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.99637443"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432356123"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Goce%20Del%C4%8Dev%2C%20spomenik%20u%20Skoplju.JPG"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q360160"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Gotse Delchev"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Гоце Делчев"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570655"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%88%D0%B0%D0%BD%D0%B5_%D0%A1%D0%B0%D0%BD%D0%B4%D0%B0%D0%BD%D1%81%D0%BA%D0%B8_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5-%D0%90%D0%B5%D1%80%D0%BE%D0%B4%D1%80%D0%BE%D0%BC)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Јане Сандански"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.983194794"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.471112788"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20%D0%BD%D0%B0%20%D0%88%D0%B0%D0%BD%D0%B5%20%D0%A1%D0%B0%D0%BD%D0%B4%D0%B0%D0%BD%D1%81%D0%BA%D0%B8.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Jane Sandanski"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q983638"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Yane Sandanski"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Јане Сандански"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570659"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%91%D0%BE%D1%80%D0%B8%D1%81_%D0%A1%D0%B0%D1%80%D0%B0%D1%84%D0%BE%D0%B2_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Борис Сарафов"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.99600614"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.43734155"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Spomenik%20na%20Boris%20Sarafov.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Boris Sarafov"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q674532"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Boris Sarafov"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Борис Сарафов"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570662"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%93%D0%BE%D1%86%D0%B5_%D0%94%D0%B5%D0%BB%D1%87%D0%B5%D0%B2_(%D0%93%D1%80%D0%B0%D0%B4%D1%81%D0%BA%D0%B8_%D0%BF%D0%B0%D1%80%D0%BA,_%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Гоце Делчев"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "42.003333333"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.423333333"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Delcevstatue-cityparkskopje.JPG"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570666"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D0%B8%D1%98%D0%B0_%D0%90%D0%BD%D0%B4%D0%BE%D0%BD%D0%BE%D0%B2_%D0%A7%D0%B5%D0%BD%D1%82%D0%BE_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Методија Андонов Ченто"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995712202"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.430621602"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Metodija Andonov Čento"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2625112"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Metodija Andonov-Čento"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Методија Андонов-Ченто"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570668"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%BE%D1%81%D0%BD%D0%BE%D0%B2%D0%B0%D1%87%D0%B8%D1%82%D0%B5_%D0%BD%D0%B0_%D0%92%D0%9C%D0%A0%D0%9E"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на основачите на ВМРО"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.993357251"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433527566"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20-%20%D0%9E%D1%81%D0%BD%D0%BE%D0%B2%D0%B0%D1%87%D0%B8%20%D0%BD%D0%B0%20%D0%92%D0%9C%D0%A0%D0%9E.JPG"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570672"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%A1%D0%B2._%D0%9A%D0%BB%D0%B8%D0%BC%D0%B5%D0%BD%D1%82_%D0%B8_%D0%9D%D0%B0%D1%83%D0%BC_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Св. Климент и Наум"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.997593195"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.43415632"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/SK%2020170809%20093235%20%2836321381811%29.jpg"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570672"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%A1%D0%B2._%D0%9A%D0%BB%D0%B8%D0%BC%D0%B5%D0%BD%D1%82_%D0%B8_%D0%9D%D0%B0%D1%83%D0%BC_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Св. Климент и Наум"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.997593195"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.43415632"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/SK%2020170809%20093235%20%2836321381811%29.jpg"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q20570676"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%A2%D0%B5%D1%88%D0%BA%D0%BE%D1%82%D0%BE_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Тешкото"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.994243142"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.430817677"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20-%20%D0%A2%D0%B5%D1%88%D0%BA%D0%BE%D1%82%D0%BE.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of the Teškoto Dance"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q61119888"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD-%D0%BA%D1%83%D1%9C%D0%B0_-_%D0%BC%D1%83%D0%B7%D0%B5%D1%98_%D0%BD%D0%B0_%D0%9D%D0%9E%D0%92_%D0%B8_%D1%80%D0%B5%D0%B2%D0%BE%D0%BB%D1%83%D1%86%D0%B8%D1%98%D0%B0"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Спомен-куќа - музеј на НОВ и револуција"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996993078"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.442518664"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Spomenik%20na%20revolucijata%20Skopje.jpg"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q91093118"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.997929"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.434437"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Aleksandar%20Makedonski%20vo%20Skopje%20011.jpg"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q91093118"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.997929"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.434437"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Aleksandar%20Makedonski%20vo%20Skopje%20011.jpg"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q139770561"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%9F%D0%B0%D0%B2%D0%B5%D0%BB_%D0%A8%D0%B0%D1%82%D0%B5%D0%B2"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Павел Шатев"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.994515028"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432651304"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20%D0%BD%D0%B0%20%D0%9F%D0%B0%D0%B2%D0%B5%D0%BB%20%D0%A8%D0%B0%D1%82%D0%B5%D0%B2.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Pavel Šatev"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3407157"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Pavel Shatev"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Павел Шатев"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q139784985"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%A5%D1%80%D0%B8%D1%81%D1%82%D0%BE_%D0%A2%D0%B0%D1%82%D0%B0%D1%80%D1%87%D0%B5%D0%B2"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Христо Татарчев"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.99436549"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.432239248"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA%20%D0%BD%D0%B0%20%D0%A5%D1%80%D0%B8%D1%81%D1%82%D0%BE%20%D0%A2%D0%B0%D1%82%D0%B0%D1%80%D1%87%D0%B5%D0%B2.jpg"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q785607"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hristo Tatarchev"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Христо Татарчев"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q139785043"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%A1%D0%BF%D0%BE%D0%BC%D0%B5%D0%BD%D0%B8%D0%BA_%D0%BD%D0%B0_%D0%A5%D1%80%D0%B8%D1%81%D1%82%D0%BE_%D0%A3%D0%B7%D1%83%D0%BD%D0%BE%D0%B2"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Споменик на Христо Узунов"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995010209"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.429369301"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Hristo%20Uzunov.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Monument of Hristo Uzunov"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3407165"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Hristo Uzunov"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Христо Узунов"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q141204382"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Јигит-пашина џамија"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "42.002523321"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.438645257"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Yigit-Pasha Mosque"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1890632"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Millennium_Cross"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9C%D0%B8%D0%BB%D0%B5%D0%BD%D0%B8%D1%83%D0%BC%D1%81%D0%BA%D0%B8_%D0%BA%D1%80%D1%81%D1%82"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Милениумски крст"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.965027"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.39441"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20Millennium%20Cross%201.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Millennium Cross"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3497603"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Warrior_on_Horseback"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%92%D0%BE%D0%B8%D0%BD_%D0%BD%D0%B0_%D0%BA%D0%BE%D1%9A_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Воин на коњ (Скопје)"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995833333"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.431388888"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20-%20Warrior%20on%20a%20Horse%20%289451253725%29.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Warrior on Horseback"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8409"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Alexander the Great"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Александар III Македонски"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3497603"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Warrior_on_Horseback"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%92%D0%BE%D0%B8%D0%BD_%D0%BD%D0%B0_%D0%BA%D0%BE%D1%9A_(%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Воин на коњ (Скопје)"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.995833333"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.431388888"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Skopje%20-%20Warrior%20on%20a%20Horse%20%289451253725%29.jpg"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Warrior on Horseback"
+    },
+    "depicts": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8409"
+    },
+    "depEn": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Alexander the Great"
+    },
+    "depMk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Александар III Македонски"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q4680067"
+    },
+    "wen": {
+     "type": "uri",
+     "value": "https://en.wikipedia.org/wiki/Adam_of_Macedonia"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%90%D0%B4%D0%B0%D0%BC_%D0%BE%D0%B4_%D0%9C%D0%B0%D0%BA%D0%B5%D0%B4%D0%BE%D0%BD%D0%B8%D1%98%D0%B0"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Адам од Македонија"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.991"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.4289"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Adam of Macedonia"
+    }
+   }
+  ]
+ }
+}
