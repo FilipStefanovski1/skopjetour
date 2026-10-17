@@ -1,4 +1,4 @@
-import type { Lang, Statue, StatueProps, Theme } from './types'
+import { dataLang, type DataLang, type Lang, type Statue, type StatueProps, type Theme } from './types'
 
 interface Feature {
   geometry: { coordinates: [number, number] }
@@ -42,8 +42,22 @@ export interface Story {
  * A statue's story in the visitor's language. Pre-generated biographies in
  * /content/<id>.<lang>.json win; until those exist, fall back to the Wikipedia summary.
  */
-export async function loadStory(s: Statue, lang: Lang): Promise<Story | null> {
+let written: Promise<Set<string>> | null = null
+
+/** The reviewed stories that exist (public/content/index.json), as "<id>.<lang>". */
+function writtenStories(): Promise<Set<string>> {
+  written ??= fetch('/content/index.json')
+    .then((r) => (r.ok && r.headers.get('content-type')?.includes('json') ? r.json() : []))
+    .then((names: string[]) => new Set(names))
+    .catch(() => new Set<string>())
+  return written
+}
+
+export async function loadStory(s: Statue, screenLang: Lang): Promise<Story | null> {
+  // Stories exist in Macedonian and English; the other languages read the English.
+  const lang = dataLang(screenLang)
   try {
+    if (!(await writtenStories()).has(`${s.id}.${lang}`)) throw new Error('no written story')
     const res = await fetch(`/content/${s.id}.${lang}.json`)
     if (res.ok && res.headers.get('content-type')?.includes('json')) {
       const c: { bio: string; audio?: string } = await res.json()
@@ -53,7 +67,7 @@ export async function loadStory(s: Statue, lang: Lang): Promise<Story | null> {
     // no generated content yet
   }
   // The visitor's language first; if that Wikipedia has no article, the other one.
-  const other: Lang = lang === 'en' ? 'mk' : 'en'
+  const other: DataLang = lang === 'en' ? 'mk' : 'en'
   for (const l of [lang, other]) {
     const title = l === 'en' ? s.wiki_en : s.wiki_mk
     if (!title) continue

@@ -1,4 +1,23 @@
-export type Lang = 'mk' | 'en'
+/** The languages the app's screens speak. */
+export type Lang = 'mk' | 'en' | 'sq' | 'tr' | 'sr' | 'es' | 'de'
+
+/** Statue names, descriptions and stories exist in Macedonian and English; every other language reads the English. */
+export type DataLang = 'mk' | 'en'
+
+export const dataLang = (lang: Lang): DataLang => (lang === 'mk' ? 'mk' : 'en')
+
+/** In each language's own name, for the language picker. */
+export const LANGS: { code: Lang; name: string }[] = [
+  { code: 'mk', name: 'Македонски' },
+  { code: 'en', name: 'English' },
+  { code: 'sq', name: 'Shqip' },
+  { code: 'tr', name: 'Türkçe' },
+  { code: 'sr', name: 'Srpski' },
+  { code: 'es', name: 'Español' },
+  { code: 'de', name: 'Deutsch' },
+]
+
+export const isLang = (code: unknown): code is Lang => LANGS.some((l) => l.code === code)
 
 export interface StatueProps {
   id: string
@@ -40,6 +59,15 @@ export interface Theme {
   id: string
   mk: string
   en: string
+  sq?: string
+  tr?: string
+  sr?: string
+  es?: string
+  de?: string
+}
+
+export function themeName(th: Theme, lang: Lang): string {
+  return th[lang] ?? th.en
 }
 
 /** "Споменик на Даме Груев" / "Monument of Dame Gruev" read as just the person's name. */
@@ -56,7 +84,7 @@ export function coverFile(s: Statue): string | null {
 }
 
 export function statueName(s: Statue, lang: Lang): string {
-  const raw = lang === 'en' ? s.name_en ?? s.subject_en ?? s.name_mk ?? '' : s.name_mk ?? s.subject_mk ?? s.name_en ?? ''
+  const raw = dataLang(lang) === 'en' ? s.name_en ?? s.subject_en ?? s.name_mk ?? '' : s.name_mk ?? s.subject_mk ?? s.name_en ?? ''
   return displayName(raw)
 }
 
@@ -72,10 +100,10 @@ export function subjectLine(s: Statue, lang: Lang): string | null {
 
 /** One line on who or what this is ("Macedonian writer (1935–1987)"), in the visitor's language. */
 export function describe(s: Statue, lang: Lang): string | null {
-  const d = lang === 'en' ? s.desc_en : s.desc_mk
+  const d = dataLang(lang) === 'en' ? s.desc_en : s.desc_mk
   return d ? d.charAt(0).toUpperCase() + d.slice(1) : subjectLine(s, lang)
 }
 
 export function subjectName(s: Statue, lang: Lang): string | null {
-  return lang === 'en' ? s.subject_en ?? s.subject_mk : s.subject_mk ?? s.subject_en
+  return dataLang(lang) === 'en' ? s.subject_en ?? s.subject_mk : s.subject_mk ?? s.subject_en
 }

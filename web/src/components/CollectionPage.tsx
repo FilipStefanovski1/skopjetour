@@ -3,7 +3,7 @@ import { useMemo, useState, type CSSProperties } from 'react'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import type { Lang, Statue, Theme } from '../types'
-import { coverFile, statueName } from '../types'
+import { coverFile, statueName, themeName } from '../types'
 import { LangSwitch } from './LangSwitch'
 import { StatueGlyph } from './StatueGlyph'
 
@@ -55,7 +55,7 @@ export function CollectionPage({ statues, themes, seen, myPhotos, lang, onLang, 
           </button>
           {themes.map((th) => (
             <button key={th.id} type="button" aria-pressed={theme === th.id} onClick={() => setTheme(th.id)}>
-              {th[lang]}
+              {themeName(th, lang)}
             </button>
           ))}
         </nav>

@@ -5,7 +5,7 @@ import type { Course } from '../course'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import type { Lang, Statue, Theme } from '../types'
-import { coverFile, statueName } from '../types'
+import { coverFile, statueName, themeName } from '../types'
 import type { LatLon } from './MapView'
 import { StatueGlyph } from './StatueGlyph'
 import { Carousel } from './Carousel'
@@ -38,7 +38,8 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
   const completed = course?.controls.filter((s) => seen.has(s.id)).length ?? 0
   const show = (id: string) => { onSelect(id); setPanel(null) }
   const routed = walking.route
-  const walkName = course ? themes.find((th) => th.id === course.id)?.[lang] : null
+  const walkTheme = course ? themes.find((th) => th.id === course.id) : undefined
+  const walkName = walkTheme ? themeName(walkTheme, lang) : null
   const routeNotice = course && (walking.status === 'loading' ? 'walkLoading' : walking.status === 'error' ? 'walkRoutingError' : routed?.originUnavailable ? 'walkOriginUnavailable' : !routed?.complete ? 'walkPartial' : null)
 
   return <>
@@ -52,7 +53,7 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
           <span>{walkName ?? t('walksShort', lang)}</span>
           {course && <small aria-hidden>{completed}/{course.controls.length}</small>}
         </button>
-        {next && <button type="button" className="discovery__next-shortcut" title={`${t('nextStop', lang)}: ${statueName(next, lang)}`} aria-label={`${t('nextStop', lang)}: ${statueName(next, lang)}, ${formatDistance(metresBetween(origin, next))}`} onClick={() => show(next.id)}><MapPin size={19} aria-hidden /><ChevronRight size={13} aria-hidden /></button>}
+        {next && <button type="button" className="discovery__next-shortcut" title={`${t('nextStop', lang)}: ${statueName(next, lang)}`} aria-label={`${t('nextStop', lang)}: ${statueName(next, lang)}${userPos ? `, ${formatDistance(metresBetween(userPos, next))}` : ''}`} onClick={() => show(next.id)}><MapPin size={19} aria-hidden /><ChevronRight size={13} aria-hidden /></button>}
       </div>
       {panel ? <div id="map-discovery-panel" className="discovery__panel">
         <div className="discovery__heading">
@@ -69,7 +70,7 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
             {discovered.map((s) => <li key={s.id} className={s.id === activeId ? 'is-selected' : ''}>
               <button type="button" className="discovery__place" onClick={() => onOpen(s.id)}>
                 <span className="discovery__photo">{coverFile(s) ? <img src={photoUrl(coverFile(s)!, 120)} alt="" loading="lazy" /> : <StatueGlyph />}</span>
-                <span><strong>{statueName(s, lang)}</strong><small>{formatDistance(metresBetween(origin, s))} · {seen.has(s.id) ? <><Check size={12} aria-hidden /> {t('visited', lang)}</> : t('unvisited', lang)}</small></span>
+                <span><strong>{statueName(s, lang)}</strong><small>{userPos && <>{formatDistance(metresBetween(userPos, s))} · </>}{seen.has(s.id) ? <><Check size={12} aria-hidden /> {t('visited', lang)}</> : t('unvisited', lang)}</small></span>
               </button>
               <button type="button" className="discovery__map" onClick={() => show(s.id)} aria-label={`${t('showOnMap', lang)}: ${statueName(s, lang)}`}><MapPin size={19} /></button>
             </li>)}
@@ -77,7 +78,7 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
           {!discovered.length && <p className="discovery__hint">{t('noNearby', lang)}</p>}
         </> : <>
           {course && <div className="discovery__walk-summary">
-            <div><strong>{walkName}</strong><small>{t('walkProgress', lang, { n: completed, m: course.controls.length })}{routed?.complete && <> · {formatDistance(routed.metres)} · ≈{routed.minutes} {lang === 'en' ? 'min walking' : 'мин пешачење'}</>}</small></div>
+            <div><strong>{walkName}</strong><small>{t('walkProgress', lang, { n: completed, m: course.controls.length })}{routed?.complete && <> · {formatDistance(routed.metres)} · ≈{t('minWalking', lang, { m: routed.minutes })}</>}</small></div>
             <button type="button" className="discovery__end-walk" onClick={() => { onRoute(null); setPanel(null) }}>{t('endWalk', lang)}</button>
             <progress value={completed} max={course.controls.length || 1} aria-label={t('walkProgress', lang, { n: completed, m: course.controls.length })} />
             <p className="discovery__start-hint">{t(routed?.originUnavailable ? 'walkOriginUnavailable' : course.origin ? 'walkFromYou' : 'walkNeedsLocation', lang)}</p>
@@ -88,8 +89,8 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
           <p className="discovery__hint">{t('walkEstimate', lang)}</p>
           <ul className="discovery__walks">
             {walks.filter(({ walk }) => walk.controls.length > 0).map(({ theme, walk }) => <li key={theme.id}>
-              <button type="button" aria-pressed={course?.id === theme.id} aria-label={`${t('startWalk', lang)}: ${theme[lang]}`} onClick={() => { onRoute(theme.id); setPanel(null) }}>
-                <Footprints size={22} aria-hidden /><span><strong>{theme[lang]}</strong><small>{t('walkStats', lang, { n: walk.controls.length, m: walk.minutes })} · ≈{formatDistance(walk.metres)}</small><small>{t('walkProgress', lang, { n: walk.controls.filter((s) => seen.has(s.id)).length, m: walk.controls.length })}</small></span><ChevronRight size={18} aria-hidden />
+              <button type="button" aria-pressed={course?.id === theme.id} aria-label={`${t('startWalk', lang)}: ${themeName(theme, lang)}`} onClick={() => { onRoute(theme.id); setPanel(null) }}>
+                <Footprints size={22} aria-hidden /><span><strong>{themeName(theme, lang)}</strong><small>{t('walkStats', lang, { n: walk.controls.length, m: walk.minutes })} · ≈{formatDistance(walk.metres)}</small><small>{t('walkProgress', lang, { n: walk.controls.filter((s) => seen.has(s.id)).length, m: walk.controls.length })}</small></span><ChevronRight size={18} aria-hidden />
               </button>
             </li>)}
           </ul>

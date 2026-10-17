@@ -1,11 +1,11 @@
-import type { Lang } from './types'
+import type { DataLang } from './types'
 
 /**
  * The tour guide's voice, spoken by the phone itself (Web Speech API): free, offline, no audio
  * files. Text is queued sentence by sentence because some browsers cut long utterances short.
  */
 
-const FALLBACKS: Record<Lang, string[]> = {
+const FALLBACKS: Record<DataLang, string[]> = {
   // No phone ships a Macedonian voice everywhere; the closest South Slavic voices read Cyrillic well.
   mk: ['mk', 'sr', 'bg', 'hr', 'bs'],
   en: ['en-GB', 'en-US', 'en'],
@@ -18,7 +18,7 @@ function voices(): SpeechSynthesisVoice[] {
 }
 
 /** Best voice for the language, or null if the phone has none that fits. */
-export function pickVoice(lang: Lang): SpeechSynthesisVoice | null {
+export function pickVoice(lang: DataLang): SpeechSynthesisVoice | null {
   const all = voices()
   for (const code of FALLBACKS[lang]) {
     const exact = all.filter((v) => v.lang.toLowerCase().startsWith(code.toLowerCase()))

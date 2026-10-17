@@ -476,26 +476,33 @@ h1 {
 }
 
 .lang {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   flex: none;
-  padding: 3px;
-  border-radius: 20px;
+  align-items: center;
+  gap: 5px;
+  height: 38px;
+  padding: 0 10px 0 11px;
+  border-radius: 19px;
   background: var(--bg);
-}
-
-.lang button {
-  min-width: 40px;
-  height: 32px;
-  border-radius: 16px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--ink-2);
-}
-
-.lang button[aria-pressed='true'] {
-  background: var(--surface);
   color: var(--ink);
-  box-shadow: 0 1px 3px rgba(47, 69, 80, 0.16);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.lang:focus-within {
+  outline: 2.5px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The phone's own picker opens from an invisible select laid over the pill. */
+.lang select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  font-size: 16px; /* below 16px iPhones zoom the page when it opens */
+  cursor: pointer;
 }
 
 .search__results {
@@ -618,6 +625,20 @@ h1 {
 
 .bottom > * {
   pointer-events: auto;
+}
+
+.bottom {
+  transition: transform 280ms var(--ease), opacity 200ms var(--ease);
+}
+
+/* Tucked away by a tap on the map. */
+.bottom.is-tucked {
+  transform: translateY(calc(100% + var(--nav-h)));
+  opacity: 0;
+}
+
+.bottom.is-tucked > * {
+  pointer-events: none;
 }
 
 .cards {
@@ -1136,7 +1157,9 @@ h1 {
   inset: 0;
 }
 
-.app:not([data-tab='map']) .screen--map {
+.app:not([data-tab='map']) .screen--map,
+/* MapLibre's attribution sets itself visible, which would show (and tap) through other tabs. */
+.app:not([data-tab='map']) .screen--map * {
   visibility: hidden;
 }
 
@@ -1237,7 +1260,50 @@ h1 {
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  padding: calc(var(--safe-top) + 14px) 20px 22px;
+  /* The tab bar's raised Scan button overlaps the page by about 30px. */
+  padding: calc(var(--safe-top) + 14px) 20px 52px;
+}
+
+/* Short phones (iPhone SE and smaller): keep "Snap a statue" above the fold. */
+@media (max-height: 700px) {
+  .scan .plaque {
+    width: min(66vw, 270px, 28dvh);
+    margin-top: 6px;
+  }
+
+  .scan .plaque__face {
+    width: 60%;
+    border-radius: 22px;
+  }
+
+  .scan .plaque__face .glyph {
+    width: 58%;
+    height: auto;
+  }
+
+  .scan .plaque__nfc {
+    right: -8px;
+    bottom: -8px;
+    padding: 6px;
+  }
+
+  .scan .scan__text h1 {
+    font-size: 1.55rem;
+  }
+
+  .scan .scan__text p {
+    margin-top: 6px;
+    font-size: 0.95rem;
+  }
+
+  .scan .scan__actions {
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .scan .scan__actions .btn {
+    height: 50px;
+  }
 }
 
 .scan__top {
@@ -1426,7 +1492,7 @@ h1 {
 /* ------------------------------------------------------------------ collection */
 
 .collection {
-  padding: calc(var(--safe-top) + 14px) 16px 24px;
+  padding: calc(var(--safe-top) + 14px) 16px 52px;
 }
 
 .collection__title {
@@ -1728,6 +1794,34 @@ h1 {
   color: var(--ink-2);
   white-space: nowrap;
   transition: background 180ms var(--ease), color 180ms var(--ease);
+}
+
+/* Narrow phones: only the open view keeps its word; the others are icons. */
+@media (max-width: 380px) {
+  .media-tabs button {
+    padding: 0 11px;
+  }
+
+  .media-tabs button[aria-selected='false'] .media-tabs__label {
+    display: none;
+  }
+}
+
+.ar-button {
+  position: absolute;
+  right: 14px;
+  bottom: 70px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 18px;
+  background: rgba(244, 244, 249, 0.94);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(47, 69, 80, 0.22);
 }
 
 .media-tabs button[aria-selected='true'] {
@@ -2270,4 +2364,17 @@ h1 {
 /* While walking somewhere, the other statues step back so the route reads first. */
 .map.is-navigating .marker:not(:has(.is-active)) {
   opacity: 0.45;
+}
+
+/* Statues are tall: crop thumbnails toward the top so the head stays in frame, not just the legs. */
+.tile__photo img,
+.card__photo img,
+.pin img,
+.cluster__photo img,
+.guess__photo img,
+.result__photo img,
+.navpanel__photo img,
+.nav-next img,
+.detail__hero--photo img {
+  object-position: 50% 18%;
 }

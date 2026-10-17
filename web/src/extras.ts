@@ -1,4 +1,4 @@
-import type { Lang } from './types'
+import type { DataLang } from './types'
 
 /** 3D models by the statue's Wikidata item. */
 export const MODELS: Record<string, { src: string }> = {
@@ -11,7 +11,7 @@ export const MODELS: Record<string, { src: string }> = {
  * Wikipedia articles (EN "Warrior on Horseback", MK "Воин на коњ (Скопје)", "Alexander the Great").
  * Other statues are narrated from their Wikipedia summary.
  */
-export const NARRATION: Record<string, Record<Lang, string>> = {
+export const NARRATION: Record<string, Record<DataLang, string>> = {
   Q3497603: {
     en: `Welcome to Macedonia Square. Look up: the rider on the rearing horse is the Warrior on Horseback, the centrepiece of Skopje's main square. The bronze figure is about twelve metres tall and stands on a ten-metre column, and the whole monument is also a fountain. It was sculpted by Valentina Stevanovska, cast in Florence, Italy, and unveiled on the eighth of September 2011, twenty years after the country's independence referendum.
 Officially it is simply a warrior, but everyone in Skopje knows who it shows: Alexander the Great. Alexander was born in Pella in 356 BC, the son of King Philip the Second and Olympias. As a boy he was taught by the philosopher Aristotle. He became king at twenty, and by thirty he had built one of the largest empires in history, stretching from Greece to northwestern India, and he never lost a battle. He died in Babylon in 323 BC, at just thirty-two.

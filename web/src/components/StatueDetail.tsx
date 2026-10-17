@@ -1,12 +1,12 @@
-import { ArrowLeft, Camera, Check, ChevronLeft, ExternalLink, Image as ImageIcon, Navigation2, Pause, Rotate3d, Sparkles, UserRound, Volume2 } from 'lucide-react'
+import { ArrowLeft, Box, Camera, Check, ChevronLeft, ExternalLink, Image as ImageIcon, Navigation2, Pause, Rotate3d, Sparkles, UserRound, Volume2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { formatDistance, metresBetween } from '../course'
 import { loadStory, photoPageUrl, photoUrl, wikiUrl, type Story } from '../data'
 import { MODELS, NARRATION } from '../extras'
-import { t } from '../i18n'
+import { t, type StringKey } from '../i18n'
 import { canSpeak, pickVoice, speak, voicesReady, type Narration } from '../narrator'
 import type { Lang, Statue, Theme } from '../types'
-import { coverFile, describe, statueName } from '../types'
+import { coverFile, dataLang, describe, statueName, type DataLang } from '../types'
 import type { LatLon } from './MapView'
 import { StatueGlyph } from './StatueGlyph'
 
@@ -38,15 +38,15 @@ function loadModelViewer() {
   return modelViewerLoading
 }
 
-const MATERIALS: Record<string, Record<Lang, string>> = {
-  bronze: { mk: 'Бронза', en: 'Bronze' },
-  marble: { mk: 'Мермер', en: 'Marble' },
-  metal: { mk: 'Метал', en: 'Metal' },
-  steel: { mk: 'Челик', en: 'Steel' },
-  copper: { mk: 'Бакар', en: 'Copper' },
-  concrete: { mk: 'Бетон', en: 'Concrete' },
-  stone: { mk: 'Камен', en: 'Stone' },
-  granite: { mk: 'Гранит', en: 'Granite' },
+const MATERIALS: Record<string, StringKey> = {
+  bronze: 'materialBronze',
+  marble: 'materialMarble',
+  metal: 'materialMetal',
+  steel: 'materialSteel',
+  copper: 'materialCopper',
+  concrete: 'materialConcrete',
+  stone: 'materialStone',
+  granite: 'materialGranite',
 }
 
 /** Pokémon GO-style sparkles around the model: [left %, top %, size px, delay s]. */
@@ -78,6 +78,8 @@ function fileCaption(file: string): string {
 /** One statue, full screen: photo, 3D or the person, who they were, the guide's voice, and the way on. */
 export function StatueDetail({ statue, lang, themes, list, numbers, userPos, seen, myPhoto, collected, onSnap, onNavigate, onDirections, onClose }: Props) {
   const model = statue.statue_qid ? MODELS[statue.statue_qid] : undefined
+  // Story, guide and names come in Macedonian or English; the screens in any of the app's languages.
+  const dl = dataLang(lang)
   const [story, setStory] = useState<Story | null | undefined>(undefined)
   // A statue with a model opens on it, turning slowly, the way a Pokémon GO entry does.
   const [media, setMedia] = useState<Media>(firstMedia(statue, Boolean(model)))
@@ -121,16 +123,16 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
   }, [onClose])
 
   const scripted = statue.statue_qid ? NARRATION[statue.statue_qid] : undefined
-  const guideText = scripted?.[lang] ?? story?.text ?? null
+  const guideText = scripted?.[dl] ?? story?.text ?? null
 
   const startGuide = async () => {
     if (!canSpeak || !guideText) return
     await voicesReady()
     let text = guideText
-    let voice = pickVoice(lang)
-    let tag = lang === 'mk' ? 'mk-MK' : 'en-GB'
+    let voice = pickVoice(dl)
+    let tag = dl === 'mk' ? 'mk-MK' : 'en-GB'
     setVoiceNote(null)
-    if (!voice && lang === 'mk' && scripted?.en) {
+    if (!voice && dl === 'mk' && scripted?.en) {
       // No Macedonian-capable voice on this phone: the guide speaks English instead.
       text = scripted.en
       voice = pickVoice('en')
@@ -163,11 +165,11 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
   const name = statueName(statue, lang)
   const desc = describe(statue, lang)
   const n = numbers?.get(statue.id)
-  const route = statue.themes.map((id) => themes.find((th) => th.id === id)?.[lang]).filter(Boolean)[0]
+  const route = statue.themes.map((id) => themes.find((th) => th.id === id)?.[dl]).filter(Boolean)[0]
   const where = n ? t('stopOf', lang, { n, m: numbers!.size }) : userPos ? t('away', lang, { d: formatDistance(metresBetween(userPos, statue)) }) : null
   const meta = [`№ ${String(statue.no).padStart(3, '0')}`, where].filter(Boolean).join(' · ')
   // Up to three facts under the name, the plaque's first: year, height, material, then theme and distance.
-  const material = statue.material ? MATERIALS[statue.material]?.[lang] : undefined
+  const material = statue.material && statue.material in MATERIALS ? t(MATERIALS[statue.material], lang) : undefined
   const stats = [
     statue.year && { label: t('statYear', lang), value: String(statue.year) },
     statue.height && { label: t('statHeight', lang), value: `${statue.height.toLocaleString(lang)} m` },
@@ -177,8 +179,8 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
   ]
     .filter((x): x is { label: string; value: string } => Boolean(x))
     .slice(0, 3)
-  const artist = lang === 'en' ? statue.artist_en : statue.artist_mk
-  const wikiLang: Lang = (lang === 'en' ? statue.wiki_en : statue.wiki_mk) ? lang : lang === 'en' ? 'mk' : 'en'
+  const artist = dl === 'en' ? statue.artist_en : statue.artist_mk
+  const wikiLang: DataLang = (dl === 'en' ? statue.wiki_en : statue.wiki_mk) ? dl : dl === 'en' ? 'mk' : 'en'
   const wikiTitle = wikiLang === 'en' ? statue.wiki_en : statue.wiki_mk
   const note = statue.position === 'approximate' ? t(statue.group === 'art-bridge' ? 'approximate' : 'estimated', lang) : null
 
@@ -238,7 +240,13 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
                 camera-orbit="205deg 78deg 135%"
                 max-camera-orbit="auto auto 180%"
                 class="detail__model"
-              />
+              >
+                {/* Our own AR button, placed clear of the view tabs. */}
+                <button slot="ar-button" type="button" className="ar-button">
+                  <Box aria-hidden size={16} strokeWidth={2.3} />
+                  AR
+                </button>
+              </model-viewer>
             </>
           ) : media === 'mine' && myPhoto ? (
             <img key="mine" src={myPhoto} alt={t('yourPhoto', lang)} decoding="async" />
@@ -273,9 +281,9 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
           {modes.length > 1 && (
             <div className="media-tabs" role="tablist" aria-label={t('view', lang)}>
               {modes.map(({ id, label, icon: Icon }) => (
-                <button key={id} type="button" role="tab" aria-selected={media === id} onClick={() => setMedia(id)}>
+                <button key={id} type="button" role="tab" aria-selected={media === id} aria-label={label} onClick={() => setMedia(id)}>
                   <Icon aria-hidden size={16} strokeWidth={2.3} />
-                  {label}
+                  <span className="media-tabs__label">{label}</span>
                 </button>
               ))}
             </div>

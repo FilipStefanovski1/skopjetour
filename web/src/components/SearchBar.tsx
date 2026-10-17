@@ -4,6 +4,7 @@ import { photoUrl } from '../data'
 import { t } from '../i18n'
 import type { Lang, Statue } from '../types'
 import { coverFile, describe, statueName } from '../types'
+import { LangSwitch } from './LangSwitch'
 import { StatueGlyph } from './StatueGlyph'
 
 interface Props {
@@ -65,13 +66,7 @@ export function SearchBar({ statues, lang, onLang, onPick }: Props) {
             <X aria-hidden size={18} strokeWidth={2.2} />
           </button>
         ) : (
-          <div className="lang" role="group" aria-label="Language / Јазик">
-            {(['mk', 'en'] as const).map((l) => (
-              <button key={l} type="button" aria-pressed={lang === l} onClick={() => onLang(l)}>
-                {l.toUpperCase()}
-              </button>
-            ))}
-          </div>
+          <LangSwitch lang={lang} onLang={onLang} />
         )}
       </div>
       {open && query && (

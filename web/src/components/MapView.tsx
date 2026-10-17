@@ -46,6 +46,8 @@ interface Props {
   follow: boolean
   locating: boolean
   onUserPan: () => void
+  /** A tap on the map itself (not a pin): shows or hides the cards over it. */
+  onMapTap: () => void
   onLocate: () => void
   locateError: string | null
   /** Pretending to stand on Macedonia Square, for demos away from the statues. */
@@ -103,7 +105,7 @@ function clusterElement(count: number, onClick: () => void): HTMLButtonElement {
 /** Statues closer than this to a neighbour need a very close zoom to tell apart (the Art Bridge). */
 const CROWDED_M = 15
 
-export function MapView({ enabled, focusSequence, walkingRoute, locating, statues, course, activeId, seen, lang, insets, onSelect, user, navLine, follow, onUserPan, onLocate, locateError, demo, onDemo }: Props) {
+export function MapView({ enabled, focusSequence, walkingRoute, locating, statues, course, activeId, seen, lang, insets, onSelect, user, navLine, follow, onUserPan, onMapTap, onLocate, locateError, demo, onDemo }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MLMap | null>(null)
   const me = useRef<{ marker: maplibregl.Marker; el: HTMLDivElement } | null>(null)
@@ -115,8 +117,8 @@ export function MapView({ enabled, focusSequence, walkingRoute, locating, statue
   const keepOverview = useRef(false)
   const byId = useRef(new Map<string, Statue>())
   const [ready, setReady] = useState(false)
-  const cb = useRef({ onSelect, onUserPan })
-  cb.current = { onSelect, onUserPan }
+  const cb = useRef({ onSelect, onUserPan, onMapTap })
+  cb.current = { onSelect, onUserPan, onMapTap }
   const insetsRef = useRef(insets)
   insetsRef.current = insets
   const state = useRef({ activeId, seen, course, lang })
@@ -169,6 +171,11 @@ export function MapView({ enabled, focusSequence, walkingRoute, locating, statue
     map.touchZoomRotate.disableRotation()
     // A drag or pinch by the visitor means "let me look around": stop following them.
     map.on('dragstart', () => cb.current.onUserPan())
+    map.on('click', (e) => {
+      // Pins and clusters are DOM markers over the canvas; their taps are their own.
+      if ((e.originalEvent.target as Element | null)?.closest('.maplibregl-marker, button')) return
+      cb.current.onMapTap()
+    })
 
     // HTML photo pins for single statues and count bubbles for groups, rebuilt as the view changes.
     let queued = 0

@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg', 'statues.geojson', 'themes.json'],
+      includeAssets: ['icon.svg', 'apple-touch-icon.png', 'robots.txt', 'statues.geojson', 'themes.json'],
       manifest: {
         name: 'Skopje Statues',
         short_name: 'Statues',
@@ -20,10 +20,20 @@ export default defineConfig(({ mode }) => ({
         theme_color: '#f4f4f9',
         background_color: '#f4f4f9',
         display: 'standalone',
-        icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
+        orientation: 'portrait',
+        start_url: '/',
+        scope: '/',
+        icons: [
+          { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+          { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          // Full-bleed for Android's round and squircle masks.
+          { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,json,geojson,woff2}'],
+        // .mjs is MapLibre's worker: without it the map is blank offline.
+        globPatterns: ['**/*.{js,mjs,css,html,svg,png,json,geojson,woff2}'],
         runtimeCaching: [
           {
             // Vector tiles and map fonts the visitor has already seen stay available offline.
@@ -32,9 +42,16 @@ export default defineConfig(({ mode }) => ({
             options: { cacheName: 'map', expiration: { maxEntries: 1500, maxAgeSeconds: 60 * 60 * 24 * 30 } },
           },
           {
-            urlPattern: /^https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//,
+            // Statue photos are cross-origin <img>s, so their responses are opaque (status 0).
+            urlPattern: /^https:\/\/(commons|upload)\.wikimedia\.org\//,
             handler: 'CacheFirst',
-            options: { cacheName: 'photos', expiration: { maxEntries: 300 } },
+            options: { cacheName: 'photos', cacheableResponse: { statuses: [0, 200] }, expiration: { maxEntries: 300 } },
+          },
+          {
+            // 3D models: fetched the first time a statue is opened, then kept for offline.
+            urlPattern: /\/models\/.*\.glb$/,
+            handler: 'CacheFirst',
+            options: { cacheName: 'models', expiration: { maxEntries: 10 } },
           },
           {
             urlPattern: /^https:\/\/(mk|en)\.wikipedia\.org\/api\/rest_v1\/page\/summary\//,

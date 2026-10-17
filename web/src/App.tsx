@@ -7,7 +7,7 @@ import { MapView, type Insets, type LatLon } from './components/MapView'
 import { NavBanner, NavPanel, type NavStatus } from './components/Navigation'
 import { fetchRoute, progress as routeProgress, type Route } from './directions'
 import { enableCompass, locationErrorText, useCompass, useDemoLocation, useLiveLocation } from './location'
-import { statueName } from './types'
+import { isLang, statueName } from './types'
 import { Check, X } from 'lucide-react'
 import { MapDiscovery } from './components/MapDiscovery'
 import { useWalkingRoute } from './useWalkingRoute'
@@ -85,7 +85,13 @@ export default function App() {
   const [statues, setStatues] = useState<Statue[] | null>(null)
   const [themes, setThemes] = useState<Theme[]>([])
   const [failed, setFailed] = useState(false)
-  const [lang, setLang] = useState<Lang>(() => (stored<string>('lang', 'mk') === 'en' ? 'en' : 'mk'))
+  // The visitor's choice, else their phone's language when the app speaks it, else Macedonian.
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = stored<string | null>('lang', null)
+    if (isLang(saved)) return saved
+    const phone = navigator.languages?.map((l) => l.slice(0, 2).toLowerCase()).find(isLang)
+    return phone ?? 'mk'
+  })
   const [tab, setTab] = useState<Tab>(initial.tab)
   const [routeId, setRouteId] = useState<string | null>(initial.route)
   const [activeId, setActiveId] = useState<string | null>(initial.statue)
@@ -117,7 +123,10 @@ export default function App() {
   const userPos = fix
   const [routeStart, setRouteStart] = useState<{ id: string; position: LatLon | null } | null>(null)
   const [focusSequence, setFocusSequence] = useState(0)
+  // A tap on the map tucks the cards away to show more of it; another tap or a pin brings them back.
+  const [cardsHidden, setCardsHidden] = useState(false)
   const selectOnMap = useCallback((id: string) => {
+    setCardsHidden(false)
     setFollow(false)
     setActiveId(id)
     setFocusSequence((n) => n + 1)
@@ -306,7 +315,9 @@ export default function App() {
       if (!topRef.current || !bottomRef.current) return
       setInsets({
         top: topRef.current.getBoundingClientRect().bottom,
-        bottom: window.innerHeight - bottomRef.current.getBoundingClientRect().top,
+        bottom: cardsHidden
+          ? document.querySelector('.tabbar')?.getBoundingClientRect().height ?? 66
+          : window.innerHeight - bottomRef.current.getBoundingClientRect().top,
       })
     }
     measure()
@@ -318,7 +329,7 @@ export default function App() {
       ro.disconnect()
       removeEventListener('resize', measure)
     }
-  }, [statues, tab])
+  }, [statues, tab, cardsHidden])
 
   return (
     <div className="app" data-tab={tab} style={{ '--top-h': `${insets.top}px`, '--bottom-h': `${insets.bottom}px` } as React.CSSProperties}>
@@ -339,6 +350,7 @@ export default function App() {
           follow={following}
           locating={(locating || Boolean(target)) && !fix && !locationError}
           onUserPan={() => setFollow(false)}
+          onMapTap={() => !target && setCardsHidden((hidden) => !hidden)}
           onLocate={() => {
             if (following && !locationError) {
               setFollow(false)
@@ -368,7 +380,7 @@ export default function App() {
           )}
         </header>
 
-        <div ref={bottomRef} className="bottom">
+        <div ref={bottomRef} className={`bottom${cardsHidden && !target ? ' is-tucked' : ''}`}>
           {target ? (
             <NavPanel
               lang={lang}

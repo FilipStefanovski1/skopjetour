@@ -1,6 +1,21 @@
-import type { Lang } from './types'
+import de from './locales/de'
+import es from './locales/es'
+import sq from './locales/sq'
+import sr from './locales/sr'
+import tr from './locales/tr'
+import type { DataLang, Lang } from './types'
 
 const strings = {
+  language: { mk: 'Јазик', en: 'Language' },
+  minWalking: { mk: '{m} мин пешачење', en: '{m} min walking' },
+  materialBronze: { mk: 'Бронза', en: 'Bronze' },
+  materialMarble: { mk: 'Мермер', en: 'Marble' },
+  materialMetal: { mk: 'Метал', en: 'Metal' },
+  materialSteel: { mk: 'Челик', en: 'Steel' },
+  materialCopper: { mk: 'Бакар', en: 'Copper' },
+  materialConcrete: { mk: 'Бетон', en: 'Concrete' },
+  materialStone: { mk: 'Камен', en: 'Stone' },
+  materialGranite: { mk: 'Гранит', en: 'Granite' },
   walkStart: { mk: 'Почеток', en: 'Start' },
   walkFromYou: { mk: 'Почнува од твојата локација при изборот на прошетката.', en: 'Starts from your location when you chose this walk.' },
   walkNeedsLocation: { mk: 'Вклучи „Следи ме“ за прошетката да почне од твојата локација.', en: 'Turn on Follow me to start this walk from your location.' },
@@ -177,12 +192,15 @@ const strings = {
   straight: { mk: 'Продолжи право', en: 'Continue straight' },
   inDistance: { mk: 'За {d}', en: 'In {d}' },
   youAreHere: { mk: 'Ти си тука', en: 'You are here' },
-} satisfies Record<string, Record<Lang, string>>
+} satisfies Record<string, Record<DataLang, string>>
 
 export type StringKey = keyof typeof strings
 
+/** Macedonian and English live above; the other languages in src/locales, one file each. */
+const locales: Record<Exclude<Lang, DataLang>, Record<StringKey, string>> = { sq, tr, sr, es, de }
+
 export function t(key: StringKey, lang: Lang, vars?: Record<string, string | number>): string {
-  let s: string = strings[key][lang]
+  let s: string = lang === 'mk' || lang === 'en' ? strings[key][lang] : locales[lang][key]
   if (vars) for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, String(v))
   return s
 }

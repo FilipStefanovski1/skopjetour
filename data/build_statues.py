@@ -672,6 +672,20 @@ def find_photos(statues, offline):
             s["sources"] = sorted(set(s["sources"]) | {"commons-search"})
 
 
+def drop_rejected_photos(statues):
+    """Reviewed wrong photos (data/photo_rejects.json) leave every statue, from any source;
+    a reviewed pick (data/photo_picks.json) becomes the statue's photo."""
+    rejects = {t.removeprefix("File:") for t in json.loads((ROOT / "photo_rejects.json").read_text())}
+    picks = json.loads((ROOT / "photo_picks.json").read_text())
+    for s in statues:
+        s["photos"] = [f for f in s["photos"] if f not in rejects]
+        if s["id"] in picks:
+            s["photos"] = [picks[s["id"]]] + [f for f in s["photos"] if f != picks[s["id"]]]
+            s["image"] = picks[s["id"]]
+        elif s["image"] in rejects:
+            s["image"] = s["photos"][0] if s["photos"] else None
+
+
 def apply_people(statues):
     """Reviewed descriptions and English stories (data/people.json) over Wikidata's and Wikipedia's."""
     reviewed = json.loads((ROOT / "people.json").read_text())
@@ -691,6 +705,8 @@ def apply_people(statues):
                 s[f"desc_{lang}"] = r[lang]
         if r.get("story_en"):
             (content / f"{s['id']}.en.json").write_text(json.dumps({"bio": r["story_en"]}, ensure_ascii=False))
+    # Which stories exist, so the app asks only for those instead of probing every statue.
+    (content / "index.json").write_text(json.dumps(sorted(f.name.removesuffix(".json") for f in content.glob("*.*.json"))))
 
 
 def number(statues):
@@ -763,6 +779,7 @@ def main():
     fill_names(statues)
     enrich(statues, args.offline)
     find_photos(statues, args.offline)
+    drop_rejected_photos(statues)
     apply_people(statues)
     apply_themes(statues)
     number(statues)

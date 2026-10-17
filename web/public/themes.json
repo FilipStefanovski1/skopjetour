@@ -3,6 +3,11 @@
     "id": "antiquity",
     "mk": "Антика",
     "en": "Antiquity",
+    "sq": "Antikiteti",
+    "tr": "Antik Çağ",
+    "sr": "Antika",
+    "es": "Antigüedad",
+    "de": "Antike",
     "match": [
       "Филип II",
       "Philip II",
@@ -28,6 +33,11 @@
     "id": "faith",
     "mk": "Писменост и вера",
     "en": "Letters and faith",
+    "sq": "Shkrimi dhe besimi",
+    "tr": "Yazı ve inanç",
+    "sr": "Pismenost i vera",
+    "es": "Letras y fe",
+    "de": "Schrift und Glaube",
     "match": [
       "Кирил",
       "Cyril",
@@ -55,6 +65,11 @@
     "id": "revolution",
     "mk": "Револуционери",
     "en": "Revolutionaries",
+    "sq": "Revolucionarët",
+    "tr": "Devrimciler",
+    "sr": "Revolucionari",
+    "es": "Revolucionarios",
+    "de": "Revolutionäre",
     "match": [
       "Гоце Делчев",
       "Goce Delchev",
@@ -126,6 +141,11 @@
     "groups": [
       "art-bridge"
     ],
+    "sq": "Artistët",
+    "tr": "Sanatçılar",
+    "sr": "Umetnici",
+    "es": "Artistas",
+    "de": "Künstler",
     "match": [
       "Тоше Проески",
       "Toše Proeski",
@@ -139,6 +159,11 @@
     "id": "everyday",
     "mk": "Секојдневно Скопје",
     "en": "Everyday Skopje",
+    "sq": "Shkupi i përditshëm",
+    "tr": "Gündelik Üsküp",
+    "sr": "Svakodnevno Skoplje",
+    "es": "Skopje cotidiano",
+    "de": "Skopje im Alltag",
     "match": [
       "Просјак",
       "Beggar",
@@ -157,7 +182,8 @@
       "Мајки",
       "Venus",
       "Torch bearer",
-      "Lion", "Lions",
+      "Lion",
+      "Lions",
       "Лав",
       "Дрво",
       "Tree"
