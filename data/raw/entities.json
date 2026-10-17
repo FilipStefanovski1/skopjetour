@@ -1,0 +1,926 @@
+{
+ "Q12277581": {
+  "desc": {
+   "en": "Macedonian partisan and revolutionary",
+   "mk": "македонски партизан и револуционер"
+  },
+  "wiki": {
+   "mk": "Даме Крапчев"
+  }
+ },
+ "Q12288012": {
+  "desc": {
+   "en": "Yugoslav partisan",
+   "mk": "македонска партизанка"
+  },
+  "wiki": {
+   "en": "Nevena Georgieva",
+   "mk": "Невена Георгиева-Дуња"
+  }
+ },
+ "Q12288547": {
+  "desc": {
+   "en": "Socialist revolutionary"
+  },
+  "wiki": {
+   "mk": "Никола Петров Русински"
+  }
+ },
+ "Q12289741": {
+  "desc": {
+   "en": "Monument in the Macedonian capital Skopje"
+  },
+  "wiki": {
+   "mk": "Споменик на Скендербег (Скопје)"
+  }
+ },
+ "Q12296806": {
+  "desc": {},
+  "wiki": {
+   "en": "Trajko Prokopiev",
+   "mk": "Трајко Прокопиев"
+  }
+ },
+ "Q1284754": {
+  "desc": {
+   "en": "Bulgarian revivalists and folklorists",
+   "mk": "македонски преродбеници"
+  },
+  "wiki": {
+   "en": "Miladinov brothers",
+   "mk": "Браќа Миладиновци"
+  }
+ },
+ "Q1289578": {
+  "desc": {
+   "mk": "македонски партизан",
+   "en": "Macedonian and Yugoslav partizan (1921–1944)"
+  },
+  "wiki": {
+   "en": "Hristijan Todorovski Karpoš",
+   "mk": "Христијан Тодоровски-Карпош"
+  }
+ },
+ "Q12905165": {
+  "desc": {
+   "en": "sculpture in Skopje",
+   "mk": "скулптура во Скопје"
+  },
+  "wiki": {
+   "mk": "Бесконечна циркулација (скулптура во Скопје)"
+  }
+ },
+ "Q12906239": {
+  "desc": {
+   "en": "sculpture in Skopje",
+   "mk": "скулптура во Скопје"
+  },
+  "wiki": {
+   "mk": "Дрво (скулптура во Скопје)"
+  }
+ },
+ "Q12908768": {
+  "desc": {
+   "en": "sculpture in Skopje",
+   "mk": "скулптура во Скопје"
+  },
+  "wiki": {
+   "mk": "Музиканти (скулптура во Скопје)"
+  }
+ },
+ "Q12909479": {
+  "desc": {
+   "en": "sculpture in Skopje",
+   "mk": "скулптура во Скопје"
+  },
+  "wiki": {
+   "mk": "Пајонска свештеничка (скулптура)"
+  }
+ },
+ "Q12909806": {
+  "desc": {
+   "en": "sculpture in Skopje",
+   "mk": "скулптура во Скопје"
+  },
+  "wiki": {
+   "mk": "Просјак (скулптура во Скопје)"
+  }
+ },
+ "Q12909988": {
+  "desc": {
+   "en": "sculpture in Skopje",
+   "mk": "скулптура во Скопје"
+  },
+  "wiki": {
+   "mk": "Риба (скулптура во Скопје)"
+  }
+ },
+ "Q12910338": {
+  "desc": {
+   "en": "monument in Skopje",
+   "mk": "споменик во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик „Сила, Слава и Победа“ - Скопје"
+  }
+ },
+ "Q12910613": {
+  "desc": {
+   "en": "statue in Skopje",
+   "mk": "статуа во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Ѓорѓија Пулевски (Скопје)"
+  }
+ },
+ "Q12910616": {
+  "desc": {
+   "en": "statue in Ǵorče Petrov neighbourhood, Skopje",
+   "mk": "статуа во населба Ѓорче Петров, Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Ѓорче Петров (Скопје-Ѓорче Петров)"
+  }
+ },
+ "Q12910626": {
+  "desc": {
+   "mk": "споменик на плоштадот „Македонија“ во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Јустинијан I"
+  }
+ },
+ "Q12910627": {
+  "desc": {
+   "mk": "споменик во Скопје",
+   "en": "monument in Skopje"
+  },
+  "wiki": {
+   "mk": "Споменик на Гемиџиите (Скопје)"
+  }
+ },
+ "Q12910628": {
+  "desc": {
+   "mk": "споменик во Скопје посветен на бранителите на Македонија во конфликтот од 2001 г."
+  },
+  "wiki": {
+   "mk": "Споменик на Бранителите (Скопје)"
+  }
+ },
+ "Q12910630": {
+  "desc": {
+   "en": "statue in Skopje",
+   "mk": "статуа во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Питу Гули (Скопје)"
+  }
+ },
+ "Q12910631": {
+  "desc": {},
+  "wiki": {
+   "mk": "Споменик на Цар Самоил (Скопје)"
+  }
+ },
+ "Q12910632": {
+  "desc": {
+   "en": "statue in Skopje",
+   "mk": "статуа во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на г.г. Доситеј (Скопје)"
+  }
+ },
+ "Q12912155": {
+  "desc": {
+   "en": "sculpture at Macedonia St., Skopje",
+   "mk": "скулптура на ул. „Македонија“, Скопје"
+  },
+  "wiki": {
+   "mk": "Шмизла (скулптура во Скопје)"
+  }
+ },
+ "Q130650": {
+  "desc": {
+   "en": "King of Macedon from 359 to 336 BC",
+   "mk": "македонски крал, татко на Александар III Македонски"
+  },
+  "wiki": {
+   "en": "Philip II of Macedon",
+   "mk": "Филип II Македонски"
+  }
+ },
+ "Q134958": {
+  "desc": {
+   "en": "Ukrainian poet and artist (1814–1861)"
+  },
+  "wiki": {
+   "en": "Taras Shevchenko",
+   "mk": "Тарас Шевченко"
+  }
+ },
+ "Q1363141": {
+  "desc": {
+   "en": "Bulgarian writer (1830-1893)",
+   "mk": "македонски писател од времето на романтизмот (1830-1893)"
+  },
+  "wiki": {
+   "en": "Grigor Parlichev",
+   "mk": "Григор Прличев"
+  }
+ },
+ "Q1388772": {
+  "desc": {
+   "en": "Yugoslavian painter (1898-1963)"
+  },
+  "wiki": {
+   "en": "Dimitar Avramovski-Pandilov",
+   "mk": "Димитар Пандилов"
+  }
+ },
+ "Q1396875": {
+  "desc": {
+   "mk": "македонски револуционер и претседател на Крушевската Република",
+   "en": "Bulgarian revolutionary (1877–1905)"
+  },
+  "wiki": {
+   "en": "Nikola Karev",
+   "mk": "Никола Карев"
+  }
+ },
+ "Q139770561": {
+  "desc": {
+   "mk": "статуа во Скопје",
+   "en": "statue in Skopje"
+  },
+  "wiki": {
+   "mk": "Споменик на Павел Шатев"
+  }
+ },
+ "Q139784985": {
+  "desc": {
+   "mk": "статуа во Скопје",
+   "en": "statue in Skopje"
+  },
+  "wiki": {
+   "mk": "Споменик на Христо Татарчев"
+  }
+ },
+ "Q139785043": {
+  "desc": {
+   "mk": "статуа во Скопје",
+   "en": "statue in Skopje"
+  },
+  "wiki": {
+   "mk": "Споменик на Христо Узунов"
+  }
+ },
+ "Q141204382": {
+  "desc": {
+   "en": "Active mosque in the Old Bazaar in Skopje",
+   "mk": "Активна џамија во Старата скопска чаршија"
+  },
+  "wiki": {}
+ },
+ "Q15241217": {
+  "desc": {
+   "mk": "споменик во Скопје",
+   "en": "monument in North Macedonia"
+  },
+  "wiki": {
+   "mk": "Споменик „Ослободители на Скопје“"
+  }
+ },
+ "Q158504": {
+  "desc": {
+   "en": "medieval Bulgarian scholar",
+   "mk": "словенски просветител и светец"
+  },
+  "wiki": {
+   "en": "Clement of Ohrid",
+   "mk": "Свети Климент Охридски"
+  }
+ },
+ "Q16087907": {
+  "desc": {},
+  "wiki": {
+   "mk": "Споменик на Президиумот на АСНОМ"
+  }
+ },
+ "Q1890632": {
+  "desc": {
+   "mk": "градба во Скопје",
+   "en": "cross in Skopje, Macedonia"
+  },
+  "wiki": {
+   "en": "Millennium Cross",
+   "mk": "Милениумски крст"
+  }
+ },
+ "Q205634": {
+  "desc": {
+   "en": "Macedonian writer"
+  },
+  "wiki": {
+   "en": "Slavko Janevski",
+   "mk": "Славко Јаневски"
+  }
+ },
+ "Q20566163": {
+  "desc": {
+   "mk": "споменик во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Даме Груев (плоштад Македонија)"
+  }
+ },
+ "Q20569889": {
+  "desc": {
+   "mk": "споменик на плоштад „Македонија“, Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Гоце Делчев (плоштад Македонија)"
+  }
+ },
+ "Q20570659": {
+  "desc": {
+   "en": "statue in Skopje",
+   "mk": "статуа во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Борис Сарафов (Скопје)"
+  }
+ },
+ "Q20570662": {
+  "desc": {
+   "mk": "споменик во Скопје, Македонија",
+   "en": "monument in Skopje, North Macedonia"
+  },
+  "wiki": {
+   "mk": "Споменик на Гоце Делчев (Градски парк, Скопје)"
+  }
+ },
+ "Q20570666": {
+  "desc": {
+   "en": "statue in Skopje",
+   "mk": "статуа во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Методија Андонов Ченто (Скопје)"
+  }
+ },
+ "Q20570668": {
+  "desc": {},
+  "wiki": {
+   "mk": "Споменик на основачите на ВМРО"
+  }
+ },
+ "Q20570672": {
+  "desc": {},
+  "wiki": {
+   "mk": "Споменик на Св. Климент и Наум (Скопје)"
+  }
+ },
+ "Q20570676": {
+  "desc": {
+   "en": "sculpture in Skopje",
+   "mk": "скулптура во Скопје"
+  },
+  "wiki": {
+   "mk": "Споменик на Тешкото (Скопје)"
+  }
+ },
+ "Q20570678": {
+  "desc": {},
+  "wiki": {
+   "mk": "Споменик на Филип II Македонски (Автокоманда)"
+  }
+ },
+ "Q20966633": {
+  "desc": {},
+  "wiki": {
+   "mk": "Роберт Гајдик"
+  }
+ },
+ "Q220645": {
+  "desc": {
+   "en": "Macedonian musician (1981–2007)",
+   "mk": "македонски пејач и композитор"
+  },
+  "wiki": {
+   "en": "Toše Proeski",
+   "mk": "Тоше Проески"
+  }
+ },
+ "Q223134": {
+  "desc": {
+   "en": "mother of Alexander the Great",
+   "mk": "четврта жена на македонскиот крал Филип II и мајка на Александар III Македонски"
+  },
+  "wiki": {
+   "en": "Olympias",
+   "mk": "Олимпијада (кралица)"
+  }
+ },
+ "Q2349366": {
+  "desc": {
+   "en": "Yugoslav partisan, People's Hero of Yugoslavia (1951-)"
+  },
+  "wiki": {
+   "en": "Vera Jocić",
+   "mk": "Вера Јоциќ"
+  }
+ },
+ "Q239925": {
+  "desc": {
+   "en": "9th-century Byzantine Christian theologians and missionaries",
+   "mk": "македонски просветители"
+  },
+  "wiki": {
+   "en": "Cyril and Methodius",
+   "mk": "Свети Кирил и Методиј"
+  }
+ },
+ "Q2466136": {
+  "desc": {
+   "mk": "македонски револуционер",
+   "en": "Bulgarian revolutionary (1881–1924)"
+  },
+  "wiki": {
+   "en": "Todor Aleksandrov",
+   "mk": "Тодор Александров"
+  }
+ },
+ "Q2497361": {
+  "desc": {
+   "en": "Bulgarian revolutionary (1865-1921)",
+   "mk": "македонски револуционер"
+  },
+  "wiki": {
+   "en": "Gyorche Petrov",
+   "mk": "Ѓорче Петров"
+  }
+ },
+ "Q2586864": {
+  "desc": {
+   "mk": "македонски филолог, новинар, историчар и етнограф — основач на македонизмот",
+   "en": "Philologist, collector, ethnologist, journalist, historian and ethnographer"
+  },
+  "wiki": {
+   "en": "Krste Misirkov",
+   "mk": "Крсте Петков Мисирков"
+  }
+ },
+ "Q259539": {
+  "desc": {
+   "en": "archbishop of the Macedonian Orthodox Church - Archbishopric of Ohrid",
+   "mk": "архиепископ на МПЦ-ОА"
+  },
+  "wiki": {
+   "en": "Dositej II of Ohrid and Macedonia",
+   "mk": "Архиепископ Охридски и Македонски г.г. Доситеј II"
+  }
+ },
+ "Q2625112": {
+  "desc": {
+   "en": "Macedonian politician (1902-1957)",
+   "mk": "македонски политичар и државник"
+  },
+  "wiki": {
+   "en": "Metodija Andonov-Čento",
+   "mk": "Методија Андонов-Ченто"
+  }
+ },
+ "Q2662030": {
+  "desc": {
+   "en": "Macedonian writer (1935-1987)"
+  },
+  "wiki": {
+   "en": "Živko Čingo",
+   "mk": "Живко Чинго"
+  }
+ },
+ "Q270740": {
+  "desc": {
+   "en": "Tsar of Bulgaria from 997 to 1014",
+   "mk": "македонски цар"
+  },
+  "wiki": {
+   "en": "Samuel of Bulgaria",
+   "mk": "Цар Самоил"
+  }
+ },
+ "Q3028100": {
+  "desc": {
+   "en": "Macedonian artist (1923-1993)"
+  },
+  "wiki": {
+   "en": "Dimitar Kondovski",
+   "mk": "Димитар Кондовски"
+  }
+ },
+ "Q3028173": {
+  "desc": {
+   "en": "Macedonian writer (1878–1940)"
+  },
+  "wiki": {
+   "en": "Dimitrija Čupovski",
+   "mk": "Димитрија Чуповски"
+  }
+ },
+ "Q30547": {
+  "desc": {
+   "en": "Albanian-Indian Catholic nun and missionary (1910–1997)"
+  },
+  "wiki": {
+   "en": "Mother Teresa",
+   "mk": "Мајка Тереза"
+  }
+ },
+ "Q3067865": {
+  "desc": {
+   "en": "Bulgarian revivalist from Macedonia",
+   "mk": "македонски преродбеник"
+  },
+  "wiki": {
+   "en": "Yordan Hadzhikonstantinov-Dzhinot",
+   "mk": "Јордан Хаџи Константинов-Џинот"
+  }
+ },
+ "Q3078453": {
+  "desc": {
+   "mk": "триумфална арка во Скопје",
+   "en": "triumphal arch in Skopje, North Macedonia"
+  },
+  "wiki": {
+   "en": "Porta Macedonia",
+   "mk": "Порта Македонија"
+  }
+ },
+ "Q3081365": {
+  "desc": {
+   "en": "Wikimedia list article",
+   "mk": "список на статии на Викимедија"
+  },
+  "wiki": {
+   "en": "List of World War II monuments and memorials in North Macedonia",
+   "mk": "Список на споменици на НОБ во Македонија"
+  }
+ },
+ "Q3103765": {
+  "desc": {
+   "en": "Mijak writer",
+   "mk": "македонски писател"
+  },
+  "wiki": {
+   "en": "Georgi Pulevski",
+   "mk": "Ѓорѓија Пулевски"
+  }
+ },
+ "Q3133559": {
+  "desc": {
+   "en": "Macedonian artist (1927-1993)",
+   "mk": "македонски сликар"
+  },
+  "wiki": {
+   "en": "Petar Mazev",
+   "mk": "Петар Мазев"
+  }
+ },
+ "Q3393353": {
+  "desc": {
+   "en": "Aromanian revolutionary in Ottoman Macedonia",
+   "mk": "македонски револуционер"
+  },
+  "wiki": {
+   "en": "Pitu Guli",
+   "mk": "Питу Гули"
+  }
+ },
+ "Q3396549": {
+  "desc": {
+   "mk": "македонски револуционер",
+   "en": "Bulgarian revolutionary (1840–1907)"
+  },
+  "wiki": {
+   "en": "Dimitar Popgeorgiev",
+   "mk": "Димитар Поп-Георгиев Беровски"
+  }
+ },
+ "Q3396878": {
+  "desc": {
+   "mk": "македонски револуционер",
+   "en": "Bulgarian revolutionary (1874–1913)"
+  },
+  "wiki": {
+   "en": "Vasil Chekalarov",
+   "mk": "Васил Чакаларов"
+  }
+ },
+ "Q3397086": {
+  "desc": {
+   "en": "Yugoslav partisan (1916–1942)"
+  },
+  "wiki": {
+   "en": "Jordan Nikolov Orce",
+   "mk": "Орце Николов"
+  }
+ },
+ "Q3397220": {
+  "desc": {
+   "en": "Macedonian & Yugoslav partisan (1915–1944)",
+   "mk": "македонски партизан"
+  },
+  "wiki": {
+   "en": "Kuzman Josifovski Pitu",
+   "mk": "Кузман Јосифоски-Питу"
+  }
+ },
+ "Q3398805": {
+  "desc": {
+   "en": "Macedonian dramatic actor (1907–1995)",
+   "mk": "македонски глумец"
+  },
+  "wiki": {
+   "en": "Petre Prličko",
+   "mk": "Петре Прличко"
+  }
+ },
+ "Q3399128": {
+  "desc": {
+   "en": "Macedonian composer, choir and orchestra conductor (1909–2004)"
+  },
+  "wiki": {
+   "en": "Todor Skalovski",
+   "mk": "Тодор Скаловски"
+  }
+ },
+ "Q3401191": {
+  "desc": {
+   "en": "Revolutionary (1881-1924)",
+   "mk": "македонски револуционер"
+  },
+  "wiki": {
+   "en": "Petar Chaulev",
+   "mk": "Петар Чаулев"
+  }
+ },
+ "Q3403199": {
+  "desc": {
+   "mk": "македонски драмски писател",
+   "en": "Macedonian writer (1902–1995)"
+  },
+  "wiki": {
+   "en": "Vasil Iljoski",
+   "mk": "Васил Иљоски"
+  }
+ },
+ "Q3407157": {
+  "desc": {
+   "mk": "македонски револуционер",
+   "en": "Revolutionary (1882–1951)"
+  },
+  "wiki": {
+   "en": "Pavel Shatev",
+   "mk": "Павел Шатев"
+  }
+ },
+ "Q3407165": {
+  "desc": {
+   "mk": "македонски револуционер",
+   "en": "Macedonian revolutionary (1878–1905)"
+  },
+  "wiki": {
+   "en": "Hristo Uzunov",
+   "mk": "Христо Узунов"
+  }
+ },
+ "Q3408205": {
+  "desc": {
+   "en": "Macedonian artist (1901-1964)"
+  },
+  "wiki": {
+   "en": "Lazar Ličenoski",
+   "mk": "Лазар Личеноски"
+  }
+ },
+ "Q3409676": {
+  "desc": {
+   "mk": "македонски писател",
+   "en": "Bulgarian writer (1875–1951)"
+  },
+  "wiki": {
+   "en": "Voydan Popgeorgiev – Chernodrinski",
+   "mk": "Војдан Чернодрински"
+  }
+ },
+ "Q34100": {
+  "desc": {
+   "en": "Macedonian & Yugoslav partisan and communist resistance activist",
+   "mk": "македонски партизан"
+  },
+  "wiki": {
+   "mk": "Васил Антевски - Дрен"
+  }
+ },
+ "Q342010": {
+  "desc": {
+   "en": "Macedonian poet (1923-1982)"
+  },
+  "wiki": {
+   "en": "Aco Šopov",
+   "mk": "Ацо Шопов"
+  }
+ },
+ "Q3497603": {
+  "desc": {
+   "en": "Monument in Skopje, North Macedonia"
+  },
+  "wiki": {
+   "en": "Warrior on Horseback",
+   "mk": "Воин на коњ (Скопје)"
+  }
+ },
+ "Q3541070": {
+  "desc": {
+   "en": "Bulgarian revolutionary",
+   "mk": "македонски револуционер"
+  },
+  "wiki": {
+   "en": "Pere Toshev",
+   "mk": "Пере Тошев"
+  }
+ },
+ "Q360160": {
+  "desc": {
+   "mk": "македонски револуционер",
+   "en": "Macedonian Bulgarian revolutionary (1872–1903)"
+  },
+  "wiki": {
+   "en": "Gotse Delchev",
+   "mk": "Гоце Делчев"
+  }
+ },
+ "Q40107334": {
+  "desc": {},
+  "wiki": {}
+ },
+ "Q41866": {
+  "desc": {
+   "en": "Eastern Roman Emperor who ruled from 527 to 565 (482-565)"
+  },
+  "wiki": {
+   "en": "Justinian I",
+   "mk": "Јустинијан I"
+  }
+ },
+ "Q4680067": {
+  "desc": {
+   "en": "Neolithic sculpture from Macedonia",
+   "mk": "неолитска фигура пронајдена во наоѓалиштето Церје кај с. Говрлево, Скопско"
+  },
+  "wiki": {
+   "en": "Adam of Macedonia",
+   "mk": "Адам од Македонија"
+  }
+ },
+ "Q472110": {
+  "desc": {
+   "mk": "македонски книжевен, културен и јавен работник",
+   "en": "Macedonian writer (1921–1993)"
+  },
+  "wiki": {
+   "en": "Blaže Koneski",
+   "mk": "Блаже Конески"
+  }
+ },
+ "Q61119880": {
+  "desc": {},
+  "wiki": {
+   "mk": "Споменик на жената-борец (Скопје)"
+  }
+ },
+ "Q61119888": {
+  "desc": {},
+  "wiki": {
+   "mk": "Спомен-куќа - музеј на НОВ и револуција"
+  }
+ },
+ "Q674532": {
+  "desc": {
+   "en": "Bulgarian revolutionary (1872-1907)",
+   "mk": "македонски револуционер"
+  },
+  "wiki": {
+   "en": "Boris Sarafov",
+   "mk": "Борис Сарафов"
+  }
+ },
+ "Q7171683": {
+  "desc": {
+   "en": "Bulgarian high jumper"
+  },
+  "wiki": {
+   "en": "Petar Bogdanov"
+  }
+ },
+ "Q7327": {
+  "desc": {
+   "en": "Soviet pilot and cosmonaut, first human in space (1934–1968)"
+  },
+  "wiki": {
+   "en": "Yuri Gagarin",
+   "mk": "Јуриј Гагарин"
+  }
+ },
+ "Q785607": {
+  "desc": {
+   "mk": "македонски лекар и револуционер",
+   "en": "Bulgarian doctor and revolutionary (1869–1952)"
+  },
+  "wiki": {
+   "en": "Hristo Tatarchev",
+   "mk": "Христо Татарчев"
+  }
+ },
+ "Q797666": {
+  "desc": {
+   "mk": "македонски книжевник и социјалистички деец",
+   "en": "Macedonian and Yugoslav writer, poet and communist (1908–1943)"
+  },
+  "wiki": {
+   "en": "Kočo Racin",
+   "mk": "Кочо Рацин"
+  }
+ },
+ "Q83365913": {
+  "desc": {},
+  "wiki": {
+   "mk": "Француски воени гробишта (Скопје)"
+  }
+ },
+ "Q8409": {
+  "desc": {
+   "en": "king of Macedonia and conqueror of Achaemenid Persia (356–323 BC)",
+   "mk": "крал на Македонија и основоположник на Македонското Царство"
+  },
+  "wiki": {
+   "en": "Alexander the Great",
+   "mk": "Александар III Македонски"
+  }
+ },
+ "Q9161": {
+  "desc": {
+   "en": "Yugoslav revolutionary and statesman (1892−1980)",
+   "mk": "југословенски револуционер и политичар"
+  },
+  "wiki": {
+   "en": "Josip Broz Tito",
+   "mk": "Јосип Броз-Тито"
+  }
+ },
+ "Q924865": {
+  "desc": {
+   "en": "Macedonian artist (1903-1973)",
+   "mk": "македонски сликар"
+  },
+  "wiki": {
+   "en": "Nikola Martinoski",
+   "mk": "Никола Мартиноски"
+  }
+ },
+ "Q9377389": {
+  "desc": {},
+  "wiki": {}
+ },
+ "Q956441": {
+  "desc": {
+   "en": "Bulgarian communist writer (1909-1942)",
+   "mk": "македонски поет"
+  },
+  "wiki": {
+   "en": "Nikola Vaptsarov",
+   "mk": "Никола Вапцаров"
+  }
+ },
+ "Q983638": {
+  "desc": {
+   "en": "Macedonian Bulgarian revolutionary",
+   "mk": "македонски револуционер"
+  },
+  "wiki": {
+   "en": "Yane Sandanski",
+   "mk": "Јане Сандански"
+  }
+ },
+ "Q983917": {
+  "desc": {
+   "en": "Bulgarian revolutionary from Macedonia",
+   "mk": "македонски револуционер"
+  },
+  "wiki": {
+   "en": "Dame Gruev",
+   "mk": "Даме Груев"
+  }
+ }
+}

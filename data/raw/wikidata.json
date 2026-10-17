@@ -340,40 +340,6 @@
     "lat": {
      "datatype": "http://www.w3.org/2001/XMLSchema#double",
      "type": "literal",
-     "value": "42.002753476"
-    },
-    "lon": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
-     "value": "21.436461628"
-    },
-    "img": {
-     "type": "uri",
-     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0%20-%20%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0%20%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0%20%28%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5%29.JPG"
-    },
-    "en": {
-     "xml:lang": "en",
-     "type": "literal",
-     "value": "Paeonian Priestess"
-    }
-   },
-   {
-    "item": {
-     "type": "uri",
-     "value": "http://www.wikidata.org/entity/Q12909479"
-    },
-    "wmk": {
-     "type": "uri",
-     "value": "https://mk.wikipedia.org/wiki/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0)"
-    },
-    "mk": {
-     "xml:lang": "mk",
-     "type": "literal",
-     "value": "Пајонска свештеничка"
-    },
-    "lat": {
-     "datatype": "http://www.w3.org/2001/XMLSchema#double",
-     "type": "literal",
      "value": "41.996366529"
     },
     "lon": {
@@ -414,6 +380,40 @@
      "datatype": "http://www.w3.org/2001/XMLSchema#double",
      "type": "literal",
      "value": "21.436461628"
+    },
+    "img": {
+     "type": "uri",
+     "value": "http://commons.wikimedia.org/wiki/Special:FilePath/%D0%A1%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0%20-%20%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0%20%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0%20%28%D0%A1%D0%BA%D0%BE%D0%BF%D1%98%D0%B5%29.JPG"
+    },
+    "en": {
+     "xml:lang": "en",
+     "type": "literal",
+     "value": "Paeonian Priestess"
+    }
+   },
+   {
+    "item": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12909479"
+    },
+    "wmk": {
+     "type": "uri",
+     "value": "https://mk.wikipedia.org/wiki/%D0%9F%D0%B0%D1%98%D0%BE%D0%BD%D1%81%D0%BA%D0%B0_%D1%81%D0%B2%D0%B5%D1%88%D1%82%D0%B5%D0%BD%D0%B8%D1%87%D0%BA%D0%B0_(%D1%81%D0%BA%D1%83%D0%BB%D0%BF%D1%82%D1%83%D1%80%D0%B0)"
+    },
+    "mk": {
+     "xml:lang": "mk",
+     "type": "literal",
+     "value": "Пајонска свештеничка"
+    },
+    "lat": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "41.996366529"
+    },
+    "lon": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#double",
+     "type": "literal",
+     "value": "21.433948981"
     },
     "img": {
      "type": "uri",
@@ -442,12 +442,12 @@
     "lat": {
      "datatype": "http://www.w3.org/2001/XMLSchema#double",
      "type": "literal",
-     "value": "41.996366529"
+     "value": "42.002753476"
     },
     "lon": {
      "datatype": "http://www.w3.org/2001/XMLSchema#double",
      "type": "literal",
-     "value": "21.433948981"
+     "value": "21.436461628"
     },
     "img": {
      "type": "uri",

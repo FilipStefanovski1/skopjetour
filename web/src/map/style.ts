@@ -1,24 +1,22 @@
 import type { ExpressionSpecification, StyleSpecification } from 'maplibre-gl'
 import type { Lang } from '../types'
 
-/**
- * Skopje redrawn in sprint-orienteering inks (after ISSprOM): white runnable ground,
- * light-brown paving, yellow open grass, olive woods, blue water, grey buildings.
- * Course purple is kept off the base map entirely; it belongs to the statues.
- */
-export const INK = {
-  ground: '#ffffff',
-  paved: '#efdcbf',
-  pavedEdge: '#c7a57d',
-  open: '#ffdf6e',
-  wood: '#c3d38f',
-  water: '#a3cfec',
-  waterEdge: '#3b87c0',
-  building: '#a6a39f',
-  buildingEdge: '#5f5b57',
-  path: '#3a2c20',
-  label: '#6b4a2b',
-  rail: '#2b2b2b',
+/** A quiet light base map: the statue photos are the colour on screen, the city stays in the background. */
+const C = {
+  ground: '#f3f2ef',
+  park: '#dfe9d3',
+  wood: '#d3e2c4',
+  water: '#bcd9ea',
+  waterLine: '#9cc5de',
+  building: '#e6e3dd',
+  buildingEdge: '#d6d2ca',
+  road: '#ffffff',
+  roadCasing: '#dedad3',
+  path: '#c9c3b9',
+  rail: '#c4bfb7',
+  label: '#77716a',
+  labelStrong: '#4f4a45',
+  waterLabel: '#5f8fae',
 } as const
 
 export function labelField(lang: Lang): ExpressionSpecification {
@@ -33,10 +31,12 @@ const MID = ['secondary', 'tertiary']
 /** Road width by class, growing with zoom (one zoom curve, the class picked inside each stop). */
 const roadWidth = (major: number, mid: number, minor: number): ExpressionSpecification => {
   const at = (k: number): ExpressionSpecification => ['match', ['get', 'class'], MAJOR, major * k, MID, mid * k, minor * k]
-  return ['interpolate', ['exponential', 1.6], ['zoom'], 12, at(0.4), 15, at(2.2), 18, at(9)]
+  return ['interpolate', ['exponential', 1.6], ['zoom'], 12, at(0.5), 15, at(2.4), 18, at(10)]
 }
 
-export function sprintMapStyle(lang: Lang): StyleSpecification {
+const ROADS: ExpressionSpecification = ['in', ['get', 'class'], ['literal', ['motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'minor', 'service']]]
+
+export function cityStyle(lang: Lang): StyleSpecification {
   return {
     version: 8,
     glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
@@ -44,89 +44,61 @@ export function sprintMapStyle(lang: Lang): StyleSpecification {
       omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet', attribution: '© OpenStreetMap contributors, OpenFreeMap' },
     },
     layers: [
-      { id: 'ground', type: 'background', paint: { 'background-color': INK.ground } },
+      { id: 'ground', type: 'background', paint: { 'background-color': C.ground } },
+      { id: 'park', type: 'fill', source: 'omt', 'source-layer': 'park', paint: { 'fill-color': C.park } },
       {
-        id: 'grass', type: 'fill', source: 'omt', 'source-layer': 'landcover',
-        filter: ['in', ['get', 'class'], ['literal', ['grass', 'farmland']]],
-        paint: { 'fill-color': INK.open },
+        id: 'green', type: 'fill', source: 'omt', 'source-layer': 'landcover',
+        filter: ['in', ['get', 'class'], ['literal', ['grass', 'wood']]],
+        paint: { 'fill-color': ['match', ['get', 'class'], 'wood', C.wood, C.park] },
       },
-      {
-        id: 'park', type: 'fill', source: 'omt', 'source-layer': 'park',
-        paint: { 'fill-color': INK.open, 'fill-opacity': 0.75 },
-      },
-      {
-        id: 'wood', type: 'fill', source: 'omt', 'source-layer': 'landcover',
-        filter: ['==', ['get', 'class'], 'wood'],
-        paint: { 'fill-color': INK.wood },
-      },
-      {
-        id: 'pitch', type: 'fill', source: 'omt', 'source-layer': 'landuse',
-        filter: ['in', ['get', 'class'], ['literal', ['pitch', 'playground', 'stadium']]],
-        paint: { 'fill-color': INK.open, 'fill-outline-color': INK.pavedEdge },
-      },
-      {
-        id: 'water', type: 'fill', source: 'omt', 'source-layer': 'water',
-        paint: { 'fill-color': INK.water, 'fill-outline-color': INK.waterEdge },
-      },
+      { id: 'water', type: 'fill', source: 'omt', 'source-layer': 'water', paint: { 'fill-color': C.water } },
       {
         id: 'river', type: 'line', source: 'omt', 'source-layer': 'waterway',
-        paint: { 'line-color': INK.waterEdge, 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.6, 17, 2] },
+        paint: { 'line-color': C.waterLine, 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.5, 17, 1.5] },
       },
       {
-        id: 'road-edge', type: 'line', source: 'omt', 'source-layer': 'transportation',
-        filter: ['in', ['get', 'class'], ['literal', ['motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'minor', 'service']]],
-        layout: { 'line-cap': 'butt', 'line-join': 'round' },
-        paint: {
-          'line-color': INK.pavedEdge,
-          'line-width': roadWidth(1.5, 1.25, 0.9),
-        },
+        id: 'building', type: 'fill', source: 'omt', 'source-layer': 'building', minzoom: 14,
+        paint: { 'fill-color': C.building, 'fill-outline-color': C.buildingEdge },
       },
       {
-        id: 'road', type: 'line', source: 'omt', 'source-layer': 'transportation',
-        filter: ['in', ['get', 'class'], ['literal', ['motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'minor', 'service']]],
+        id: 'road-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: ROADS,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: {
-          'line-color': INK.paved,
-          'line-width': roadWidth(1.25, 1.05, 0.72),
-        },
+        paint: { 'line-color': C.roadCasing, 'line-width': roadWidth(1.6, 1.35, 1) },
       },
       {
-        id: 'footway', type: 'line', source: 'omt', 'source-layer': 'transportation',
+        id: 'road', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: ROADS,
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': C.road, 'line-width': roadWidth(1.3, 1.1, 0.78) },
+      },
+      {
+        id: 'footway', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 15,
         filter: ['in', ['get', 'class'], ['literal', ['path', 'track']]],
-        minzoom: 14,
-        paint: { 'line-color': INK.path, 'line-width': ['interpolate', ['linear'], ['zoom'], 14, 0.6, 18, 1.6], 'line-dasharray': [3, 2] },
+        paint: { 'line-color': C.path, 'line-width': 1, 'line-dasharray': [2, 2] },
       },
       {
         id: 'rail', type: 'line', source: 'omt', 'source-layer': 'transportation',
         filter: ['==', ['get', 'class'], 'rail'],
-        paint: { 'line-color': INK.rail, 'line-width': 1.4 },
-      },
-      {
-        id: 'building', type: 'fill', source: 'omt', 'source-layer': 'building', minzoom: 13,
-        paint: { 'fill-color': INK.building, 'fill-outline-color': INK.buildingEdge },
+        paint: { 'line-color': C.rail, 'line-width': 1.2 },
       },
       {
         id: 'street-name', type: 'symbol', source: 'omt', 'source-layer': 'transportation_name', minzoom: 15,
         filter: ['in', ['get', 'class'], ['literal', ['primary', 'secondary', 'tertiary', 'minor']]],
         layout: {
           'symbol-placement': 'line', 'text-field': labelField(lang), 'text-font': ['Noto Sans Regular'],
-          'text-size': ['interpolate', ['linear'], ['zoom'], 15, 10, 18, 13], 'text-letter-spacing': 0.04,
+          'text-size': ['interpolate', ['linear'], ['zoom'], 15, 10.5, 18, 13],
         },
-        paint: { 'text-color': INK.label, 'text-halo-color': INK.paved, 'text-halo-width': 1.2 },
+        paint: { 'text-color': C.label, 'text-halo-color': C.road, 'text-halo-width': 1.4 },
       },
       {
         id: 'water-name', type: 'symbol', source: 'omt', 'source-layer': 'water_name',
         layout: { 'text-field': labelField(lang), 'text-font': ['Noto Sans Italic'], 'text-size': 12, 'symbol-placement': 'line' },
-        paint: { 'text-color': INK.waterEdge, 'text-halo-color': INK.ground, 'text-halo-width': 1 },
+        paint: { 'text-color': C.waterLabel, 'text-halo-color': C.water, 'text-halo-width': 1 },
       },
       {
         id: 'quarter', type: 'symbol', source: 'omt', 'source-layer': 'place', maxzoom: 16,
         filter: ['in', ['get', 'class'], ['literal', ['suburb', 'quarter', 'neighbourhood']]],
-        layout: {
-          'text-field': labelField(lang), 'text-font': ['Noto Sans Bold'], 'text-size': 11,
-          'text-transform': 'uppercase', 'text-letter-spacing': 0.18,
-        },
-        paint: { 'text-color': INK.label, 'text-halo-color': INK.ground, 'text-halo-width': 1.4 },
+        layout: { 'text-field': labelField(lang), 'text-font': ['Noto Sans Bold'], 'text-size': 11, 'text-letter-spacing': 0.06 },
+        paint: { 'text-color': C.labelStrong, 'text-halo-color': C.ground, 'text-halo-width': 1.6 },
       },
     ],
   }

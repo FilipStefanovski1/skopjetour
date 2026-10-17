@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { buildCourse } from './course'
+import { buildCourse, CITY_CENTRE, metresBetween } from './course'
 import { loadStatues, loadThemes } from './data'
 import { t } from './i18n'
 import type { Lang, Statue, Theme } from './types'
-import { MapView, type Insets } from './components/MapView'
-import { CourseSheet } from './components/CourseSheet'
-import { StatueCard } from './components/StatueCard'
-import { Sheet, type SheetState } from './components/Sheet'
+import { MapView, type Insets, type LatLon } from './components/MapView'
+import { Carousel } from './components/Carousel'
+import { SearchBar } from './components/SearchBar'
+import { StatueDetail } from './components/StatueDetail'
 
 function stored<T>(key: string, fallback: T): T {
   try {
@@ -25,7 +25,7 @@ function store(key: string, value: unknown) {
   }
 }
 
-/** `#/route/<theme>` and `#/s/<statue>` (or both) make every route and statue linkable, and NFC-ready. */
+/** `#/route/<theme>` and `#/s/<statue>` (or both): every route and statue has a link, ready for NFC/QR plaques. */
 function readHash(): { statue: string | null; route: string | null } {
   const route = location.hash.match(/#\/route\/([^/]+)/)
   const statue = location.hash.match(/\/s\/([^/]+)/)
@@ -37,20 +37,20 @@ function writeHash(route: string | null, statue: string | null): string {
   return parts.length ? `#/${parts.join('/')}` : ''
 }
 
-const WIDE = '(min-width: 900px)'
-
 export default function App() {
+  const initial = useMemo(readHash, [])
   const [statues, setStatues] = useState<Statue[] | null>(null)
   const [themes, setThemes] = useState<Theme[]>([])
   const [failed, setFailed] = useState(false)
   const [lang, setLang] = useState<Lang>(() => (stored<string>('lang', 'mk') === 'en' ? 'en' : 'mk'))
-  const [routeId, setRouteId] = useState<string | null>(() => readHash().route)
-  const [selectedId, setSelectedId] = useState<string | null>(() => readHash().statue)
+  const [routeId, setRouteId] = useState<string | null>(initial.route)
+  const [activeId, setActiveId] = useState<string | null>(initial.statue)
+  const [open, setOpen] = useState(Boolean(initial.statue))
   const [seen, setSeen] = useState<Set<string>>(() => new Set(stored<string[]>('seen', [])))
-  const [sheet, setSheet] = useState<SheetState>('peek')
-  const [wide, setWide] = useState(() => matchMedia(WIDE).matches)
-  const [insets, setInsets] = useState<Insets>({ top: 0, bottom: 0, left: 0 })
-  const headerRef = useRef<HTMLElement>(null)
+  const [userPos, setUserPos] = useState<LatLon | null>(null)
+  const [insets, setInsets] = useState<Insets>({ top: 0, bottom: 0 })
+  const topRef = useRef<HTMLElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
 
   const load = useCallback(() => {
     setFailed(false)
@@ -64,58 +64,50 @@ export default function App() {
   useEffect(load, [load])
 
   useEffect(() => {
-    const mq = matchMedia(WIDE)
-    const on = () => setWide(mq.matches)
-    mq.addEventListener('change', on)
-    return () => mq.removeEventListener('change', on)
-  }, [])
-
-  useEffect(() => {
     document.documentElement.lang = lang
     document.title = t('title', lang)
     store('lang', lang)
   }, [lang])
-
   useEffect(() => store('seen', [...seen]), [seen])
 
   useEffect(() => {
-    const hash = writeHash(routeId, selectedId)
+    const hash = writeHash(routeId, open ? activeId : null)
     if (hash !== location.hash) history.replaceState(null, '', hash || location.pathname)
-  }, [selectedId, routeId])
-
-  useEffect(() => {
-    const onHash = () => {
-      const h = readHash()
-      setSelectedId(h.statue)
-      setRouteId(h.route)
-    }
-    addEventListener('hashchange', onHash)
-    return () => removeEventListener('hashchange', onHash)
-  }, [])
-
-  useEffect(() => {
-    const active = headerRef.current?.querySelector<HTMLElement>('.routes [aria-pressed="true"]')
-    active?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' })
-  }, [routeId, themes.length, lang])
+  }, [routeId, activeId, open])
 
   const theme = themes.find((th) => th.id === routeId) ?? null
   const course = useMemo(() => (statues && theme ? buildCourse(theme.id, statues) : null), [statues, theme])
-  const courseCounts = useMemo(
-    () => Object.fromEntries(themes.map((th) => [th.id, statues?.filter((s) => s.themes.includes(th.id)).length ?? 0])),
-    [themes, statues],
-  )
-  const selected = statues?.find((s) => s.id === selectedId) ?? null
 
-  const select = useCallback((id: string) => {
-    setSelectedId(id)
-    setSheet((s) => (s === 'full' ? 'full' : 'half'))
-  }, [])
+  // What the cards and pins show: the route in walking order, or every statue nearest first.
+  const items = useMemo(() => {
+    if (!statues) return []
+    if (course) return [...course.controls, ...course.beyond]
+    const from = userPos ?? { lat: CITY_CENTRE[0], lon: CITY_CENTRE[1] }
+    return [...statues].sort((a, b) => metresBetween(from, a) - metresBetween(from, b))
+    // Re-sort only when a location first arrives, not on every GPS tick.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statues, course, Boolean(userPos)])
+  const numbers = useMemo(() => (course ? new Map(course.controls.map((s, i) => [s.id, i + 1])) : null), [course])
+
+  // The card in the middle is always a real statue: start on the first one of each list.
+  useEffect(() => {
+    if (items.length && !items.some((s) => s.id === activeId)) setActiveId(items[0].id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items])
+  const active = statues?.find((s) => s.id === activeId) ?? null
 
   const chooseRoute = (id: string | null) => {
     setRouteId(id)
-    setSelectedId(null)
-    setSheet('peek')
+    setActiveId(null)
+    setOpen(false)
   }
+
+  const openStatue = useCallback((id: string) => {
+    setActiveId(id)
+    setOpen(true)
+  }, [])
+
+  const closeDetail = useCallback(() => setOpen(false), [])
 
   const toggleSeen = (id: string) =>
     setSeen((prev) => {
@@ -125,110 +117,96 @@ export default function App() {
       return next
     })
 
-  // Keep the map's padding in step with what covers it: the header on top, the sheet below.
+  // Keep the active route chip in view on narrow screens.
+  useEffect(() => {
+    topRef.current?.querySelector('.chips [aria-pressed="true"]')?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' })
+  }, [routeId, themes.length, lang])
+
+  // The map pads around what floats over it: search and chips on top, cards below.
   useLayoutEffect(() => {
-    const header = headerRef.current
-    if (!header) return
-    const measure = () => {
-      const top = wide ? 0 : header.getBoundingClientRect().bottom
-      setInsets((i) => (i.top === top ? i : { ...i, top }))
-    }
+    const measure = () =>
+      setInsets({
+        top: topRef.current?.getBoundingClientRect().bottom ?? 0,
+        bottom: bottomRef.current ? window.innerHeight - bottomRef.current.getBoundingClientRect().top : 0,
+      })
     measure()
     const ro = new ResizeObserver(measure)
-    ro.observe(header)
-    return () => ro.disconnect()
-  }, [wide])
-  const onSheetVisible = useCallback((px: number) => setInsets((i) => (i.bottom === px ? i : { ...i, bottom: px })), [])
-
-  const header = (
-    <header ref={headerRef} className="masthead">
-      <div className="masthead__row">
-        <h1 className="wordmark">
-          <svg viewBox="0 0 40 32" width="34" height="27" aria-hidden>
-            <path d="M11 4 20 20H2z" />
-            <circle cx="27" cy="18" r="9" />
-          </svg>
-          {t('title', lang)}
-        </h1>
-        <div className="lang" role="group" aria-label="Language / Јазик">
-          {(['mk', 'en'] as const).map((l) => (
-            <button key={l} type="button" aria-pressed={lang === l} onClick={() => setLang(l)}>
-              {l.toUpperCase()}
-            </button>
-          ))}
-        </div>
-      </div>
-      <nav className="routes" aria-label={t('routes', lang)}>
-        <button type="button" aria-pressed={routeId === null} onClick={() => chooseRoute(null)}>
-          {t('allStatues', lang)}
-          <span className="routes__n">{statues?.length ?? '–'}</span>
-        </button>
-        {themes.map((th) => (
-          <button key={th.id} type="button" aria-pressed={routeId === th.id} onClick={() => chooseRoute(th.id)}>
-            {th[lang]}
-            <span className="routes__n">{courseCounts[th.id]}</span>
-          </button>
-        ))}
-      </nav>
-    </header>
-  )
-
-  let body
-  if (failed) {
-    body = (
-      <div className="sheet-body sheet-state">
-        <p>{t('loadError', lang)}</p>
-        <button type="button" className="button button--secondary" onClick={load}>
-          {t('retry', lang)}
-        </button>
-      </div>
-    )
-  } else if (!statues) {
-    body = <p className="sheet-body sheet-state">{t('loadingStatues', lang)}</p>
-  } else if (selected) {
-    body = (
-      <StatueCard
-        statue={selected}
-        lang={lang}
-        themes={themes}
-        course={course}
-        seen={seen.has(selected.id)}
-        onToggleSeen={() => toggleSeen(selected.id)}
-        onSelect={select}
-        onBack={() => setSelectedId(null)}
-      />
-    )
-  } else {
-    body = <CourseSheet lang={lang} statues={statues} course={course} theme={theme} seen={seen} onSelect={select} />
-  }
+    if (topRef.current) ro.observe(topRef.current)
+    if (bottomRef.current) ro.observe(bottomRef.current)
+    addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      removeEventListener('resize', measure)
+    }
+  }, [statues])
 
   return (
-    <div
-      className={`app${wide ? ' app--wide' : ''}`}
-      style={{ '--header-h': `${insets.top}px`, '--sheet-h': `${insets.bottom}px` } as React.CSSProperties}
-    >
-      {wide ? (
-        <aside className="panel">
-          {header}
-          <div className="panel__scroll">{body}</div>
-        </aside>
-      ) : (
-        <>
-          {header}
-          <Sheet state={sheet} onState={setSheet} onVisible={onSheetVisible} lang={lang} resetKey={selectedId ?? routeId ?? 'all'}>
-            {body}
-          </Sheet>
-        </>
-      )}
+    <div className="app" style={{ '--top-h': `${insets.top}px`, '--bottom-h': `${insets.bottom}px` } as React.CSSProperties}>
       <MapView
-        statues={statues ?? []}
+        statues={course ? items : statues ?? []}
         course={course}
-        selectedId={selectedId}
+        activeId={activeId}
         seen={seen}
         lang={lang}
-        insets={wide ? { top: 0, bottom: 0, left: 0 } : insets}
-        onSelect={select}
+        insets={insets}
+        onSelect={setActiveId}
+        onUserPosition={setUserPos}
       />
+
+      <header ref={topRef} className="top">
+        <SearchBar statues={statues ?? []} lang={lang} onLang={setLang} onPick={openStatue} />
+        <nav className="chips" aria-label={t('routes', lang)}>
+          <button type="button" aria-pressed={routeId === null} onClick={() => chooseRoute(null)}>
+            {t('all', lang)}
+          </button>
+          {themes.map((th) => (
+            <button key={th.id} type="button" aria-pressed={routeId === th.id} onClick={() => chooseRoute(th.id)}>
+              {th[lang]}
+            </button>
+          ))}
+        </nav>
+      </header>
+
+      <div ref={bottomRef} className="bottom">
+        {failed ? (
+          <div className="notice">
+            <p>{t('loadError', lang)}</p>
+            <button type="button" onClick={load}>
+              {t('retry', lang)}
+            </button>
+          </div>
+        ) : !statues ? (
+          <div className="notice">
+            <p>{t('loading', lang)}</p>
+          </div>
+        ) : (
+          <Carousel
+            items={items}
+            activeId={activeId}
+            lang={lang}
+            numbers={numbers}
+            userPos={userPos}
+            seen={seen}
+            onActive={setActiveId}
+            onOpen={openStatue}
+          />
+        )}
+      </div>
+
+      {open && active && (
+        <StatueDetail
+          statue={active}
+          lang={lang}
+          themes={themes}
+          list={items}
+          numbers={numbers}
+          userPos={userPos}
+          seen={seen.has(active.id)}
+          onToggleSeen={() => toggleSeen(active.id)}
+          onNavigate={setActiveId}
+          onClose={closeDetail}
+        />
+      )}
     </div>
   )
 }

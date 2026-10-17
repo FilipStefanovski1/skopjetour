@@ -1,189 +1,136 @@
 import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
-import type { GeoJSONSource, Map as MLMap, MapLayerMouseEvent } from 'maplibre-gl'
+import type { GeoJSONSource, Map as MLMap } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
-import { LocateFixed, Maximize2, Minus, Plus } from 'lucide-react'
+import { LocateFixed } from 'lucide-react'
 import type { Course } from '../course'
 import { CITY_CENTRE, metresBetween } from '../course'
+import { photoUrl } from '../data'
 import { t } from '../i18n'
-import { LABEL_LAYERS, labelField, sprintMapStyle } from '../map/style'
+import { LABEL_LAYERS, cityStyle, labelField } from '../map/style'
 import type { Lang, Statue } from '../types'
 import { statueName } from '../types'
 
 // Vite moves MapLibre's code during bundling, so point it at its worker explicitly.
 maplibregl.setWorkerUrl(workerUrl)
 
-export const PURPLE = '#7b2cbf'
-const CONTOUR = '#8a5728'
+const ACCENT = '#6d28d9'
 
 export interface Insets {
   top: number
   bottom: number
-  left: number
+}
+
+export interface LatLon {
+  lat: number
+  lon: number
 }
 
 interface Props {
   statues: Statue[]
   course: Course | null
-  selectedId: string | null
+  activeId: string | null
   seen: Set<string>
   lang: Lang
   insets: Insets
   onSelect: (id: string) => void
+  onUserPosition: (p: LatLon) => void
 }
 
-type FC = GeoJSON.FeatureCollection
+const STATUE_SVG =
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6.2" r="2.6"/><path d="M8.6 20v-6.2c0-2.3 1.5-4.4 3.4-4.4s3.4 2.1 3.4 4.4V20z"/><path d="M6.5 20h11v1.6h-11z"/></svg>'
 
-const empty: FC = { type: 'FeatureCollection', features: [] }
-
-function point(s: Statue, props: Record<string, unknown> = {}): GeoJSON.Feature {
-  return { type: 'Feature', geometry: { type: 'Point', coordinates: [s.lon, s.lat] }, properties: { id: s.id, ...props } }
+/** MapLibre positions the wrapper (absolute + transform); the visible pin lives inside it. */
+function wrap(inner: HTMLElement): HTMLDivElement {
+  const anchor = document.createElement('div')
+  anchor.className = 'marker'
+  anchor.appendChild(inner)
+  return anchor
 }
 
-function bearing(a: Statue, b: Statue): number {
-  const toRad = (d: number) => (d * Math.PI) / 180
-  const y = Math.sin(toRad(b.lon - a.lon)) * Math.cos(toRad(b.lat))
-  const x = Math.cos(toRad(a.lat)) * Math.sin(toRad(b.lat)) - Math.sin(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.cos(toRad(b.lon - a.lon))
-  return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360
-}
-
-/** A leg drawn between circle edges, the way a course is printed, revealed up to `progress` metres. */
-function legLines(course: Course, progress: number): FC {
-  const features: GeoJSON.Feature[] = []
-  let walked = 0
-  for (const { from, to } of course.legs) {
-    const length = metresBetween(from, to)
-    const trim = Math.min(14, length / 3)
-    const f0 = trim / length
-    const f1 = 1 - trim / length
-    const visible = Math.min(1, Math.max(0, (progress - walked) / length))
-    walked += length
-    if (visible <= f0) continue
-    const end = Math.min(f1, visible)
-    const lerp = (f: number) => [from.lon + (to.lon - from.lon) * f, from.lat + (to.lat - from.lat) * f]
-    features.push({ type: 'Feature', geometry: { type: 'LineString', coordinates: [lerp(f0), lerp(end)] }, properties: {} })
-  }
-  return { type: 'FeatureCollection', features }
-}
-
-function triangleImage(): ImageData {
-  const size = 64
-  const c = document.createElement('canvas')
-  c.width = c.height = size
-  const g = c.getContext('2d')!
-  g.strokeStyle = PURPLE
-  g.lineWidth = 5
-  g.lineJoin = 'miter'
-  g.beginPath()
-  // Points up; the layer rotates it toward the first leg.
-  g.moveTo(size / 2, 7)
-  g.lineTo(size - 9, size - 12)
-  g.lineTo(9, size - 12)
-  g.closePath()
-  g.stroke()
-  return g.getImageData(0, 0, size, size)
-}
-
-// Symbols stop growing past street level: on the Art Bridge the statues stand ~6 m apart.
-interface NumberMarker {
-  marker: maplibregl.Marker
-  node: HTMLElement
-  lngLat: [number, number]
-  dense: boolean
-  edge: boolean
-}
-
-function ringPx(base: number, zoom: number): number {
-  if (zoom <= 12) return base * 0.55
-  if (zoom <= 16) return base * (0.55 + ((zoom - 12) / 4) * 0.45)
-  return base * (1 - (Math.min(zoom, 18.5) - 16) / 2.5 * 0.1)
-}
-
-// Try the printed-map positions in order: up-right first, then round the circle.
-const ANGLES = [45, 135, -45, -135, 0, 180, 90, -90].map((a) => (a * Math.PI) / 180)
-
-/**
- * Place each control number beside its circle where it collides with no other number and no
- * other circle, the way a course setter does. Only a number with no free spot at all is hidden.
- */
-function layoutNumbers(map: MLMap, markers: NumberMarker[]) {
-  const zoom = map.getZoom()
-  const circles = markers.map((m) => ({ p: map.project(m.lngLat), r: ringPx(m.dense ? 5.5 : 11, zoom) + 2 }))
-  const placed: { x: number; y: number; w: number; h: number }[] = []
-  const hits = (b: { x: number; y: number; w: number; h: number }, own: number) =>
-    placed.some((o) => b.x < o.x + o.w && b.x + b.w > o.x && b.y < o.y + o.h && b.y + b.h > o.y) ||
-    circles.some((c, j) => {
-      if (j === own) return false
-      const nx = Math.max(b.x, Math.min(c.p.x, b.x + b.w))
-      const ny = Math.max(b.y, Math.min(c.p.y, b.y + b.h))
-      return (nx - c.p.x) ** 2 + (ny - c.p.y) ** 2 < c.r ** 2
-    })
-  markers.forEach((m, i) => {
-    const w = m.node.offsetWidth || 14
-    const h = m.node.offsetHeight || 18
-    const { p, r } = circles[i]
-    let spot: { x: number; y: number; w: number; h: number; dx: number; dy: number } | null = null
-    for (const a of ANGLES) {
-      const dx = Math.cos(a) * (r + 2 + w / 2)
-      const dy = -Math.sin(a) * (r + 1 + h / 2)
-      const box = { x: p.x + dx - w / 2, y: p.y + dy - h / 2, w, h }
-      if (!hits(box, i)) {
-        spot = { ...box, dx, dy }
-        break
-      }
-    }
-    if (!spot && m.edge) {
-      const dx = Math.cos(ANGLES[0]) * (r + 2 + w / 2)
-      const dy = -Math.sin(ANGLES[0]) * (r + 1 + h / 2)
-      spot = { x: p.x + dx - w / 2, y: p.y + dy - h / 2, w, h, dx, dy }
-    }
-    m.node.style.visibility = spot ? 'visible' : 'hidden'
-    if (spot) {
-      m.marker.setOffset([spot.dx, spot.dy])
-      placed.push({ x: spot.x, y: spot.y, w, h })
-    }
+function pinElement(s: Statue, lang: Lang, onClick: () => void): HTMLButtonElement {
+  const el = document.createElement('button')
+  el.type = 'button'
+  el.className = 'pin'
+  el.setAttribute('aria-label', statueName(s, lang))
+  el.innerHTML = s.image
+    ? `<img src="${photoUrl(s.image, 160)}" alt="" loading="lazy" decoding="async" draggable="false">`
+    : `<span class="pin__blank">${STATUE_SVG}</span>`
+  const badge = document.createElement('span')
+  badge.className = 'pin__n'
+  el.appendChild(badge)
+  const tick = document.createElement('span')
+  tick.className = 'pin__seen'
+  tick.innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.2 2.2 4.8-5"/></svg>'
+  el.appendChild(tick)
+  el.addEventListener('click', (e) => {
+    e.stopPropagation()
+    onClick()
   })
+  return el
 }
 
-const ring = (base: number) =>
-  ['interpolate', ['linear'], ['zoom'], 12, base * 0.55, 16, base, 18.5, base * 0.9] as maplibregl.ExpressionSpecification
-
-/** A control closer than this to its nearest neighbour is drawn small, its number shown only up close. */
-const DENSE_M = 18
-
-const controlRing = (base: number, dense: number) => {
-  const at = (k: number): maplibregl.ExpressionSpecification => ['case', ['get', 'dense'], dense * k, base * k]
-  return ['interpolate', ['linear'], ['zoom'], 12, at(0.55), 16, at(1), 18.5, at(0.9)] as maplibregl.ExpressionSpecification
+/** A group of nearby statues: one of their photos, with how many are there. */
+function clusterElement(count: number, onClick: () => void): HTMLButtonElement {
+  const el = document.createElement('button')
+  el.type = 'button'
+  el.className = 'cluster'
+  el.innerHTML = `<span class="cluster__photo">${STATUE_SVG}</span><span class="cluster__n">${count}</span>`
+  el.addEventListener('click', (e) => {
+    e.stopPropagation()
+    onClick()
+  })
+  return el
 }
 
-export function MapView({ statues, course, selectedId, seen, lang, insets, onSelect }: Props) {
+/** Statues closer than this to a neighbour need a very close zoom to tell apart (the Art Bridge). */
+const CROWDED_M = 15
+
+export function MapView({ statues, course, activeId, seen, lang, insets, onSelect, onUserPosition }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MLMap | null>(null)
   const geolocate = useRef<maplibregl.GeolocateControl | null>(null)
-  const numberMarkers = useRef<NumberMarker[]>([])
-  const relayoutRef = useRef<() => void>(() => {})
+  const pins = useRef(new Map<string, { marker: maplibregl.Marker; el: HTMLButtonElement }>())
+  const clusters = useRef(new Map<string, maplibregl.Marker>())
+  const activePin = useRef<{ id: string; marker: maplibregl.Marker; el: HTMLButtonElement } | null>(null)
+  /** A new route shows its whole length first; the first stop is selected without zooming to it. */
+  const keepOverview = useRef(false)
+  const byId = useRef(new Map<string, Statue>())
   const [ready, setReady] = useState(false)
   const [locateError, setLocateError] = useState(false)
-  const onSelectRef = useRef(onSelect)
-  onSelectRef.current = onSelect
+  const cb = useRef({ onSelect, onUserPosition })
+  cb.current = { onSelect, onUserPosition }
   const insetsRef = useRef(insets)
   insetsRef.current = insets
+  const state = useRef({ activeId, seen, course, lang })
+  state.current = { activeId, seen, course, lang }
 
-  const padding = (extra = 40) => ({
-    top: insetsRef.current.top + extra,
-    bottom: insetsRef.current.bottom + extra,
-    left: insetsRef.current.left + extra,
-    right: 72,
-  })
+  const padding = () => ({ top: insetsRef.current.top + 36, bottom: insetsRef.current.bottom + 36, left: 56, right: 56 })
 
-  // Map and static layers, once.
+  /** Paint each pin's state: active, seen, route number. */
+  const paintPins = () => {
+    const { activeId: active, seen: seenSet, course: c } = state.current
+    const order = new Map(c?.controls.map((s, i) => [s.id, i + 1]))
+    const all = [...pins.current]
+    if (activePin.current) all.push([activePin.current.id, activePin.current])
+    for (const [id, { el: node, marker }] of all) {
+      const n = order.get(id)
+      node.classList.toggle('is-active', id === active)
+      node.classList.toggle('is-seen', seenSet.has(id))
+      node.querySelector<HTMLElement>('.pin__n')!.textContent = n ? String(n) : ''
+      node.classList.toggle('has-n', Boolean(n))
+      marker.getElement().style.zIndex = id === active ? '5' : n ? '2' : '1'
+    }
+  }
+
+  // Map, once.
   useEffect(() => {
     if (!el.current) return
     const map = new maplibregl.Map({
       container: el.current,
-      style: sprintMapStyle(lang),
+      style: cityStyle(state.current.lang),
       center: [CITY_CENTRE[1], CITY_CENTRE[0]],
-      zoom: 15.2,
+      zoom: 15.4,
       minZoom: 11,
       maxZoom: 20,
       attributionControl: { compact: true },
@@ -191,124 +138,97 @@ export function MapView({ statues, course, selectedId, seen, lang, insets, onSel
       pitchWithRotate: false,
     })
     map.touchZoomRotate.disableRotation()
-    map.addControl(new maplibregl.ScaleControl({ unit: 'metric', maxWidth: 96 }), 'bottom-left')
-    const geo = new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: false, showAccuracyCircle: true })
+    const geo = new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: true, showAccuracyCircle: false })
     geo.on('error', () => setLocateError(true))
-    geo.on('geolocate', () => setLocateError(false))
+    geo.on('geolocate', (e: { coords: GeolocationCoordinates }) => {
+      setLocateError(false)
+      cb.current.onUserPosition({ lat: e.coords.latitude, lon: e.coords.longitude })
+    })
     map.addControl(geo, 'top-left')
     geolocate.current = geo
 
-    map.on('load', () => {
-      map.addImage('start-triangle', triangleImage(), { pixelRatio: 2 })
-      map.addSource('statues', { type: 'geojson', data: empty, cluster: true, clusterRadius: 36, clusterMaxZoom: 16 })
-      map.addSource('others', { type: 'geojson', data: empty })
-      map.addSource('legs', { type: 'geojson', data: empty })
-      map.addSource('controls', { type: 'geojson', data: empty })
-      map.addSource('selected', { type: 'geojson', data: empty })
-
-      map.addLayer({
-        id: 'others', type: 'circle', source: 'others',
-        paint: { 'circle-radius': ring(4), 'circle-color': '#ffffff', 'circle-stroke-color': PURPLE, 'circle-stroke-width': 1.5, 'circle-opacity': 0.75, 'circle-stroke-opacity': 0.45 },
-      })
-      // A group of statues: two stacked contour-brown rings with a ×count, never a purple control.
-      const clusterRadius: maplibregl.ExpressionSpecification = ['step', ['get', 'point_count'], 13, 10, 16, 25, 19]
-      map.addLayer({
-        id: 'cluster-back', type: 'circle', source: 'statues', filter: ['has', 'point_count'],
-        paint: { 'circle-radius': clusterRadius, 'circle-color': '#ffffff', 'circle-stroke-color': CONTOUR, 'circle-stroke-width': 1.5, 'circle-translate': [4, -4] },
-      })
-      map.addLayer({
-        id: 'cluster', type: 'circle', source: 'statues', filter: ['has', 'point_count'],
-        paint: { 'circle-radius': clusterRadius, 'circle-color': '#ffffff', 'circle-stroke-color': CONTOUR, 'circle-stroke-width': 2 },
-      })
-      map.addLayer({
-        id: 'cluster-count', type: 'symbol', source: 'statues', filter: ['has', 'point_count'],
-        layout: { 'text-field': ['concat', '×', ['get', 'point_count_abbreviated']], 'text-font': ['Noto Sans Bold'], 'text-size': 11.5, 'text-allow-overlap': true },
-        paint: { 'text-color': CONTOUR },
-      })
-      map.addLayer({
-        id: 'statue', type: 'circle', source: 'statues', filter: ['!', ['has', 'point_count']],
-        paint: {
-          'circle-radius': ring(7), 'circle-stroke-width': 2.2, 'circle-stroke-color': PURPLE,
-          'circle-color': ['case', ['get', 'seen'], PURPLE, '#ffffff'], 'circle-opacity': ['case', ['get', 'seen'], 0.85, 0.55],
-        },
-      })
-      map.addLayer({
-        id: 'legs', type: 'line', source: 'legs',
-        layout: { 'line-cap': 'butt' },
-        paint: { 'line-color': PURPLE, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 1.6, 17, 3] },
-      })
-      map.addLayer({
-        id: 'finish-outer', type: 'circle', source: 'controls', filter: ['get', 'last'],
-        paint: { 'circle-radius': controlRing(15, 9), 'circle-color': 'rgba(0,0,0,0)', 'circle-stroke-color': PURPLE, 'circle-stroke-width': 2.2 },
-      })
-      map.addLayer({
-        id: 'control', type: 'circle', source: 'controls', filter: ['!', ['get', 'first']],
-        paint: {
-          'circle-radius': controlRing(11, 5.5), 'circle-stroke-width': ['case', ['get', 'dense'], 2, 2.6], 'circle-stroke-color': PURPLE,
-          'circle-color': ['case', ['get', 'seen'], PURPLE, 'rgba(255,255,255,0.35)'], 'circle-opacity': ['case', ['get', 'seen'], 0.8, 1],
-        },
-      })
-      map.addLayer({
-        id: 'start', type: 'symbol', source: 'controls', filter: ['get', 'first'],
-        layout: {
-          'icon-image': 'start-triangle', 'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.55, 16, 0.95, 18.5, 0.9],
-          'icon-rotate': ['get', 'bearing'], 'icon-rotation-alignment': 'map', 'icon-allow-overlap': true,
-        },
-      })
-      map.addLayer({
-        id: 'selected', type: 'circle', source: 'selected',
-        paint: { 'circle-radius': ring(17), 'circle-color': 'rgba(123,44,191,0.12)', 'circle-stroke-color': PURPLE, 'circle-stroke-width': 3.2 },
-      })
-
-      const pick = (e: MapLayerMouseEvent) => {
-        const id = e.features?.[0]?.properties?.id
-        if (typeof id === 'string') onSelectRef.current(id)
-      }
-      for (const layer of ['statue', 'control', 'start', 'others']) {
-        map.on('click', layer, pick)
-        map.on('mouseenter', layer, () => (map.getCanvas().style.cursor = 'pointer'))
-        map.on('mouseleave', layer, () => (map.getCanvas().style.cursor = ''))
-      }
-      map.on('click', 'cluster', async (e: MapLayerMouseEvent) => {
-        const f = e.features?.[0]
-        if (!f) return
-        const zoom = await (map.getSource('statues') as GeoJSONSource).getClusterExpansionZoom(f.properties!.cluster_id)
-        map.easeTo({ center: (f.geometry as GeoJSON.Point).coordinates as [number, number], zoom: zoom + 0.3 })
-      })
-      map.on('mouseenter', 'cluster', () => (map.getCanvas().style.cursor = 'zoom-in'))
-      map.on('mouseleave', 'cluster', () => (map.getCanvas().style.cursor = ''))
-      setReady(true)
-    })
-
+    // HTML photo pins for single statues and count bubbles for groups, rebuilt as the view changes.
     let queued = 0
-    const relayout = () => {
+    const syncMarkers = () => {
       if (queued) return
       queued = requestAnimationFrame(() => {
         queued = 0
-        layoutNumbers(map, numberMarkers.current)
+        if (!map.getSource('statues') || !map.isSourceLoaded('statues')) return
+        const seenPins = new Set<string>()
+        const seenClusters = new Set<string>()
+        for (const f of map.querySourceFeatures('statues')) {
+          const coords = (f.geometry as GeoJSON.Point).coordinates as [number, number]
+          const p = f.properties as Record<string, unknown>
+          if (p.cluster) {
+            // Cluster ids are reused when the data changes, so key by place and size.
+            const key = `${coords[0].toFixed(6)},${coords[1].toFixed(6)},${p.point_count}`
+            if (seenClusters.has(key)) continue
+            seenClusters.add(key)
+            if (!clusters.current.has(key)) {
+              const clusterId = Number(p.cluster_id)
+              const source = map.getSource('statues') as GeoJSONSource
+              const node = clusterElement(Number(p.point_count), async () => {
+                const zoom = await source.getClusterExpansionZoom(clusterId)
+                map.easeTo({ center: coords, zoom: zoom + 0.4, padding: padding() })
+              })
+              source
+                .getClusterLeaves(clusterId, 12, 0)
+                .then((leaves) => {
+                  const withPhoto = leaves.map((l) => byId.current.get(String(l.properties?.id))).find((x) => x?.image)
+                  if (withPhoto?.image) node.querySelector('.cluster__photo')!.innerHTML = `<img src="${photoUrl(withPhoto.image, 160)}" alt="" draggable="false">`
+                })
+                .catch(() => {})
+              clusters.current.set(key, new maplibregl.Marker({ element: wrap(node) }).setLngLat(coords).addTo(map))
+            }
+          } else {
+            const id = String(p.id)
+            if (seenPins.has(id)) continue
+            seenPins.add(id)
+            const s = byId.current.get(id)
+            if (s && !pins.current.has(id)) {
+              const node = pinElement(s, state.current.lang, () => cb.current.onSelect(id))
+              pins.current.set(id, { el: node, marker: new maplibregl.Marker({ element: wrap(node) }).setLngLat(coords).addTo(map) })
+            }
+          }
+        }
+        for (const [k, m] of clusters.current) if (!seenClusters.has(k)) (m.remove(), clusters.current.delete(k))
+        for (const [k, m] of pins.current) if (!seenPins.has(k)) (m.marker.remove(), pins.current.delete(k))
+        paintPins()
       })
     }
-    map.on('move', relayout)
-    relayoutRef.current = relayout
+
+    map.on('load', () => {
+      map.addSource('statues', { type: 'geojson', data: { type: 'FeatureCollection', features: [] }, cluster: true, clusterRadius: 38, clusterMaxZoom: 16 })
+      // An invisible layer, so MapLibre loads the statue tiles the HTML pins are read from.
+      map.addLayer({ id: 'statues-anchor', type: 'circle', source: 'statues', paint: { 'circle-radius': 1, 'circle-opacity': 0 } })
+      map.addSource('route', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
+      map.addLayer({
+        id: 'route', type: 'line', source: 'route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': ACCENT, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 2, 18, 4], 'line-dasharray': [0.1, 1.8], 'line-opacity': 0.9 },
+      })
+      map.on('render', syncMarkers)
+      setReady(true)
+    })
+    if (import.meta.env.DEV) map.on('idle', () => el.current?.setAttribute('data-ready', '1'))
 
     const ro = new ResizeObserver(() => map.resize())
     ro.observe(el.current)
     mapRef.current = map
-    if (import.meta.env.DEV) {
-      const mark = () => el.current?.setAttribute('data-debug', JSON.stringify({ c: map.getCenter(), z: map.getZoom(), loaded: map.loaded() }))
-      map.on('moveend', mark)
-      map.on('error', (e) => el.current?.setAttribute('data-error', String(e.error?.message ?? e.error)))
-      map.on('load', mark)
-    }
+    const pinMap = pins.current
+    const clusterMap = clusters.current
     return () => {
       ro.disconnect()
-      numberMarkers.current.forEach((m) => m.marker.remove())
+      pinMap.forEach((p) => p.marker.remove())
+      pinMap.clear()
+      clusterMap.forEach((m) => m.remove())
+      clusterMap.clear()
+      activePin.current?.marker.remove()
+      activePin.current = null
       map.remove()
       mapRef.current = null
       setReady(false)
     }
-    // The style is built once; language changes are applied below.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -316,128 +236,87 @@ export function MapView({ statues, course, selectedId, seen, lang, insets, onSel
     if (!ready || !map) return
     for (const id of LABEL_LAYERS) map.setLayoutProperty(id, 'text-field', labelField(lang))
     map.getCanvas().setAttribute('aria-label', t('map', lang))
+    for (const [id, { el: node }] of pins.current) {
+      const s = byId.current.get(id)
+      if (s) node.setAttribute('aria-label', statueName(s, lang))
+    }
   }, [lang, ready])
 
-  // Statues, course and the punched state.
+  // The statues on the map: everything, or just the chosen route. The active one stands apart,
+  // on its own pin, so it can never be swallowed by a group.
   useEffect(() => {
     const map = mapRef.current
     if (!ready || !map) return
-    const inCourse = new Set(course?.controls.map((c) => c.id))
+    byId.current = new Map(statues.map((s) => [s.id, s]))
+    for (const [id, p] of pins.current) if (!byId.current.has(id) || id === activeId) (p.marker.remove(), pins.current.delete(id))
     ;(map.getSource('statues') as GeoJSONSource).setData({
       type: 'FeatureCollection',
-      features: course ? [] : statues.map((s) => point(s, { seen: seen.has(s.id) })),
+      features: statues
+        .filter((s) => s.id !== activeId)
+        .map((s) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [s.lon, s.lat] }, properties: { id: s.id } })),
     })
-    ;(map.getSource('others') as GeoJSONSource).setData({
-      type: 'FeatureCollection',
-      features: course ? statues.filter((s) => !inCourse.has(s.id)).map((s) => point(s)) : [],
-    })
-    const controls = course?.controls ?? []
-    const dense = controls.map((s) => controls.some((o) => o !== s && metresBetween(s, o) < DENSE_M))
-    ;(map.getSource('controls') as GeoJSONSource).setData({
-      type: 'FeatureCollection',
-      features: controls.map((s, i) =>
-        point(s, {
-          n: i + 1, seen: seen.has(s.id), first: i === 0, last: i === controls.length - 1 && i > 0, dense: dense[i],
-          bearing: i === 0 && controls[1] ? bearing(s, controls[1]) : 0,
-        }),
-      ),
-    })
+    activePin.current?.marker.remove()
+    activePin.current = null
+    const a = activeId ? byId.current.get(activeId) : undefined
+    if (a) {
+      const node = pinElement(a, lang, () => cb.current.onSelect(a.id))
+      activePin.current = { id: a.id, el: node, marker: new maplibregl.Marker({ element: wrap(node) }).setLngLat([a.lon, a.lat]).addTo(map) }
+    }
+    paintPins()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, statues, activeId])
 
-    // Control numbers sit up and to the right of their circles, set in the UI face.
-    numberMarkers.current.forEach((m) => m.marker.remove())
-    numberMarkers.current = controls.map((s, i) => {
-      const node = document.createElement('button')
-      node.type = 'button'
-      node.className = `control-number${dense[i] ? ' control-number--dense' : ''}`
-      node.textContent = String(i + 1)
-      node.setAttribute('aria-label', `${i + 1}. ${statueName(s, lang)}`)
-      node.addEventListener('click', () => onSelectRef.current(s.id))
-      const marker = new maplibregl.Marker({ element: node, anchor: 'center' }).setLngLat([s.lon, s.lat]).addTo(map)
-      return { marker, node, lngLat: [s.lon, s.lat] as [number, number], dense: dense[i], edge: i === 0 || i === controls.length - 1 }
-    })
-    relayoutRef.current()
-  }, [ready, statues, course, seen, lang])
-
-  // Draw the legs in, start to finish, whenever the course changes.
+  // The route line, and fit the view to it when a route is chosen.
   useEffect(() => {
     const map = mapRef.current
     if (!ready || !map) return
-    const source = map.getSource('legs') as GeoJSONSource
-    if (!course || course.legs.length === 0) {
-      source.setData(empty)
-      return
+    const line = course?.controls.map((s) => [s.lon, s.lat]) ?? []
+    ;(map.getSource('route') as GeoJSONSource).setData({
+      type: 'FeatureCollection',
+      features: line.length > 1 ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: line }, properties: {} }] : [],
+    })
+    if (course?.controls.length) {
+      keepOverview.current = true
+      const bounds = new maplibregl.LngLatBounds()
+      course.controls.forEach((c) => bounds.extend([c.lon, c.lat]))
+      map.fitBounds(bounds, { padding: padding(), maxZoom: 17, duration: 700 })
     }
-    const total = course.legs.reduce((sum, l) => sum + metresBetween(l.from, l.to), 0)
-    // When most stops stand shoulder to shoulder (the Art Bridge), open on that group, close
-    // enough for each circle and number to separate; the whole-route button shows the rest.
-    const packed = course.controls.filter((s) => course.controls.some((o) => o !== s && metresBetween(s, o) < DENSE_M))
-    const focus = packed.length >= course.controls.length / 2 ? packed : course.controls
-    const bounds = new maplibregl.LngLatBounds()
-    focus.forEach((c) => bounds.extend([c.lon, c.lat]))
-    map.fitBounds(bounds, { padding: padding(), maxZoom: focus === packed ? 19.4 : 18.5, duration: 700 })
-
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      source.setData(legLines(course, total))
-      return
-    }
-    let frame = 0
-    const startAt = performance.now() + 450
-    const duration = Math.min(2200, 600 + course.legs.length * 70)
-    const tick = (now: number) => {
-      const p = Math.min(1, Math.max(0, (now - startAt) / duration))
-      const eased = 1 - Math.pow(1 - p, 3)
-      source.setData(legLines(course, total * eased))
-      if (p < 1) frame = requestAnimationFrame(tick)
-    }
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
     // padding reads the latest insets through a ref
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, course])
 
-  // The selected statue: ring it and bring it into the visible part of the map.
+  useEffect(paintPins, [activeId, seen, course])
+
+  // Bring the active statue into the clear part of the map.
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
-    const s = statues.find((x) => x.id === selectedId)
-    ;(map.getSource('selected') as GeoJSONSource).setData(s ? { type: 'FeatureCollection', features: [point(s)] } : empty)
+    if (!ready || !map || !activeId) return
+    const s = byId.current.get(activeId) ?? statues.find((x) => x.id === activeId)
     if (!s) return
-    // Wait a beat so the phone sheet has risen and reported the space it now covers.
-    const timer = setTimeout(
-      () => map.easeTo({ center: [s.lon, s.lat], zoom: Math.max(map.getZoom(), 16.5), padding: padding(0), duration: 600 }),
-      90,
-    )
-    return () => clearTimeout(timer)
+    if (keepOverview.current && course?.controls[0]?.id === activeId) {
+      keepOverview.current = false
+      return
+    }
+    keepOverview.current = false
+    // On a route, packed stops (the Art Bridge) need a close zoom to tell neighbours apart;
+    // otherwise the active statue has its own pin, so a street-level view is enough.
+    const crowded = state.current.course && statues.some((o) => o.id !== s.id && metresBetween(o, s) < CROWDED_M)
+    const zoom = crowded ? Math.max(map.getZoom(), 18.3) : Math.min(Math.max(map.getZoom(), 15.8), 17.2)
+    map.easeTo({ center: [s.lon, s.lat], zoom, padding: padding(), duration: 550 })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, selectedId, statues])
+  }, [ready, activeId])
 
-  const fitCourse = () => {
-    const map = mapRef.current
-    if (!map || !course?.controls.length) return
-    const bounds = new maplibregl.LngLatBounds()
-    course.controls.forEach((c) => bounds.extend([c.lon, c.lat]))
-    map.fitBounds(bounds, { padding: padding(), maxZoom: 18.5, duration: 600 })
+  const locate = () => {
+    const ok = geolocate.current?.trigger()
+    if (ok === false) setLocateError(true)
   }
 
   return (
     <div className="map-wrap">
       <div ref={el} className="map" role="region" aria-label={t('map', lang)} />
-      <div className="map-tools" role="group">
-        <button type="button" onClick={() => mapRef.current?.zoomIn()} aria-label={t('zoomIn', lang)} title={t('zoomIn', lang)}>
-          <Plus aria-hidden size={18} strokeWidth={2.25} />
-        </button>
-        <button type="button" onClick={() => mapRef.current?.zoomOut()} aria-label={t('zoomOut', lang)} title={t('zoomOut', lang)}>
-          <Minus aria-hidden size={18} strokeWidth={2.25} />
-        </button>
-        <button type="button" onClick={() => geolocate.current?.trigger()} aria-label={t('locate', lang)} title={t('locate', lang)}>
-          <LocateFixed aria-hidden size={18} strokeWidth={2.25} />
-        </button>
-        {course && (
-          <button type="button" onClick={fitCourse} aria-label={t('fitCourse', lang)} title={t('fitCourse', lang)}>
-            <Maximize2 aria-hidden size={17} strokeWidth={2.25} />
-          </button>
-        )}
-      </div>
+      <button type="button" className="locate" onClick={locate} aria-label={t('locate', lang)} title={t('locate', lang)}>
+        <LocateFixed aria-hidden size={20} strokeWidth={2.2} />
+      </button>
       {locateError && (
         <p className="map-toast" role="status">
           {t('locateError', lang)}

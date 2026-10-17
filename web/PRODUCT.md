@@ -25,7 +25,7 @@ Outdoors, one-handed, in sunlight, often on roaming data or none. Visitors move 
 
 - City map of 128 statues and monuments merged by `data/build_statues.py` from OSM, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list.
 - Themed routes: Antiquity, Letters and faith, Revolutionaries, Artists, Everyday Skopje.
-- Statue card: Wikimedia Commons photo, name, depicted person, themes, and the Wikipedia summary in MK or EN; pre-generated biographies and audio in `public/content/` override the summary when present.
+- Photo pins, swipe cards and a full-screen story (photo, Wikidata description, Wikipedia summary in MK or EN); pre-generated biographies and audio in `public/content/` override the summary when present.
 - Languages: Macedonian and English only.
 - Art Bridge positions are approximate until the on-site walk fills `data/art_bridge_walk.json`.
 - Planned, not built: camera recognition, left/right walk-through mode, 3D/AR for three statues, generated biographies and audio.

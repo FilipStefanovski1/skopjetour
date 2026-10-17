@@ -6,13 +6,14 @@ Every statue in the city on one map, in Macedonian and English, grouped into the
 
 ## What works now
 
-- City map of **128 statues and monuments** merged from OpenStreetMap, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list
+- City map of **127 statues and monuments** merged from OpenStreetMap, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list
 - All 27 named Art Bridge statues, with photos of the statues themselves
-- The city drawn as a sprint-orienteering map (MapLibre + OpenFreeMap vector tiles); every statue is a control
-- Five themed routes drawn as walkable courses: numbered stops, start triangle, finish circle, metres and minutes per leg
-- Statue card: Commons photo, control-description table, Wikipedia summary in MK or EN, "mark as seen", next stop
-- Search across all statues; shareable links per route and statue (`#/route/<id>/s/<id>`), ready for NFC/QR plaques
-- Installable offline web app (PWA): viewed map tiles, fonts, photos and summaries are cached
+- Every statue is a round photo of itself on a calm light map (MapLibre + OpenFreeMap vector tiles); nearby statues group into photo bubbles
+- Swipeable cards along the bottom (photo, who they were, distance or stop number) synced with the map
+- Full-screen story: big photo, one-line description, Wikipedia story in MK or EN, "mark as seen", next/previous (buttons or sideways swipe)
+- Five themed routes as chips; a route draws as a dotted walking line with numbered photo pins
+- Search by name; shareable links per route and statue (`#/route/<id>/s/<id>`), ready for NFC/QR plaques
+- Installable offline web app (PWA): viewed map tiles, fonts, photos and stories are cached
 
 See [TODO.md](TODO.md) for what's done and what's left.
 

@@ -475,6 +475,91 @@ def to_latin(name):
     return "".join(out)
 
 
+def fetch_entities(qids):
+    """Short descriptions ("Macedonian singer") and Wikipedia links for the statues and the people they show."""
+    out = {}
+    qids = sorted(qids)
+    for i in range(0, len(qids), 50):
+        ents = curl(["-G", "https://www.wikidata.org/w/api.php", "--data-urlencode", "action=wbgetentities",
+                     "--data-urlencode", "ids=" + "|".join(qids[i:i + 50]),
+                     "--data-urlencode", "props=descriptions|sitelinks", "--data-urlencode", "languages=mk|en",
+                     "--data-urlencode", "sitefilter=mkwiki|enwiki", "--data-urlencode", "format=json"])["entities"]
+        for q, e in ents.items():
+            out[q] = {
+                "desc": {l: v["value"] for l, v in e.get("descriptions", {}).items()},
+                "wiki": {k[:2]: v["title"] for k, v in e.get("sitelinks", {}).items()},
+            }
+    return out
+
+
+PERSON_PREFIX = re.compile(r"^(споменик на|споменик|спомен-обележје на|monument of|monument to|statue of|bust of)\s+", re.I)
+
+
+def person_title(name):
+    """A statue named after a person, as that person's article title would read; None otherwise."""
+    if not name:
+        return None
+    title = PERSON_PREFIX.sub("", name).strip(" „“\"")
+    title = re.sub(r"\s*\(.*\)$", "", title)
+    words = title.split()
+    if not 2 <= len(words) <= 4 or not all(w[0].isupper() for w in words if w[0].isalpha()):
+        return None
+    return title
+
+
+def fetch_people(candidates):
+    """Look each name up as an exact Wikipedia title; keep it only if Wikidata says it is a human."""
+    found = {}
+    for lang in ("mk", "en"):
+        titles = sorted({t for c in candidates for t in [c[lang]] if t})
+        for i in range(0, len(titles), 50):
+            res = curl(["-G", f"https://{lang}.wikipedia.org/w/api.php", "--data-urlencode", "action=query",
+                        "--data-urlencode", "prop=pageprops", "--data-urlencode", "ppprop=wikibase_item|disambiguation",
+                        "--data-urlencode", "redirects=1", "--data-urlencode", "format=json",
+                        "--data-urlencode", "titles=" + "|".join(titles[i:i + 50])])
+            q = res.get("query", {})
+            back = {}
+            for r in q.get("normalized", []) + q.get("redirects", []):
+                back[r["to"]] = back.get(r["from"], r["from"])
+            for page in q.get("pages", {}).values():
+                props = page.get("pageprops", {})
+                if "missing" in page or "disambiguation" in props or "wikibase_item" not in props:
+                    continue
+                asked = back.get(page["title"], page["title"])
+                found[(lang, asked)] = props["wikibase_item"]
+    qids = sorted(set(found.values()))
+    humans = {}
+    for i in range(0, len(qids), 50):
+        ents = curl(["-G", "https://www.wikidata.org/w/api.php", "--data-urlencode", "action=wbgetentities",
+                     "--data-urlencode", "ids=" + "|".join(qids[i:i + 50]), "--data-urlencode", "props=claims",
+                     "--data-urlencode", "format=json"])["entities"]
+        for q, e in ents.items():
+            p31 = [c["mainsnak"].get("datavalue", {}).get("value", {}).get("id") for c in e.get("claims", {}).get("P31", [])]
+            humans[q] = "Q5" in p31
+    return {f"{lang}|{title}": q for (lang, title), q in found.items() if humans.get(q)}
+
+
+def enrich(statues, offline):
+    """Fill descriptions, and borrow the depicted person's Wikipedia article when the statue has none."""
+    # Statues of people with no linked article: find the person by name (exact title, human only).
+    lonely = [s for s in statues if not (s["wiki_mk"] or s["wiki_en"] or s["subject_qid"])]
+    cands = [{"id": s["id"], "mk": person_title(s["name_mk"]), "en": person_title(s["name_en"])} for s in lonely]
+    people = cached("people", lambda: fetch_people(cands), offline)
+    for s, c in zip(lonely, cands):
+        q = people.get(f"mk|{c['mk']}") or people.get(f"en|{c['en']}")
+        if q:
+            s["subject_qid"] = q
+
+    qids = {q for s in statues for q in (s["subject_qid"], s["statue_qid"]) if q}
+    ents = cached("entities", lambda: fetch_entities(qids), offline)
+    for s in statues:
+        subject, statue = ents.get(s["subject_qid"] or "", {}), ents.get(s["statue_qid"] or "", {})
+        for lang in ("mk", "en"):
+            s[f"desc_{lang}"] = subject.get("desc", {}).get(lang) or statue.get("desc", {}).get(lang)
+            if not s[f"wiki_{lang}"]:
+                s[f"wiki_{lang}"] = statue.get("wiki", {}).get(lang) or subject.get("wiki", {}).get(lang)
+
+
 def fill_names(statues):
     """Reviewed names first (data/names.json), then transliteration where it is reliable."""
     reviewed = json.loads((ROOT / "names.json").read_text())
@@ -529,6 +614,7 @@ def main():
     excluded = json.loads((ROOT / "exclude.json").read_text())
     statues = [s for s in statues if s["id"] not in excluded]
     fill_names(statues)
+    enrich(statues, args.offline)
     apply_themes(statues)
 
     features = [{"type": "Feature",

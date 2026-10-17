@@ -13,7 +13,7 @@ export default defineConfig({
         short_name: 'Statues',
         description: 'Your personal guide to the statues of Skopje',
         lang: 'mk',
-        theme_color: '#7b2cbf',
+        theme_color: '#f3f2ef',
         background_color: '#ffffff',
         display: 'standalone',
         icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],

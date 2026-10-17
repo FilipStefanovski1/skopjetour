@@ -18,6 +18,8 @@ export interface StatueProps {
   themes: string[]
   aliases: string[]
   sources: string[]
+  desc_mk?: string | null
+  desc_en?: string | null
 }
 
 export interface Statue extends StatueProps {
@@ -52,6 +54,12 @@ function fold(s: string): string {
 export function subjectLine(s: Statue, lang: Lang): string | null {
   const subject = subjectName(s, lang)
   return subject && !fold(statueName(s, lang)).startsWith(fold(subject)) ? subject : null
+}
+
+/** One line on who or what this is ("Macedonian writer (1935–1987)"), in the visitor's language. */
+export function describe(s: Statue, lang: Lang): string | null {
+  const d = lang === 'en' ? s.desc_en : s.desc_mk
+  return d ? d.charAt(0).toUpperCase() + d.slice(1) : subjectLine(s, lang)
 }
 
 export function subjectName(s: Statue, lang: Lang): string | null {
