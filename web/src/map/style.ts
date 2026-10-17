@@ -3,20 +3,20 @@ import type { Lang } from '../types'
 
 /** A quiet light base map: the statue photos are the colour on screen, the city stays in the background. */
 const C = {
-  ground: '#f3f2ef',
-  park: '#dfe9d3',
-  wood: '#d3e2c4',
-  water: '#bcd9ea',
-  waterLine: '#9cc5de',
-  building: '#e6e3dd',
-  buildingEdge: '#d6d2ca',
+  ground: '#f4f4f9',
+  park: '#dce8e6',
+  wood: '#cededc',
+  water: '#b8dbd9',
+  waterLine: '#586f7c',
+  building: '#e0e4e9',
+  buildingEdge: '#cbd3db',
   road: '#ffffff',
-  roadCasing: '#dedad3',
-  path: '#c9c3b9',
-  rail: '#c4bfb7',
-  label: '#77716a',
-  labelStrong: '#4f4a45',
-  waterLabel: '#5f8fae',
+  roadCasing: '#dce3e7',
+  path: '#586f7c',
+  rail: '#586f7c',
+  label: '#586f7c',
+  labelStrong: '#2f4550',
+  waterLabel: '#586f7c',
 } as const
 
 export function labelField(lang: Lang): ExpressionSpecification {

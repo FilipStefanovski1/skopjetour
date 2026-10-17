@@ -14,7 +14,7 @@ import { statueName } from '../types'
 // Vite moves MapLibre's code during bundling, so point it at its worker explicitly.
 maplibregl.setWorkerUrl(workerUrl)
 
-const ACCENT = '#6d28d9'
+const ACCENT = '#2f4550'
 
 export interface Insets {
   top: number

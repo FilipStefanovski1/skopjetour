@@ -1,15 +1,15 @@
 :root {
-  --bg: #f3f2ef;
-  --surface: #ffffff;
-  --ink: #1c1a18;
-  --ink-2: #5e5852;
-  --ink-3: #8a837b;
-  --line: #e8e4de;
-  --accent: #6d28d9;
-  --accent-deep: #5b21b6;
-  --accent-wash: #f1eafd;
-  --shadow-float: 0 6px 22px rgba(28, 26, 24, 0.16), 0 1px 3px rgba(28, 26, 24, 0.1);
-  --shadow-card: 0 8px 28px rgba(28, 26, 24, 0.18), 0 1px 2px rgba(28, 26, 24, 0.08);
+  --bg: #f4f4f9;
+  --surface: #f4f4f9;
+  --ink: #000000;
+  --ink-2: #2f4550;
+  --ink-3: #586f7c;
+  --line: #b8dbd9;
+  --accent: #2f4550;
+  --accent-deep: #000000;
+  --accent-wash: #b8dbd9;
+  --shadow-float: 0 6px 22px rgba(47, 69, 80, 0.16), 0 1px 3px rgba(47, 69, 80, 0.1);
+  --shadow-card: 0 8px 28px rgba(47, 69, 80, 0.18), 0 1px 2px rgba(47, 69, 80, 0.08);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
@@ -46,7 +46,7 @@ body {
 }
 
 ::selection {
-  background: #ddd0f7;
+  background: #b8dbd9;
 }
 
 :focus-visible {
@@ -102,13 +102,13 @@ h1 {
 
 .maplibregl-ctrl-attrib.maplibregl-compact {
   margin: 0 8px 6px 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(244, 244, 249, 0.8);
   font-size: 0.7rem;
 }
 
 .maplibregl-user-location-dot,
 .maplibregl-user-location-dot::before {
-  background-color: #2563eb;
+  background-color: #586f7c;
 }
 
 /* Statue pins: a round photo of the statue itself. MapLibre positions .marker; .pin is the visible part. */
@@ -123,8 +123,8 @@ h1 {
   height: 46px;
   border-radius: 50%;
   border: 3px solid var(--surface);
-  background: #e9e5df;
-  box-shadow: 0 3px 10px rgba(28, 26, 24, 0.3);
+  background: #b8dbd9;
+  box-shadow: 0 3px 10px rgba(47, 69, 80, 0.3);
   transition: transform 260ms var(--ease), border-color 200ms var(--ease), box-shadow 200ms var(--ease);
 }
 
@@ -156,7 +156,7 @@ h1 {
 .pin.is-active {
   transform: scale(1.5);
   border-color: var(--accent);
-  box-shadow: 0 6px 18px rgba(91, 33, 182, 0.4);
+  box-shadow: 0 6px 18px rgba(47, 69, 80, 0.4);
 }
 
 .pin__n {
@@ -170,7 +170,7 @@ h1 {
   border-radius: 11px;
   border: 2px solid var(--surface);
   background: var(--accent);
-  color: #fff;
+  color: #f4f4f9;
   font-size: 0.72rem;
   font-weight: 700;
   line-height: 17px;
@@ -191,14 +191,14 @@ h1 {
   height: 19px;
   border-radius: 50%;
   border: 2px solid var(--surface);
-  background: #15803d;
+  background: #2f4550;
 }
 
 .pin__seen svg {
   width: 100%;
   height: 100%;
   fill: none;
-  stroke: #fff;
+  stroke: #f4f4f9;
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -215,8 +215,8 @@ h1 {
   height: 52px;
   border-radius: 50%;
   border: 3px solid var(--surface);
-  background: #e9e5df;
-  box-shadow: 0 3px 10px rgba(28, 26, 24, 0.3), 5px -4px 0 -1px rgba(255, 255, 255, 0.9), 5px -4px 6px -1px rgba(28, 26, 24, 0.18);
+  background: #b8dbd9;
+  box-shadow: 0 3px 10px rgba(47, 69, 80, 0.3), 5px -4px 0 -1px rgba(244, 244, 249, 0.9), 5px -4px 6px -1px rgba(47, 69, 80, 0.18);
 }
 
 .cluster__photo {
@@ -252,7 +252,7 @@ h1 {
   border-radius: 12px;
   border: 2px solid var(--surface);
   background: var(--ink);
-  color: #fff;
+  color: #f4f4f9;
   font-size: 0.78rem;
   font-weight: 700;
   line-height: 20px;
@@ -288,7 +288,7 @@ h1 {
   padding: 9px 12px;
   border-radius: 12px;
   background: var(--ink);
-  color: #fff;
+  color: #f4f4f9;
   font-size: 0.85rem;
 }
 
@@ -377,7 +377,7 @@ h1 {
 .lang button[aria-pressed='true'] {
   background: var(--surface);
   color: var(--ink);
-  box-shadow: 0 1px 3px rgba(28, 26, 24, 0.16);
+  box-shadow: 0 1px 3px rgba(47, 69, 80, 0.16);
 }
 
 .search__results {
@@ -473,7 +473,7 @@ h1 {
   padding: 0 15px;
   border-radius: 18px;
   background: var(--surface);
-  box-shadow: 0 2px 8px rgba(28, 26, 24, 0.14);
+  box-shadow: 0 2px 8px rgba(47, 69, 80, 0.14);
   font-size: 0.9rem;
   font-weight: 500;
   white-space: nowrap;
@@ -483,7 +483,7 @@ h1 {
 
 .chips button[aria-pressed='true'] {
   background: var(--ink);
-  color: #fff;
+  color: #f4f4f9;
 }
 
 /* ------------------------------------------------------------------ bottom: swipe cards */
@@ -573,8 +573,8 @@ h1 {
   bottom: 6px;
   padding: 2px 7px;
   border-radius: 8px;
-  background: #15803d;
-  color: #fff;
+  background: #2f4550;
+  color: #f4f4f9;
   font-size: 0.68rem;
   font-weight: 600;
 }
@@ -638,7 +638,7 @@ h1 {
   padding: 0 16px;
   border-radius: 20px;
   background: var(--ink);
-  color: #fff;
+  color: #f4f4f9;
   font-weight: 600;
 }
 
@@ -673,7 +673,7 @@ h1 {
   position: relative;
   margin: 0;
   height: min(58dvh, 520px);
-  background: #e9e5df;
+  background: #b8dbd9;
 }
 
 .detail__hero img {
@@ -708,9 +708,9 @@ h1 {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(244, 244, 249, 0.94);
   color: var(--ink);
-  box-shadow: 0 3px 12px rgba(28, 26, 24, 0.22);
+  box-shadow: 0 3px 12px rgba(47, 69, 80, 0.22);
 }
 
 .round--back {
@@ -723,8 +723,8 @@ h1 {
 }
 
 .round--seen.is-on {
-  background: #15803d;
-  color: #fff;
+  background: #2f4550;
+  color: #f4f4f9;
 }
 
 .detail__body {
@@ -782,7 +782,7 @@ h1 {
 .story-loading span {
   height: 13px;
   border-radius: 7px;
-  background: #eeeae4;
+  background: #b8dbd9;
   animation: breathe 1.4s ease-in-out infinite;
 }
 
@@ -865,7 +865,7 @@ h1 {
   padding: 0 8px 0 18px;
   border-radius: 16px;
   background: var(--accent);
-  color: #fff;
+  color: #f4f4f9;
   text-align: left;
 }
 
@@ -895,7 +895,7 @@ h1 {
   height: 42px;
   border-radius: 12px;
   object-fit: cover;
-  fill: rgba(255, 255, 255, 0.8);
+  fill: rgba(244, 244, 249, 0.8);
 }
 
 .nav-next--done {
@@ -921,7 +921,7 @@ h1 {
   .detail {
     inset: 0 auto 0 0;
     width: 460px;
-    box-shadow: 8px 0 30px rgba(28, 26, 24, 0.18);
+    box-shadow: 8px 0 30px rgba(47, 69, 80, 0.18);
   }
 
   .detail__hero {
@@ -971,7 +971,7 @@ h1 {
   height: var(--nav-h);
   padding: 0 8px var(--safe-bottom);
   background: var(--surface);
-  box-shadow: 0 -1px 0 var(--line), 0 -6px 20px rgba(28, 26, 24, 0.06);
+  box-shadow: 0 -1px 0 var(--line), 0 -6px 20px rgba(47, 69, 80, 0.06);
 }
 
 .tabbar__item,
@@ -1009,7 +1009,7 @@ h1 {
   border-radius: 10px;
   border: 2px solid var(--surface);
   background: var(--accent);
-  color: #fff;
+  color: #f4f4f9;
   font-size: 0.65rem;
   font-weight: 700;
   line-height: 15px;
@@ -1027,8 +1027,8 @@ h1 {
   border-radius: 50%;
   border: 4px solid var(--surface);
   background: var(--accent);
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(91, 33, 182, 0.38);
+  color: #f4f4f9;
+  box-shadow: 0 8px 20px rgba(47, 69, 80, 0.38);
   transition: transform 200ms var(--ease);
 }
 
@@ -1060,7 +1060,7 @@ h1 {
   padding: 8px 14px;
   border-radius: 18px;
   background: var(--surface);
-  box-shadow: 0 2px 8px rgba(28, 26, 24, 0.08);
+  box-shadow: 0 2px 8px rgba(47, 69, 80, 0.08);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--ink-2);
@@ -1069,12 +1069,12 @@ h1 {
 
 .scan .lang {
   background: var(--surface);
-  box-shadow: 0 2px 8px rgba(28, 26, 24, 0.08);
+  box-shadow: 0 2px 8px rgba(47, 69, 80, 0.08);
 }
 
 .scan .lang button[aria-pressed='true'] {
   background: var(--ink);
-  color: #fff;
+  color: #f4f4f9;
   box-shadow: none;
 }
 
@@ -1152,7 +1152,7 @@ h1 {
   border: 3px solid var(--bg);
   border-radius: 50%;
   background: var(--accent);
-  color: #fff;
+  color: #f4f4f9;
 }
 
 .scan__text {
@@ -1180,7 +1180,7 @@ h1 {
 .scan__text .scan__alert {
   font-size: 0.92rem;
   font-weight: 600;
-  color: #b42318;
+  color: #000000;
 }
 
 .scan__actions {
@@ -1207,8 +1207,8 @@ h1 {
 
 .btn--primary {
   background: var(--accent);
-  color: #fff;
-  box-shadow: 0 8px 22px rgba(91, 33, 182, 0.3);
+  color: #f4f4f9;
+  box-shadow: 0 8px 22px rgba(47, 69, 80, 0.3);
 }
 
 .btn--primary:active {
@@ -1218,7 +1218,7 @@ h1 {
 .btn--quiet {
   background: var(--surface);
   color: var(--ink);
-  box-shadow: 0 2px 10px rgba(28, 26, 24, 0.08);
+  box-shadow: 0 2px 10px rgba(47, 69, 80, 0.08);
 }
 
 .scan__map {
@@ -1251,12 +1251,12 @@ h1 {
 
 .collection .lang {
   background: var(--surface);
-  box-shadow: 0 2px 8px rgba(28, 26, 24, 0.08);
+  box-shadow: 0 2px 8px rgba(47, 69, 80, 0.08);
 }
 
 .collection .lang button[aria-pressed='true'] {
   background: var(--ink);
-  color: #fff;
+  color: #f4f4f9;
   box-shadow: none;
 }
 
@@ -1270,7 +1270,7 @@ h1 {
 .progress {
   height: 8px;
   border-radius: 4px;
-  background: #e4dfd8;
+  background: #b8dbd9;
   overflow: hidden;
 }
 
@@ -1340,7 +1340,7 @@ h1 {
   aspect-ratio: 1;
   border-radius: 18px;
   overflow: hidden;
-  background: #e7e3dd;
+  background: #b8dbd9;
 }
 
 .tile__photo img {
@@ -1352,7 +1352,7 @@ h1 {
 }
 
 .tile__photo .glyph {
-  fill: #b9b2a8;
+  fill: #586f7c;
 }
 
 .tile.is-found .tile__photo {
@@ -1372,8 +1372,8 @@ h1 {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #15803d url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.6 6.3l2.2 2.2 4.6-4.8' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat;
-  border: 2px solid #fff;
+  background: #2f4550 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.6 6.3l2.2 2.2 4.6-4.8' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat;
+  border: 2px solid #f4f4f9;
 }
 
 .tile__name {
@@ -1405,11 +1405,11 @@ h1 {
   padding: 9px 14px;
   border-radius: 20px;
   background: var(--accent);
-  color: #fff;
+  color: #f4f4f9;
   font-size: 0.85rem;
   font-weight: 600;
   white-space: nowrap;
-  box-shadow: 0 6px 18px rgba(91, 33, 182, 0.4);
+  box-shadow: 0 6px 18px rgba(47, 69, 80, 0.4);
   transform: translateX(-50%);
   animation: pop 520ms var(--ease) both 180ms;
 }
@@ -1424,7 +1424,7 @@ h1 {
 /* ------------------------------------------------------------------ hero: statue / 3D / person */
 
 .detail__hero--3d {
-  background: radial-gradient(120% 90% at 50% 35%, #ffffff 0%, #ece8e2 70%, #e2ddd5 100%);
+  background: radial-gradient(120% 90% at 50% 35%, #f4f4f9 0%, #f4f4f9 70%, #b8dbd9 100%);
 }
 
 .detail__model {
@@ -1447,8 +1447,8 @@ h1 {
   max-width: calc(100% - 28px);
   padding: 4px 9px;
   border-radius: 8px;
-  background: rgba(28, 26, 24, 0.55);
-  color: #fff;
+  background: rgba(47, 69, 80, 0.55);
+  color: #f4f4f9;
   font-size: 0.72rem;
 }
 
@@ -1461,8 +1461,8 @@ h1 {
   gap: 2px;
   padding: 4px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 4px 16px rgba(28, 26, 24, 0.22);
+  background: rgba(244, 244, 249, 0.94);
+  box-shadow: 0 4px 16px rgba(47, 69, 80, 0.22);
   transform: translateX(-50%);
 }
 
@@ -1482,7 +1482,7 @@ h1 {
 
 .media-tabs button[aria-selected='true'] {
   background: var(--ink);
-  color: #fff;
+  color: #f4f4f9;
 }
 
 /* ------------------------------------------------------------------ the tour-guide voice */
@@ -1503,7 +1503,7 @@ h1 {
 
 .guide.is-on {
   background: var(--accent);
-  color: #fff;
+  color: #f4f4f9;
 }
 
 .guide__icon {
@@ -1514,11 +1514,11 @@ h1 {
   height: 40px;
   border-radius: 50%;
   background: var(--accent);
-  color: #fff;
+  color: #f4f4f9;
 }
 
 .guide.is-on .guide__icon {
-  background: #fff;
+  background: #f4f4f9;
   color: var(--accent);
 }
 
@@ -1580,7 +1580,7 @@ h1 {
     left: 50%;
     width: 480px;
     transform: translateX(-50%);
-    box-shadow: 0 0 40px rgba(28, 26, 24, 0.12);
+    box-shadow: 0 0 40px rgba(47, 69, 80, 0.12);
   }
 
   .tabbar {
@@ -1621,7 +1621,7 @@ h1 {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(167, 139, 250, 0.45) 50%, transparent 100%) 0 -100% / 100% 40% no-repeat;
+  background: linear-gradient(180deg, transparent 0%, rgba(184, 219, 217, 0.45) 50%, transparent 100%) 0 -100% / 100% 40% no-repeat;
   animation: sweep 1.6s var(--ease) infinite;
 }
 
@@ -1686,7 +1686,7 @@ h1 {
   height: 58px;
   border-radius: 12px;
   overflow: hidden;
-  background: #e7e3dd;
+  background: #b8dbd9;
 }
 
 .guess__photo img {
@@ -1722,17 +1722,17 @@ h1 {
 }
 
 .guess__tag--sure {
-  background: #dcfce7;
-  color: #166534;
+  background: #b8dbd9;
+  color: #2f4550;
 }
 
 .guess__tag--maybe {
-  background: #fef3c7;
-  color: #92400e;
+  background: #f4f4f9;
+  color: #2f4550;
 }
 
 .guess__tag--unsure {
-  background: #ece9e4;
+  background: #b8dbd9;
   color: var(--ink-2);
 }
 
