@@ -4,11 +4,14 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "test": "node --test scripts/*.test.mjs",
     "dev": "vite --host",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host",
     "data": "python3 -I ../data/build_statues.py",
     "data:offline": "python3 -I ../data/build_statues.py --offline",
+    "data:walking": "node scripts/build-walking-network.mjs",
+    "data:walking:offline": "node scripts/build-walking-network.mjs --offline",
     "embed": "node scripts/embed-statues.mjs"
   },
   "dependencies": {

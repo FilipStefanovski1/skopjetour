@@ -4,3 +4,4 @@ web/dev-dist/
 .DS_Store
 __pycache__/
 *.tsbuildinfo
+data/raw/walking-network.json
