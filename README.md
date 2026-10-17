@@ -17,7 +17,8 @@ Every statue in the city on one map, in Macedonian and English, grouped into the
 - Every statue is a round photo of itself on a calm light map (MapLibre + OpenFreeMap vector tiles); nearby statues group into photo bubbles
 - Swipeable cards along the bottom (photo, who they were, distance or stop number) synced with the map
 - Full-screen story: big photo, one-line description, Wikipedia story in MK or EN, "mark as seen", next/previous (buttons or sideways swipe)
-- Five themed routes as chips; a route draws as a dotted walking line with numbered photo pins
+- Five themed walks in the map toolbar; a walk draws as a dotted walking line with numbered photo pins
+- **Directions** on a monument page offers Google Maps or Apple Maps. A monument in the selected themed walk sends the entire walk in its existing order; other monuments send a single destination. No Maps app opens from selecting a walk, tapping a marker, or scanning a plaque.
 - Themed walks follow a bundled OpenStreetMap pedestrian network, including bridge crossings. Distance/time use the routed path; GPS starts snap to a nearby walking path. Routing runs locally without an API key.
 - Search by name; shareable links per route and statue (`#/route/<id>/s/<id>`), ready for NFC/QR plaques
 - Installable offline web app (PWA): viewed map tiles, fonts, photos and stories are cached
@@ -57,7 +58,9 @@ Edit `data/themes.json`. A statue joins a theme when any `match` string appears 
 
 ### Walking paths
 
-`web/src/map/walking-network.json` is a derived OpenStreetMap database, licensed **ODbL-1.0**, with its source timestamp and coverage bounds included. Attribution is linked on the map. It covers central Skopje (41.967–42.025° N, 21.390–21.470° E). It is loaded on the first themed walk and included in the PWA cache. Themed-walk planning runs locally; the separate **Directions** action uses the FOSSGIS walking router with the starting and destination coordinates.
+`web/src/map/walking-network.json` is a derived OpenStreetMap database, licensed **ODbL-1.0**, with its source timestamp and coverage bounds included. Attribution is linked on the map. It covers central Skopje (41.967–42.025° N, 21.390–21.470° E). It is loaded on the first themed walk and included in the PWA cache. Themed-walk previews run locally; **Directions** hands navigation over to an external Maps app, without requesting or exporting our GPS fix. Maps obtains the visitor's current location.
+
+Maps links preserve stop order, not the exact preview geometry: Google/Apple choose their own walking paths. Google app links use up to nine waypoints plus the destination; a labelled mobile-browser option uses smaller parts of three waypoints plus the destination. Longer walks expose numbered parts; each subsequent part starts at the preceding endpoint, with no stops omitted. Apple uses unified `/directions` URLs with repeated `waypoint` parameters (iOS 18.4+ / macOS 15.4+); the app conservatively caps these parts at ten destinations. All links open only after an explicit choice in a monument's Directions control. Native Maps behaviour still needs validation on the demo phone.
 
 Refresh with `cd web && npm run data:walking`, or rebuild the downloaded cache with `npm run data:walking:offline`. The raw response is cached locally in `data/raw/walking-network.json` (not committed). `OVERPASS_URL` can select another Overpass endpoint if the default is busy. Rebuild the app after refreshing.
 

@@ -2,6 +2,16 @@ import type { StringKey } from '../i18n'
 
 /** Serbian (Latin script). */
 const sr: Record<StringKey, string> = {
+  mapsWholeWalk: "Цела шетња · {n} станица, почевши од прве.",
+  mapsSingleStop: "Пешачка упутства од твоје локације до овог споменика.",
+  mapsRouteNote: "Редослед станица остаје исти. Апликација за мапе бира путање између њих.",
+  mapsChooseApp: "Изабери апликацију за мапе",
+  mapsPartsNote: "Ова шетња се отвара у {n} делова због ограничења броја станица. Отварај их редом; сваки наставља од краја претходног.",
+  mapsAppleNote: "За више станица користи iOS 18.4+ или macOS 15.4+.",
+  mapsGoogleNote: "Немаш апликацију Google Maps? Користи мање делове за мобилне прегледаче да задржиш све станице.",
+  mapsBrowserLinks: "Линкови за мобилне прегледаче",
+  mapsPart: "Део {n} од {m} · станице {from}–{to}",
+  mapsOpen: "Отвори у {app}",
   language: 'Jezik',
   minWalking: '{m} min hoda',
   materialBronze: 'Bronza',

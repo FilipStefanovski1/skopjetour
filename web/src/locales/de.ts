@@ -2,6 +2,16 @@ import type { StringKey } from '../i18n'
 
 /** German. */
 const de: Record<StringKey, string> = {
+  mapsWholeWalk: "Gesamter Rundgang · {n} Stationen, beginnend mit der ersten.",
+  mapsSingleStop: "Fußweg von deinem Standort zu diesem Denkmal.",
+  mapsRouteNote: "Die Reihenfolge bleibt erhalten. Deine Karten-App wählt die Wege dazwischen.",
+  mapsChooseApp: "Karten-App auswählen",
+  mapsPartsNote: "Dieser Rundgang wird wegen der maximalen Anzahl an Stationen in {n} Abschnitten geöffnet. Öffne sie der Reihe nach; jeder beginnt am Ende des vorherigen.",
+  mapsAppleNote: "Für mehrere Stationen benötigst du iOS 18.4+ oder macOS 15.4+.",
+  mapsGoogleNote: "Keine Google Maps App? Nutze kleinere Abschnitte für mobile Browser, damit alle Stationen erhalten bleiben.",
+  mapsBrowserLinks: "Links für mobile Browser",
+  mapsPart: "Abschnitt {n} von {m} · Stationen {from}–{to}",
+  mapsOpen: "In {app} öffnen",
   language: 'Sprache',
   minWalking: '{m} Min. zu Fuß',
   materialBronze: 'Bronze',

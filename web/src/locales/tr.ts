@@ -2,6 +2,16 @@ import type { StringKey } from '../i18n'
 
 /** Turkish. */
 const tr: Record<StringKey, string> = {
+  mapsWholeWalk: "Tüm yürüyüş · ilk duraktan başlayarak {n} durak.",
+  mapsSingleStop: "Bulunduğun konumdan bu anıta yürüme yol tarifi.",
+  mapsRouteNote: "Durakların sırası korunur. Aralarındaki yolları harita uygulaman seçer.",
+  mapsChooseApp: "Bir harita uygulaması seç",
+  mapsPartsNote: "Durak sınırına uymak için bu yürüyüş {n} bölümde açılır. Sırayla aç; her bölüm öncekinin bittiği yerden devam eder.",
+  mapsAppleNote: "Birden fazla durak için iOS 18.4+ veya macOS 15.4+ kullan.",
+  mapsGoogleNote: "Google Maps uygulaman yok mu? Tüm durakları korumak için mobil tarayıcılarda daha küçük bölümler kullan.",
+  mapsBrowserLinks: "Mobil tarayıcı bağlantıları",
+  mapsPart: "Bölüm {n}/{m} · duraklar {from}–{to}",
+  mapsOpen: "{app} ile aç",
   language: 'Dil',
   minWalking: '{m} dk yürüyüş',
   materialBronze: 'Bronz',

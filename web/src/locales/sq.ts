@@ -2,6 +2,16 @@ import type { StringKey } from '../i18n'
 
 /** Albanian. */
 const sq: Record<StringKey, string> = {
+  mapsWholeWalk: "Shëtitja e plotë · {n} ndalesa, duke filluar nga e para.",
+  mapsSingleStop: "Udhëzime për ecje nga vendndodhja jote te ky monument.",
+  mapsRouteNote: "Ndalesat mbeten sipas radhës. Aplikacioni i hartave zgjedh shtigjet mes tyre.",
+  mapsChooseApp: "Zgjidh një aplikacion hartash",
+  mapsPartsNote: "Kjo shëtitje hapet në {n} pjesë për të respektuar kufirin e ndalesave. Hapi sipas radhës; secila vazhdon nga fundi i së mëparshmes.",
+  mapsAppleNote: "Për disa ndalesa, përdor iOS 18.4+ ose macOS 15.4+.",
+  mapsGoogleNote: "Nuk ke aplikacionin Google Maps? Përdor pjesë më të vogla për shfletuesit celularë që të ruash çdo ndalesë.",
+  mapsBrowserLinks: "Lidhje për shfletues celularë",
+  mapsPart: "Pjesa {n} nga {m} · ndalesat {from}–{to}",
+  mapsOpen: "Hap në {app}",
   language: 'Gjuha',
   minWalking: '{m} min në këmbë',
   materialBronze: 'Bronz',
