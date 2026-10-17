@@ -1,6 +1,6 @@
 import type { Statue } from './types'
 
-/** Macedonia Square: every course starts at the control nearest to it. */
+/** Macedonia Square: fallback start when the visitor has not shared a location. */
 export const CITY_CENTRE: [number, number] = [41.9961, 21.4314]
 /** Controls further than this from the square are listed but not put on the course. */
 const COURSE_RADIUS_M = 1500
@@ -17,6 +17,7 @@ export interface Leg {
 
 export interface Course {
   id: string
+  origin: { lat: number; lon: number } | null
   controls: Statue[]
   legs: Leg[]
   metres: number
@@ -69,23 +70,68 @@ function walkingOrder(points: Statue[], start: Statue): Statue[] {
   return order
 }
 
-export function buildCourse(id: string, statues: Statue[]): Course {
+export function buildCourse(id: string, statues: Statue[], origin: { lat: number; lon: number } | null = null): Course {
   const centre = { lat: CITY_CENTRE[0], lon: CITY_CENTRE[1] }
   const onTheme = statues.filter((s) => s.themes.includes(id))
   const near = onTheme.filter((s) => metresBetween(centre, s) <= COURSE_RADIUS_M)
   const beyond = onTheme.filter((s) => metresBetween(centre, s) > COURSE_RADIUS_M)
-  if (near.length === 0) return { id, controls: [], legs: [], metres: 0, minutes: 0, beyond }
+  if (near.length === 0) return { id, origin, controls: [], legs: [], metres: 0, minutes: 0, beyond }
 
-  const start = near.reduce((a, b) => (metresBetween(centre, a) <= metresBetween(centre, b) ? a : b))
+  const from = origin ?? centre
+  const start = near.reduce((a, b) => (metresBetween(from, a) <= metresBetween(from, b) ? a : b))
   const controls = walkingOrder(near, start)
   const legs = controls.slice(1).map((to, i) => {
     const metres = metresBetween(controls[i], to) * STREET_FACTOR
     return { from: controls[i], to, metres, minutes: Math.max(1, Math.round(metres / WALK_M_PER_MIN)) }
   })
-  const metres = tourLength(controls) * STREET_FACTOR
-  return { id, controls, legs, metres, minutes: Math.max(1, Math.round(metres / WALK_M_PER_MIN)), beyond }
+  const metres = (tourLength(controls) + (origin ? metresBetween(origin, start) : 0)) * STREET_FACTOR
+  return { id, origin, controls, legs, metres, minutes: Math.max(1, Math.round(metres / WALK_M_PER_MIN)), beyond }
 }
 
 export function formatDistance(metres: number): string {
   return metres < 1000 ? `${Math.round(metres / 10) * 10} m` : `${(metres / 1000).toFixed(1)} km`
+}
+
+/** Straight-line proximity, deliberately separate from the fixed order of a themed walk. */
+export function nearbyStatues(statues: Statue[], from: { lat: number; lon: number }): Statue[] {
+  return [...statues].sort((a, b) => metresBetween(from, a) - metresBetween(from, b) || a.id.localeCompare(b.id))
+}
+
+export function nextStop(nearby: Statue[], seen: Set<string>, course: Course | null): Statue | null {
+  return (course ? course.controls : nearby).find((s) => !seen.has(s.id)) ?? null
+}
+
+export interface LocationFix { lat: number; lon: number; accuracy: number; timestamp: number }
+export interface ArrivalState { candidateId: string | null; since: number; blocked: Set<string> }
+export const ARRIVAL_DWELL_MS = 6000
+
+/** Only the closest monument can be collected; standing still must not collect a whole cluster. */
+export function updateArrival(statues: Statue[], fix: LocationFix | null, seen: Set<string>, previous: ArrivalState, now: number): { state: ArrivalState; visit: string | null } {
+  const reset = { ...previous, candidateId: null, since: 0 }
+  if (!fix || ![fix.lat, fix.lon, fix.accuracy, fix.timestamp].every(Number.isFinite) ||
+    fix.accuracy < 0 || fix.accuracy > 25 || now - fix.timestamp > 15000 || fix.timestamp > now + 1000) {
+    return { state: reset, visit: null }
+  }
+  const blocked = new Set([...previous.blocked].filter((id) => {
+    const s = statues.find((s) => s.id === id)
+    return s && metresBetween(fix, s) < 50
+  }))
+  const nearest = nearbyStatues(statues, fix)[0]
+  if (!nearest || metresBetween(fix, nearest) > 25 || seen.has(nearest.id) || blocked.has(nearest.id)) {
+    return { state: { ...reset, blocked }, visit: null }
+  }
+  if (previous.candidateId !== nearest.id) {
+    return { state: { candidateId: nearest.id, since: now, blocked }, visit: null }
+  }
+  if (now - previous.since < ARRIVAL_DWELL_MS) return { state: { ...previous, blocked }, visit: null }
+  blocked.add(nearest.id)
+  return { state: { candidateId: null, since: 0, blocked }, visit: nearest.id }
+}
+
+export function courseCoordinates(course: Course): [number, number][] {
+  if (!course.controls.length) return []
+  return [
+    ...(course.origin ? [[course.origin.lon, course.origin.lat] as [number, number]] : []),
+    ...course.controls.map((s): [number, number] => [s.lon, s.lat]),
+  ]
 }
