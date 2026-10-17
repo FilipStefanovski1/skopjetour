@@ -40,8 +40,6 @@ interface Props {
   onSelect: (id: string) => void
   /** The visitor's live position and the way they face. */
   user: (LatLon & { heading: number | null; accuracy: number }) | null
-  /** The walking route being followed, as [lon, lat] pairs. */
-  navLine: [number, number][] | null
   /** Keep the camera on the visitor while they walk. */
   follow: boolean
   locating: boolean
@@ -103,7 +101,7 @@ function clusterElement(count: number, onClick: () => void): HTMLButtonElement {
 /** Statues closer than this to a neighbour need a very close zoom to tell apart (the Art Bridge). */
 const CROWDED_M = 15
 
-export function MapView({ enabled, focusSequence, walkingRoute, locating, statues, course, activeId, seen, lang, insets, onSelect, user, navLine, follow, onUserPan, onLocate, locateError, demo, onDemo }: Props) {
+export function MapView({ enabled, focusSequence, walkingRoute, locating, statues, course, activeId, seen, lang, insets, onSelect, user, follow, onUserPan, onLocate, locateError, demo, onDemo }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MLMap | null>(null)
   const me = useRef<{ marker: maplibregl.Marker; el: HTMLDivElement } | null>(null)
@@ -242,17 +240,6 @@ export function MapView({ enabled, focusSequence, walkingRoute, locating, statue
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': ACCENT, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 2, 18, 4], 'line-dasharray': [0.1, 1.8], 'line-opacity': 0.9 },
       })
-      map.addSource('nav', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
-      map.addLayer({
-        id: 'nav-casing', type: 'line', source: 'nav',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': '#ffffff', 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 6, 18, 13] },
-      })
-      map.addLayer({
-        id: 'nav', type: 'line', source: 'nav',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': '#2563eb', 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 3.5, 18, 8] },
-      })
       map.addSource('route-start', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
       map.addLayer({ id: 'route-start', type: 'circle', source: 'route-start', paint: { 'circle-radius': 7, 'circle-color': ACCENT, 'circle-stroke-color': '#f4f4f9', 'circle-stroke-width': 3 } })
       map.addLayer({ id: 'route-start-label', type: 'symbol', source: 'route-start', layout: { 'text-field': t('walkStart', state.current.lang), 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-anchor': 'top', 'text-offset': [0, 1.1] }, paint: { 'text-color': ACCENT, 'text-halo-color': '#f4f4f9', 'text-halo-width': 2 } })
@@ -348,7 +335,7 @@ export function MapView({ enabled, focusSequence, walkingRoute, locating, statue
   // Bring the active statue into the clear part of the map.
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map || !activeId || navLine) return
+    if (!ready || !map || !activeId) return
     const s = byId.current.get(activeId) ?? statues.find((x) => x.id === activeId)
     if (!s) return
     if (keepOverview.current && course?.controls[0]?.id === activeId) {
@@ -402,29 +389,6 @@ export function MapView({ enabled, focusSequence, walkingRoute, locating, statue
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, enabled, user, follow])
-
-  // The walking route: drawn, and framed once when it first appears.
-  const framed = useRef<string | null>(null)
-  useEffect(() => {
-    const map = mapRef.current
-    if (!ready || !map) return
-    el.current?.classList.toggle('is-navigating', Boolean(navLine && navLine.length > 1))
-    ;(map.getSource('nav') as GeoJSONSource).setData({
-      type: 'FeatureCollection',
-      features: navLine && navLine.length > 1 ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: navLine }, properties: {} }] : [],
-    })
-    if (!navLine || navLine.length < 2) {
-      framed.current = null
-      return
-    }
-    const key = `${navLine[0]}|${navLine[navLine.length - 1]}`
-    if (framed.current?.split('|')[1] === key.split('|')[1]) return // a reroute to the same place keeps the view
-    framed.current = key
-    const bounds = new maplibregl.LngLatBounds()
-    navLine.forEach((c) => bounds.extend(c))
-    map.fitBounds(bounds, { padding: padding(), maxZoom: 17.5, duration: 700 })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, navLine])
 
   const locate = () => {
     flyToUser.current = !follow

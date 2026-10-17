@@ -4,11 +4,7 @@ import { loadStatues, loadThemes } from './data'
 import { t } from './i18n'
 import type { Lang, Statue, Theme } from './types'
 import { MapView, type Insets, type LatLon } from './components/MapView'
-import { NavBanner, NavPanel, type NavStatus } from './components/Navigation'
-import { fetchRoute, progress as routeProgress, type Route } from './directions'
 import { enableCompass, locationErrorText, useCompass, useDemoLocation, useLiveLocation } from './location'
-import { statueName } from './types'
-import { Check, X } from 'lucide-react'
 import { MapDiscovery } from './components/MapDiscovery'
 import { useWalkingRoute } from './useWalkingRoute'
 import { SearchBar } from './components/SearchBar'
@@ -91,27 +87,21 @@ export default function App() {
   const [activeId, setActiveId] = useState<string | null>(initial.statue)
   const [openId, setOpenId] = useState<string | null>(initial.statue)
   const [justCollected, setJustCollected] = useState<string | null>(initial.tagged ? initial.statue : null)
-  // Visits come from a scan, a photo, or a nearby GPS arrival with Undo.
+  // Visits come from a plaque scan or a confirmed photo match.
   const [seen, setSeen] = useState<Set<string>>(() => {
     const s = new Set(stored<string[]>('seen', []))
     if (initial.tagged && initial.statue) s.add(initial.statue)
     return s
   })
-  // Live location: on while the visitor asked "where am I" or is walking somewhere.
+  // Live location is requested only through the map's Follow me control.
   const [locating, setLocating] = useState(false)
-  const [navTo, setNavTo] = useState<string | null>(null)
-  const [route, setRoute] = useState<Route | null>(null)
-  const [routeFailed, setRouteFailed] = useState(false)
   const [follow, setFollow] = useState(true)
   // On stage, far from the statues, a pretend position on Macedonia Square (also `?demo` in the link).
   const [demoLoc, setDemoLoc] = useState(() => new URLSearchParams(location.search).has('demo') || stored('demoLocation', false))
   const [locationAttempt, setLocationAttempt] = useState(0)
-  const live = useLiveLocation(tab === 'map' && (locating || navTo !== null) && !demoLoc, locationAttempt)
+  const live = useLiveLocation(tab === 'map' && locating && !demoLoc, locationAttempt)
   const compass = useCompass()
-  const target = statues?.find((s) => s.id === navTo) ?? null
-  // The demo walker follows the route, then steps up to the statue itself.
-  const demoPath = useMemo<[number, number][] | null>(() => (route && target ? [...route.line, [target.lon, target.lat]] : null), [route]) // eslint-disable-line react-hooks/exhaustive-deps
-  const demoFix = useDemoLocation(demoLoc, demoPath)
+  const demoFix = useDemoLocation(demoLoc, null)
   const fix = demoLoc ? demoFix : live.fix
   const locationError = demoLoc ? null : live.error
   const userPos = fix
@@ -192,8 +182,8 @@ export default function App() {
   const course = useMemo(() => (statues && theme ? buildCourse(theme.id, statues, routeStart?.id === theme.id ? routeStart.position : null) : null), [statues, theme, routeStart])
   const walking = useWalkingRoute(course)
   useEffect(() => {
-    if (!navTo && course?.controls.length) setActiveId(course.controls[0].id)
-  }, [course, navTo])
+    if (course?.controls.length) setActiveId(course.controls[0].id)
+  }, [course])
 
   // What the map cards show: the route in walking order, or every statue nearest first.
   const items = useMemo(() => {
@@ -214,55 +204,9 @@ export default function App() {
 
   const open = statues?.find((s) => s.id === openId) ?? null
 
-  // ---------------------------------------------------------------- walking directions
-
-  /** Directions to a statue: off to the map, following the visitor along a walking route. */
-  const startDirections = (id: string) => {
-    enableCompass() // iPhones only allow this during a tap
-    setNavTo(id)
-    setRoute(null)
-    setRouteFailed(false)
-    setFollow(true)
-    setActiveId(id)
-    setOpenId(null)
-    setTab('map')
-  }
-
-  const endDirections = () => {
-    setNavTo(null)
-    setRoute(null)
-    setRouteFailed(false)
-  }
-
-  const prog = useMemo(() => (route && fix ? routeProgress(route, fix) : null), [route, fix])
-  const arrived = Boolean(target && fix && metresBetween(fix, target) < 25)
-
-  // Fetch the route once a position is known, and again if the walker strays well off it.
-  const lastFetch = useRef(0)
-  const fetching = useRef(false)
-  useEffect(() => {
-    if (!target || !fix || arrived || fetching.current) return
-    const stray = prog ? prog.off > Math.max(40, fix.accuracy) : false
-    if (route && !stray) return
-    if (route && Date.now() - lastFetch.current < 15000) return
-    fetching.current = true
-    lastFetch.current = Date.now()
-    const ctrl = new AbortController()
-    fetchRoute(fix, target, ctrl.signal)
-      .then((r) => {
-        setRoute(r)
-        setRouteFailed(false)
-      })
-      .catch(() => !ctrl.signal.aborted && setRouteFailed(true))
-      .finally(() => (fetching.current = false))
-    return () => ctrl.abort()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target, fix, prog?.off, arrived])
-
-  const navStatus: NavStatus = arrived ? 'arrived' : !fix ? 'locating' : routeFailed ? 'error' : route ? 'ready' : 'routing'
   const heading = compass ?? fix?.course ?? null
   const mapUser = useMemo(() => fix ? { ...fix, heading } : null, [fix, heading])
-  const following = (locating || Boolean(target) || demoLoc) && follow
+  const following = (locating || demoLoc) && follow
   // In the story, next/previous follow the map's list; elsewhere, nearest first.
   const storyList = items
 
@@ -326,23 +270,22 @@ export default function App() {
         <MapView
           enabled={tab === 'map'}
           focusSequence={focusSequence}
-          statues={target ? statues ?? [] : course ? items : statues ?? []}
-          course={target ? null : course}
-          walkingRoute={target ? null : walking.route}
+          statues={course ? items : statues ?? []}
+          course={course}
+          walkingRoute={walking.route}
           activeId={activeId}
           seen={seen}
           lang={lang}
           insets={insets}
           onSelect={selectOnMap}
           user={mapUser}
-          navLine={target ? route?.line ?? null : null}
           follow={following}
-          locating={(locating || Boolean(target)) && !fix && !locationError}
+          locating={locating && !fix && !locationError}
           onUserPan={() => setFollow(false)}
           onLocate={() => {
             if (following && !locationError) {
               setFollow(false)
-              if (!target) setLocating(false)
+              setLocating(false)
             } else {
               enableCompass()
               setLocating(true)
@@ -350,43 +293,21 @@ export default function App() {
               if (locationError) setLocationAttempt(n => n + 1)
             }
           }}
-          locateError={locating && !target && locationError ? t(locationErrorText(locationError), lang) : null}
+          locateError={locating && locationError ? t(locationErrorText(locationError), lang) : null}
           demo={demoLoc}
           onDemo={(on) => {
             setDemoLoc(on)
             setFollow(on)
             setRouteStart(null)
-            setRoute(null) // routes are planned again from wherever the visitor now is
           }}
         />
 
-        <header ref={topRef} className={`top${target ? ' top--nav' : ''}`}>
-          {target ? (
-            <NavBanner lang={lang} status={navStatus} locationError={locationError} progress={prog} destination={statueName(target, lang)} />
-          ) : (
+        <header ref={topRef} className="top">
           <SearchBar statues={statues ?? []} lang={lang} onLang={setLang} onPick={openStatue} />
-          )}
         </header>
 
         <div ref={bottomRef} className="bottom">
-          {target ? (
-            <NavPanel
-              lang={lang}
-              target={target}
-              status={navStatus}
-              route={route}
-              progress={prog}
-              following={follow}
-              onDemo={locationError ? () => setDemoLoc(true) : null}
-              onRecenter={() => setFollow(true)}
-              onEnd={endDirections}
-              onOpenStory={() => {
-                const id = target.id
-                endDirections()
-                openStatue(id)
-              }}
-            />
-          ) : failed ? (
+          {failed ? (
             <div className="notice">
               <p>{t('loadError', lang)}</p>
               <button type="button" onClick={load}>
@@ -495,7 +416,7 @@ export default function App() {
           collected={justCollected === open.id}
           onSnap={snap}
           onNavigate={openStatue}
-          onDirections={() => startDirections(open.id)}
+          walkStops={tab === 'map' ? course?.controls ?? [] : []}
           onClose={closeDetail}
         />
       )}

@@ -1,4 +1,4 @@
-import { ArrowLeft, Camera, Check, ChevronLeft, ExternalLink, Image as ImageIcon, Navigation2, Pause, Rotate3d, Sparkles, UserRound, Volume2 } from 'lucide-react'
+import { ArrowLeft, Camera, Check, ChevronLeft, ExternalLink, Image as ImageIcon, Pause, Rotate3d, Sparkles, UserRound, Volume2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { formatDistance, metresBetween } from '../course'
 import { loadStory, photoPageUrl, photoUrl, wikiUrl, type Story } from '../data'
@@ -9,6 +9,7 @@ import type { Lang, Statue, Theme } from '../types'
 import { coverFile, describe, statueName } from '../types'
 import type { LatLon } from './MapView'
 import { StatueGlyph } from './StatueGlyph'
+import { MapsDirections } from './MapsDirections'
 
 interface Props {
   statue: Statue
@@ -26,7 +27,7 @@ interface Props {
   /** Take a photo of the statue: one of the two ways to collect it, with a plaque scan. */
   onSnap: () => void
   onNavigate: (id: string) => void
-  onDirections: () => void
+  walkStops: Statue[]
   onClose: () => void
 }
 
@@ -76,7 +77,7 @@ function fileCaption(file: string): string {
 }
 
 /** One statue, full screen: photo, 3D or the person, who they were, the guide's voice, and the way on. */
-export function StatueDetail({ statue, lang, themes, list, numbers, userPos, seen, myPhoto, collected, onSnap, onNavigate, onDirections, onClose }: Props) {
+export function StatueDetail({ statue, lang, themes, list, numbers, userPos, seen, myPhoto, collected, onSnap, onNavigate, walkStops, onClose }: Props) {
   const model = statue.statue_qid ? MODELS[statue.statue_qid] : undefined
   const [story, setStory] = useState<Story | null | undefined>(undefined)
   // A statue with a model opens on it, turning slowly, the way a Pokémon GO entry does.
@@ -313,11 +314,7 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
             </div>
           )}
 
-          <button type="button" className="directions" onClick={onDirections}>
-            <Navigation2 aria-hidden size={18} strokeWidth={2.4} />
-            {t('directions', lang)}
-            {userPos && <span>· {formatDistance(metresBetween(userPos, statue))}</span>}
-          </button>
+          <MapsDirections key={statue.id} monument={statue} walkStops={walkStops} lang={lang} onOpen={stopGuide} />
 
           {canSpeak && guideText && (
             <button type="button" className={`guide${speaking ? ' is-on' : ''}`} onClick={speaking ? stopGuide : startGuide} aria-pressed={speaking}>

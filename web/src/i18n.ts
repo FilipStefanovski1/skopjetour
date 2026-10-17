@@ -1,6 +1,16 @@
 import type { Lang } from './types'
 
 const strings = {
+  mapsWholeWalk: { mk: 'Целата прошетка · {n} станици, од првата по ред.', en: 'Entire walk · {n} stops, starting with the first.' },
+  mapsSingleStop: { mk: 'Пешачки насоки од твојата локација до овој споменик.', en: 'Walking directions from your location to this monument.' },
+  mapsRouteNote: { mk: 'Станиците остануваат по ред. Апликацијата за мапи ги избира патеките меѓу нив.', en: 'Stops stay in order. Your maps app chooses the paths between them.' },
+  mapsChooseApp: { mk: 'Избери апликација за мапи', en: 'Choose a maps app' },
+  mapsPartsNote: { mk: 'Прошетката е поделена на {n} дела поради ограничувањето на бројот на станици. Отворај ги по ред; секој продолжува од крајот на претходниот.', en: 'This walk opens in {n} parts to fit the stop limit. Open them in order; each continues from the previous endpoint.' },
+  mapsAppleNote: { mk: 'За повеќе станици користи iOS 18.4 или понов, или macOS 15.4 или понов.', en: 'For multiple stops, use iOS 18.4+ or macOS 15.4+.' },
+  mapsGoogleNote: { mk: 'Немаш Google Maps апликација? Користи помали делови за мобилен прелистувач за да ги задржиш сите станици.', en: 'No Google Maps app? Use smaller parts for mobile browsers to keep every stop.' },
+  mapsBrowserLinks: { mk: 'Врски за мобилен прелистувач', en: 'Mobile-browser links' },
+  mapsPart: { mk: 'Дел {n} од {m} · станици {from}–{to}', en: 'Part {n} of {m} · stops {from}–{to}' },
+  mapsOpen: { mk: 'Отвори во {app}', en: 'Open in {app}' },
   walkStart: { mk: 'Почеток', en: 'Start' },
   walkFromYou: { mk: 'Почнува од твојата локација при изборот на прошетката.', en: 'Starts from your location when you chose this walk.' },
   walkNeedsLocation: { mk: 'Вклучи „Следи ме“ за прошетката да почне од твојата локација.', en: 'Turn on Follow me to start this walk from your location.' },

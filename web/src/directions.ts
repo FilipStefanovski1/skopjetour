@@ -1,150 +1,53 @@
-import { t } from './i18n'
-import type { Lang } from './types'
+import type { Statue } from './types'
+
+export type MapsProvider = 'google' | 'apple'
+type Stop = Pick<Statue, 'id' | 'lat' | 'lon'>
+
+/** A monument in the selected walk hands off the whole ordered walk, including visited stops. */
+export function directionStops<T extends Stop>(monument: T, walk: readonly T[]): T[] {
+  return walk.some((stop) => stop.id === monument.id) ? [...walk] : [monument]
+}
+
+export interface DirectionsPart<T extends Stop = Stop> {
+  stops: T[]
+  startNumber: number
+  endNumber: number
+  url: string
+}
+
+const coordinates = (stop: Stop) => `${stop.lat.toFixed(6)},${stop.lon.toFixed(6)}`
 
 /**
- * Walking directions from the FOSSGIS OSRM foot router (the one openstreetmap.org uses):
- * free, keyless, OpenStreetMap data. Instructions are written here, in Macedonian or English.
+ * No GPS fix is embedded: Maps obtains the visitor's current location for the first part.
+ * Later parts start at the preceding part's destination, so every connecting leg is kept.
+ * Google mobile browsers support 3 waypoints (+ destination), other platforms support 9.
+ * The UI offers app links plus an explicit mobile-browser fallback; neither drops stops.
+ * Apple unified URLs support repeated waypoints (iOS 18.4+); we cap our parts at 10 stops.
+ * Neither URL format imports our route geometry: providers calculate the paths themselves.
+ * https://developers.google.com/maps/documentation/urls/get-started
+ * https://developer.apple.com/documentation/mapkit/unified-map-urls
  */
-const ROUTER = 'https://routing.openstreetmap.de/routed-foot/route/v1/foot'
-
-export interface Point {
-  lat: number
-  lon: number
-}
-
-export interface Step {
-  type: string
-  modifier?: string
-  exit?: number
-  name: string
-  /** Where the manoeuvre happens, and how far along the route that is. */
-  at: Point
-  along: number
-}
-
-export interface Route {
-  line: [number, number][]
-  /** Running distance (m) at each vertex of the line. */
-  cum: number[]
-  steps: Step[]
-  distance: number
-}
-
-const R = 6371000
-const rad = (d: number) => (d * Math.PI) / 180
-
-function metres(a: Point, b: Point): number {
-  const x = rad(b.lon - a.lon) * Math.cos(rad((a.lat + b.lat) / 2))
-  const y = rad(b.lat - a.lat)
-  return Math.sqrt(x * x + y * y) * R
-}
-
-export async function fetchRoute(from: Point, to: Point, signal?: AbortSignal): Promise<Route> {
-  const url = `${ROUTER}/${from.lon},${from.lat};${to.lon},${to.lat}?overview=full&geometries=geojson&steps=true`
-  const res = await fetch(url, { signal })
-  if (!res.ok) throw new Error(`router ${res.status}`)
-  const data = await res.json()
-  if (data.code !== 'Ok' || !data.routes?.length) throw new Error(data.code ?? 'no route')
-  const r = data.routes[0]
-  const line: [number, number][] = r.geometry.coordinates
-  const cum = [0]
-  for (let i = 1; i < line.length; i++) {
-    cum.push(cum[i - 1] + metres({ lon: line[i - 1][0], lat: line[i - 1][1] }, { lon: line[i][0], lat: line[i][1] }))
-  }
-  const steps: Step[] = []
-  for (const s of r.legs[0].steps) {
-    const [lon, lat] = s.maneuver.location as [number, number]
-    steps.push({
-      type: s.maneuver.type,
-      modifier: s.maneuver.modifier,
-      exit: s.maneuver.exit,
-      name: s.name ?? '',
-      at: { lat, lon },
-      along: locate(line, cum, { lat, lon }).along,
-    })
-  }
-  return { line, cum, steps, distance: cum[cum.length - 1] }
-}
-
-/** The closest point on the route to `p`: how far along it is, and how far off it `p` stands. */
-export function locate(line: [number, number][], cum: number[], p: Point): { along: number; off: number } {
-  let best = { along: 0, off: Infinity }
-  const k = Math.cos(rad(p.lat)) * R * (Math.PI / 180)
-  const m = R * (Math.PI / 180)
-  for (let i = 1; i < line.length; i++) {
-    const ax = line[i - 1][0] * k, ay = line[i - 1][1] * m
-    const bx = line[i][0] * k, by = line[i][1] * m
-    const px = p.lon * k, py = p.lat * m
-    const dx = bx - ax, dy = by - ay
-    const len2 = dx * dx + dy * dy || 1
-    const u = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len2))
-    const off = Math.hypot(px - (ax + u * dx), py - (ay + u * dy))
-    if (off < best.off) best = { along: cum[i - 1] + u * (cum[i] - cum[i - 1]), off }
-  }
-  return best
-}
-
-export interface Progress {
-  /** Metres still to walk. */
-  remaining: number
-  /** The next manoeuvre and how far away it is. */
-  next: Step | null
-  toNext: number
-  /** Metres from the route line: large means the walker has left it. */
-  off: number
-}
-
-export function progress(route: Route, p: Point): Progress {
-  const { along, off } = locate(route.line, route.cum, p)
-  // The next manoeuvre is the first one still ahead (a few metres of slack for GPS jitter).
-  const next = route.steps.find((s, i) => i > 0 && s.along > along + 3) ?? null
-  return { remaining: Math.max(0, route.distance - along), next, toNext: next ? Math.max(0, next.along - along) : 0, off }
-}
-
-/** About 4.8 km/h: an unhurried sightseeing pace. */
-export function walkMinutes(m: number): number {
-  return Math.max(1, Math.round(m / 80))
-}
-
-export function instruction(step: Step, lang: Lang, destination: string): string {
-  const onto = step.name ? ` ${t('onto', lang, { street: step.name })}` : ''
-  switch (step.type) {
-    case 'depart':
-      return step.name ? t('depart', lang, { street: step.name }) : t('departPlain', lang)
-    case 'arrive':
-      return t('arrive', lang, { place: destination })
-    case 'roundabout':
-    case 'rotary':
-      return t('roundabout', lang, { n: step.exit ?? 1 }) + onto
-    default: {
-      const turn = turnWords(step.modifier, lang)
-      return turn + onto
+export function directionsParts<T extends Stop>(stops: readonly T[], provider: MapsProvider, googleBrowser = true): DirectionsPart<T>[] {
+  const limit = provider === 'google' && googleBrowser ? 4 : 10
+  const parts: DirectionsPart<T>[] = []
+  for (let offset = 0; offset < stops.length; offset += limit) {
+    const section = stops.slice(offset, offset + limit)
+    const destination = coordinates(section[section.length - 1])
+    const waypoints = section.slice(0, -1).map(coordinates)
+    const origin = offset > 0 ? coordinates(stops[offset - 1]) : null
+    const url = new URL(provider === 'google' ? 'https://www.google.com/maps/dir/' : 'https://maps.apple.com/directions')
+    if (provider === 'google') {
+      url.searchParams.set('api', '1')
+      url.searchParams.set('travelmode', 'walking')
+      if (origin) url.searchParams.set('origin', origin)
+      if (waypoints.length) url.searchParams.set('waypoints', waypoints.join('|'))
+    } else {
+      url.searchParams.set('mode', 'walking')
+      if (origin) url.searchParams.set('source', origin)
+      for (const waypoint of waypoints) url.searchParams.append('waypoint', waypoint)
     }
+    url.searchParams.set('destination', destination)
+    parts.push({ stops: section, startNumber: offset + 1, endNumber: offset + section.length, url: url.toString() })
   }
-}
-
-function turnWords(modifier: string | undefined, lang: Lang): string {
-  switch (modifier) {
-    case 'left':
-      return t('turnLeft', lang)
-    case 'right':
-      return t('turnRight', lang)
-    case 'slight left':
-      return t('bearLeft', lang)
-    case 'slight right':
-      return t('bearRight', lang)
-    case 'sharp left':
-      return t('sharpLeft', lang)
-    case 'sharp right':
-      return t('sharpRight', lang)
-    case 'uturn':
-      return t('uturn', lang)
-    default:
-      return t('straight', lang)
-  }
-}
-
-export function formatMetres(m: number): string {
-  if (m < 1000) return `${Math.max(5, Math.round(m / 10) * 10)} m`
-  return `${(m / 1000).toFixed(1)} km`
+  return parts
 }
