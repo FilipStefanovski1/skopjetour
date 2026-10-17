@@ -1,4 +1,5 @@
 import { dataLang, type DataLang, type Lang, type Statue, type StatueProps, type Theme } from './types'
+import { NARRATION } from './extras'
 
 interface Feature {
   geometry: { coordinates: [number, number] }
@@ -35,12 +36,12 @@ export function wikiUrl(lang: Lang, title: string): string {
 export interface Story {
   text: string
   audio?: string
-  source: 'generated' | 'wikipedia'
+  source: 'curated' | 'generated' | 'wikipedia'
 }
 
 /**
- * A statue's story in the visitor's language. Pre-generated biographies in
- * /content/<id>.<lang>.json win; until those exist, fall back to the Wikipedia summary.
+ * Use the bundled tour story when available so reading and listening tell the same story.
+ * Otherwise try /content/<id>.<lang>.json, then the Wikipedia summary.
  */
 let written: Promise<Set<string>> | null = null
 
@@ -56,6 +57,8 @@ function writtenStories(): Promise<Set<string>> {
 export async function loadStory(s: Statue, screenLang: Lang): Promise<Story | null> {
   // Stories exist in Macedonian and English; the other languages read the English.
   const lang = dataLang(screenLang)
+  const scripted = s.statue_qid ? NARRATION[s.statue_qid]?.[lang] : undefined
+  if (scripted) return { text: scripted, source: 'curated' }
   try {
     if (!(await writtenStories()).has(`${s.id}.${lang}`)) throw new Error('no written story')
     const res = await fetch(`/content/${s.id}.${lang}.json`)

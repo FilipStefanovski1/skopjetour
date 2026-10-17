@@ -356,7 +356,7 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
             {story === null && !scripted && <p className="muted">{t('noStory', lang)}</p>}
             {story && (
               <>
-                <p>{story.text}</p>
+                {story.text.split(/\n\s*\n/).map((paragraph, i) => <p key={i}>{paragraph}</p>)}
                 {story.audio && <audio controls src={story.audio} preload="none" />}
               </>
             )}
