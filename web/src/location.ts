@@ -4,6 +4,7 @@ export interface Fix {
   lat: number
   lon: number
   accuracy: number
+  timestamp: number
   /** Direction of travel from GPS (degrees from north), when moving. */
   course: number | null
 }
@@ -16,12 +17,16 @@ export function locationErrorText(e: LocationError) {
 }
 
 /** The visitor's live position while `enabled`; stops listening (and saves battery) otherwise. */
-export function useLiveLocation(enabled: boolean): { fix: Fix | null; error: LocationError | null } {
+export function useLiveLocation(enabled: boolean, attempt = 0): { fix: Fix | null; error: LocationError | null } {
   const [fix, setFix] = useState<Fix | null>(null)
   const [error, setError] = useState<LocationError | null>(null)
 
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled) {
+      setFix(null)
+      setError(null)
+      return
+    }
     // Browsers never share location with a plain-http page (other than localhost): say so,
     // rather than letting it look like the visitor said no.
     if (!window.isSecureContext) {
@@ -40,14 +45,18 @@ export function useLiveLocation(enabled: boolean): { fix: Fix | null; error: Loc
           lat: p.coords.latitude,
           lon: p.coords.longitude,
           accuracy: p.coords.accuracy,
+          timestamp: p.timestamp,
           course: p.coords.speed && p.coords.speed > 0.6 && p.coords.heading != null && !Number.isNaN(p.coords.heading) ? p.coords.heading : null,
         })
       },
-      (e) => setError(e.code === e.PERMISSION_DENIED ? 'denied' : 'unavailable'),
+      (e) => {
+        setFix(null)
+        setError(e.code === e.PERMISSION_DENIED ? 'denied' : 'unavailable')
+      },
       { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 },
     )
     return () => navigator.geolocation.clearWatch(id)
-  }, [enabled])
+  }, [enabled, attempt])
 
   return { fix, error }
 }
@@ -82,7 +91,7 @@ export function useDemoLocation(enabled: boolean, path: [number, number][] | nul
   const [fix, setFix] = useState<Fix | null>(null)
 
   useEffect(() => {
-    setFix(enabled ? { ...DEMO_START, accuracy: 8, course: null } : null)
+    setFix(enabled ? { ...DEMO_START, accuracy: 8, course: null, timestamp: Date.now() } : null)
   }, [enabled])
 
   useEffect(() => {
@@ -104,12 +113,12 @@ export function useDemoLocation(enabled: boolean, path: [number, number][] | nul
       }
       if (i >= path.length) {
         const [lon, lat] = path[path.length - 1]
-        setFix({ lat, lon, accuracy: 8, course: null })
+        setFix({ lat, lon, accuracy: 8, course: null, timestamp: Date.now() })
         return
       }
       const [a, b] = [path[i - 1], path[i]]
       const u = into / (metres(a, b) || 1)
-      setFix({ lon: a[0] + (b[0] - a[0]) * u, lat: a[1] + (b[1] - a[1]) * u, accuracy: 8, course: bearing(a, b) })
+      setFix({ lon: a[0] + (b[0] - a[0]) * u, lat: a[1] + (b[1] - a[1]) * u, accuracy: 8, course: bearing(a, b), timestamp: Date.now() })
       timer = window.setTimeout(tick, DEMO_TICK)
     }
     // A moment on the overview of the whole route before setting off.

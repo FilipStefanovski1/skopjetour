@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { buildCourse, CITY_CENTRE, metresBetween } from './course'
+import { ARRIVAL_DWELL_MS, buildCourse, CITY_CENTRE, metresBetween, updateArrival, type ArrivalState } from './course'
 import { loadStatues, loadThemes } from './data'
 import { t } from './i18n'
 import type { Lang, Statue, Theme } from './types'
-import { statueName as statueNameOf } from './types'
-import { MapView, type Insets } from './components/MapView'
+import { MapView, type Insets, type LatLon } from './components/MapView'
 import { NavBanner, NavPanel, type NavStatus } from './components/Navigation'
 import { fetchRoute, progress as routeProgress, type Route } from './directions'
 import { enableCompass, locationErrorText, useCompass, useDemoLocation, useLiveLocation } from './location'
-import { Carousel } from './components/Carousel'
+import { statueName } from './types'
+import { Check, X } from 'lucide-react'
+import { MapDiscovery } from './components/MapDiscovery'
+import { useWalkingRoute } from './useWalkingRoute'
 import { SearchBar } from './components/SearchBar'
 import { StatueDetail } from './components/StatueDetail'
 import { BottomNav, type Tab } from './components/BottomNav'
@@ -89,7 +91,7 @@ export default function App() {
   const [activeId, setActiveId] = useState<string | null>(initial.statue)
   const [openId, setOpenId] = useState<string | null>(initial.statue)
   const [justCollected, setJustCollected] = useState<string | null>(initial.tagged ? initial.statue : null)
-  // Only being there counts: a plaque scanned or a photo taken. There's no ticking it off by hand.
+  // Visits come from a scan, a photo, or a nearby GPS arrival with Undo.
   const [seen, setSeen] = useState<Set<string>>(() => {
     const s = new Set(stored<string[]>('seen', []))
     if (initial.tagged && initial.statue) s.add(initial.statue)
@@ -103,7 +105,8 @@ export default function App() {
   const [follow, setFollow] = useState(true)
   // On stage, far from the statues, a pretend position on Macedonia Square (also `?demo` in the link).
   const [demoLoc, setDemoLoc] = useState(() => new URLSearchParams(location.search).has('demo') || stored('demoLocation', false))
-  const live = useLiveLocation((locating || navTo !== null) && !demoLoc)
+  const [locationAttempt, setLocationAttempt] = useState(0)
+  const live = useLiveLocation(tab === 'map' && (locating || navTo !== null) && !demoLoc, locationAttempt)
   const compass = useCompass()
   const target = statues?.find((s) => s.id === navTo) ?? null
   // The demo walker follows the route, then steps up to the statue itself.
@@ -111,7 +114,25 @@ export default function App() {
   const demoFix = useDemoLocation(demoLoc, demoPath)
   const fix = demoLoc ? demoFix : live.fix
   const locationError = demoLoc ? null : live.error
-  const userPos = useMemo(() => (fix ? { lat: fix.lat, lon: fix.lon } : null), [fix])
+  const userPos = fix
+  const [routeStart, setRouteStart] = useState<{ id: string; position: LatLon | null } | null>(null)
+  const [visitNotice, setVisitNotice] = useState<{ id: string; key: number } | null>(null)
+  const arrival = useRef<ArrivalState>({ candidateId: null, since: 0, blocked: new Set() })
+  const seenRef = useRef(seen)
+  seenRef.current = seen
+  const markVisited = useCallback((id: string) => {
+    if (seenRef.current.has(id)) return
+    const next = new Set(seenRef.current).add(id)
+    seenRef.current = next
+    setSeen(next)
+    setVisitNotice({ id, key: Date.now() })
+  }, [])
+  const [focusSequence, setFocusSequence] = useState(0)
+  const selectOnMap = useCallback((id: string) => {
+    setFollow(false)
+    setActiveId(id)
+    setFocusSequence((n) => n + 1)
+  }, [])
   const [photo, setPhoto] = useState<File | null>(null)
   // Photos the visitor took to collect statues: their own picture on those tiles.
   const [myPhotos, setMyPhotos] = useState<Record<string, string>>(loadMyPhotos)
@@ -139,29 +160,55 @@ export default function App() {
   useEffect(() => store('demoLocation', demoLoc), [demoLoc])
 
   useEffect(() => {
+    if (tab !== 'map' || !statues || demoLoc) {
+      arrival.current = { ...arrival.current, candidateId: null, since: 0 }
+      return
+    }
+    const check = () => {
+      const result = updateArrival(statues, userPos, seenRef.current, arrival.current, Date.now())
+      arrival.current = result.state
+      if (result.visit) markVisited(result.visit)
+    }
+    check()
+    // GPS fixes can be infrequent when standing still. Recheck the dwell time,
+    // but updateArrival rejects a fix once it is too old or inaccurate.
+    if (!arrival.current.candidateId) return
+    const timer = window.setTimeout(check, Math.max(0, arrival.current.since + ARRIVAL_DWELL_MS - Date.now()))
+    return () => window.clearTimeout(timer)
+  }, [userPos, statues, seen, tab, demoLoc, markVisited])
+
+  useEffect(() => {
+    if (!visitNotice) return
+    const timer = window.setTimeout(() => setVisitNotice(null), 12000)
+    return () => window.clearTimeout(timer)
+  }, [visitNotice])
+
+  useEffect(() => {
     const hash = writeHash({ tab, route: routeId, statue: openId })
     if (hash !== location.hash) history.replaceState(null, '', hash || location.pathname)
   }, [tab, routeId, openId])
 
   /** A scan (NFC, a plaque's link, a photo or the demo): open the statue and add it to the collection. */
   const collect = useCallback((id: string) => {
-    setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
+    markVisited(id)
     setActiveId(id)
     setOpenId(id)
     setJustCollected(id)
-  }, [])
+  }, [markVisited])
 
   // A plaque scanned while the app is already open arrives as a new hash.
   useEffect(() => {
     const onHash = () => {
       const place = readHash()
-      if (!place.statue) return
-      if (place.tagged) {
+      setTab(place.tab)
+      setRouteId(place.route)
+      if (place.statue && place.tagged) {
         forgetTag()
         collect(place.statue)
       } else {
-        setActiveId(place.statue)
         setOpenId(place.statue)
+        setActiveId(place.statue)
+        setJustCollected(null)
       }
     }
     addEventListener('hashchange', onHash)
@@ -169,7 +216,18 @@ export default function App() {
   }, [collect])
 
   const theme = themes.find((th) => th.id === routeId) ?? null
-  const course = useMemo(() => (statues && theme ? buildCourse(theme.id, statues) : null), [statues, theme])
+  // Freeze the starting point for this walk so moving GPS fixes do not shuffle
+  // its numbered stops. A walk chosen before GPS is available adopts the first fix.
+  useEffect(() => {
+    if (!routeId || !userPos) return
+    setRouteStart((previous) => previous?.id === routeId && previous.position
+      ? previous : { id: routeId, position: { lat: userPos.lat, lon: userPos.lon } })
+  }, [routeId, userPos])
+  const course = useMemo(() => (statues && theme ? buildCourse(theme.id, statues, routeStart?.id === theme.id ? routeStart.position : null) : null), [statues, theme, routeStart])
+  const walking = useWalkingRoute(course)
+  useEffect(() => {
+    if (!navTo && course?.controls.length) setActiveId(course.controls[0].id)
+  }, [course, navTo])
 
   // What the map cards show: the route in walking order, or every statue nearest first.
   const items = useMemo(() => {
@@ -237,6 +295,8 @@ export default function App() {
 
   const navStatus: NavStatus = arrived ? 'arrived' : !fix ? 'locating' : routeFailed ? 'error' : route ? 'ready' : 'routing'
   const heading = compass ?? fix?.course ?? null
+  const mapUser = useMemo(() => fix ? { ...fix, heading } : null, [fix, heading])
+  const following = (locating || Boolean(target) || demoLoc) && follow
   // In the story, next/previous follow the map's list; elsewhere, nearest first.
   const storyList = items
 
@@ -255,7 +315,10 @@ export default function App() {
   }
 
   const chooseRoute = (id: string | null) => {
+    if (id === routeId) return
+    setFollow(false)
     setRouteId(id)
+    setRouteStart(id ? { id, position: userPos ? { lat: userPos.lat, lon: userPos.lon } : null } : null)
     setActiveId(null)
   }
 
@@ -269,6 +332,14 @@ export default function App() {
   const snap = () => {
     camera.current?.click()
     import('./recognize').then((m) => m.loadRecognizer()).catch(() => {})
+  }
+  const unvisit = (id: string) => {
+    arrival.current.blocked.add(id)
+    const next = new Set(seenRef.current)
+    next.delete(id)
+    seenRef.current = next
+    setSeen(next)
+    setVisitNotice(null)
   }
 
   // Keep the active route chip in view on narrow screens.
@@ -300,32 +371,45 @@ export default function App() {
     <div className="app" data-tab={tab} style={{ '--top-h': `${insets.top}px`, '--bottom-h': `${insets.bottom}px` } as React.CSSProperties}>
       <div className="screen screen--map" aria-hidden={tab !== 'map'}>
         <MapView
-          statues={course ? items : statues ?? []}
-          course={course}
+          enabled={tab === 'map'}
+          focusSequence={focusSequence}
+          statues={target ? statues ?? [] : course ? items : statues ?? []}
+          course={target ? null : course}
+          walkingRoute={target ? null : walking.route}
           activeId={activeId}
           seen={seen}
           lang={lang}
           insets={insets}
-          onSelect={setActiveId}
-          user={fix ? { lat: fix.lat, lon: fix.lon, accuracy: fix.accuracy, heading } : null}
+          onSelect={selectOnMap}
+          user={mapUser}
           navLine={target ? route?.line ?? null : null}
-          follow={Boolean(target) && follow}
+          follow={following}
+          locating={(locating || Boolean(target)) && !fix && !locationError}
           onUserPan={() => setFollow(false)}
           onLocate={() => {
-            enableCompass()
-            setLocating(true)
+            if (following && !locationError) {
+              setFollow(false)
+              if (!target) setLocating(false)
+            } else {
+              enableCompass()
+              setLocating(true)
+              setFollow(true)
+              if (locationError) setLocationAttempt(n => n + 1)
+            }
           }}
           locateError={locating && !target && locationError ? t(locationErrorText(locationError), lang) : null}
           demo={demoLoc}
           onDemo={(on) => {
             setDemoLoc(on)
+            setFollow(on)
+            setRouteStart(null)
             setRoute(null) // routes are planned again from wherever the visitor now is
           }}
         />
 
         <header ref={topRef} className={`top${target ? ' top--nav' : ''}`}>
           {target ? (
-            <NavBanner lang={lang} status={navStatus} locationError={locationError} progress={prog} destination={statueNameOf(target, lang)} />
+            <NavBanner lang={lang} status={navStatus} locationError={locationError} progress={prog} destination={statueName(target, lang)} />
           ) : (
           <>
           <SearchBar statues={statues ?? []} lang={lang} onLang={setLang} onPick={openStatue} />
@@ -358,7 +442,7 @@ export default function App() {
               onOpenStory={() => {
                 const id = target.id
                 endDirections()
-                openStatue(id) // collecting it still takes a scan or a photo
+                openStatue(id)
               }}
             />
           ) : failed ? (
@@ -373,15 +457,20 @@ export default function App() {
               <p>{t('loading', lang)}</p>
             </div>
           ) : (
-            <Carousel
+            <MapDiscovery
+              statues={statues}
+              themes={themes}
+              course={course}
+              walking={walking}
               items={items}
               activeId={activeId}
               lang={lang}
               numbers={numbers}
               userPos={userPos}
               seen={seen}
-              onActive={setActiveId}
+              onSelect={selectOnMap}
               onOpen={openStatue}
+              onRoute={chooseRoute}
             />
           )}
         </div>
@@ -431,6 +520,13 @@ export default function App() {
           if (file) setPhoto(file)
         }}
       />
+      {visitNotice && <div className="visit-toast" key={visitNotice.key}>
+        <Check size={22} aria-hidden />
+        <div role="status"><strong>{t('markedVisited', lang)}</strong><span>{statues?.find((s) => s.id === visitNotice.id) ? statueName(statues.find((s) => s.id === visitNotice.id)!, lang) : t('visited', lang)}</span></div>
+        <button type="button" onClick={() => unvisit(visitNotice.id)}>{t('undo', lang)}</button>
+        <button type="button" aria-label={t('close', lang)} onClick={() => setVisitNotice(null)}><X size={18} /></button>
+      </div>}
+
       {photo && statues && (
         <PhotoMatch
           photo={photo}

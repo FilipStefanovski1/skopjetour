@@ -26,24 +26,27 @@ export function Carousel({ items, activeId, lang, numbers, userPos, seen, onActi
   const settleTimer = useRef(0)
   const programmatic = useRef(false)
   const lastActive = useRef<string | null>(null)
+  const lastItems = useRef<Statue[] | null>(null)
+  const followTimer = useRef(0)
 
   // Follow the map: when a pin is tapped, slide its card into the middle.
   useEffect(() => {
     const list = listRef.current
-    if (!list || !activeId || activeId === lastActive.current) return
+    if (!list || !activeId || (activeId === lastActive.current && items === lastItems.current)) return
     lastActive.current = activeId
+    lastItems.current = items
     const card = list.querySelector<HTMLElement>(`[data-id="${CSS.escape(activeId)}"]`)
     if (!card) return
     programmatic.current = true
     list.scrollTo({ left: card.offsetLeft - (list.clientWidth - card.offsetWidth) / 2, behavior: 'smooth' })
-    window.setTimeout(() => (programmatic.current = false), 650)
+    window.clearTimeout(followTimer.current)
+    followTimer.current = window.setTimeout(() => (programmatic.current = false), 650)
   }, [activeId, items])
 
-  // A new list (route or language) starts from its first card.
-  useEffect(() => {
-    listRef.current?.scrollTo({ left: 0 })
-    lastActive.current = null
-  }, [items])
+  useEffect(() => () => {
+    window.clearTimeout(settleTimer.current)
+    window.clearTimeout(followTimer.current)
+  }, [])
 
   const onScroll = () => {
     window.clearTimeout(settleTimer.current)

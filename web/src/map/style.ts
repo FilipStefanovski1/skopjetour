@@ -35,13 +35,17 @@ const roadWidth = (major: number, mid: number, minor: number): ExpressionSpecifi
 }
 
 const ROADS: ExpressionSpecification = ['in', ['get', 'class'], ['literal', ['motorway', 'trunk', 'primary', 'secondary', 'tertiary', 'minor', 'service']]]
+const PATHS: ExpressionSpecification = ['in', ['get', 'class'], ['literal', ['path', 'track']]]
+const BRIDGES: ExpressionSpecification = ['all', ['==', ['geometry-type'], 'LineString'], ['==', ['get', 'brunnel'], 'bridge'], ['any', ROADS, PATHS]]
+const bridgeWidth = (edge: number): ExpressionSpecification => ['interpolate', ['exponential', 1.6], ['zoom'],
+  12, 2 + edge, 15, 6 + edge, 18, 24 + edge]
 
 export function cityStyle(lang: Lang): StyleSpecification {
   return {
     version: 8,
     glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
     sources: {
-      omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet', attribution: '© OpenStreetMap contributors, OpenFreeMap' },
+      omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet', attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>, <a href="https://openfreemap.org/" target="_blank" rel="noopener">OpenFreeMap</a>' },
     },
     layers: [
       { id: 'ground', type: 'background', paint: { 'background-color': C.ground } },
@@ -61,6 +65,11 @@ export function cityStyle(lang: Lang): StyleSpecification {
         paint: { 'fill-color': C.building, 'fill-outline-color': C.buildingEdge },
       },
       {
+        id: 'pedestrian-area', type: 'fill', source: 'omt', 'source-layer': 'transportation', minzoom: 14,
+        filter: ['all', ['==', ['geometry-type'], 'Polygon'], PATHS],
+        paint: { 'fill-color': C.road, 'fill-outline-color': C.roadCasing },
+      },
+      {
         id: 'road-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: ROADS,
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': C.roadCasing, 'line-width': roadWidth(1.6, 1.35, 1) },
@@ -72,13 +81,29 @@ export function cityStyle(lang: Lang): StyleSpecification {
       },
       {
         id: 'footway', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 15,
-        filter: ['in', ['get', 'class'], ['literal', ['path', 'track']]],
+        filter: ['all', ['==', ['geometry-type'], 'LineString'], PATHS, ['!=', ['get', 'brunnel'], 'bridge']],
         paint: { 'line-color': C.path, 'line-width': 1, 'line-dasharray': [2, 2] },
       },
       {
         id: 'rail', type: 'line', source: 'omt', 'source-layer': 'transportation',
         filter: ['==', ['get', 'class'], 'rail'],
         paint: { 'line-color': C.rail, 'line-width': 1.2 },
+      },
+      {
+        id: 'bridge-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: BRIDGES,
+        layout: { 'line-cap': 'butt', 'line-join': 'round' },
+        paint: { 'line-color': C.label, 'line-width': bridgeWidth(2) },
+      },
+      {
+        id: 'bridge-deck', type: 'line', source: 'omt', 'source-layer': 'transportation', filter: BRIDGES,
+        layout: { 'line-cap': 'butt', 'line-join': 'round' },
+        paint: { 'line-color': C.road, 'line-width': bridgeWidth(0) },
+      },
+      {
+        id: 'bridge-name', type: 'symbol', source: 'omt', 'source-layer': 'transportation_name', minzoom: 15,
+        filter: ['==', ['get', 'brunnel'], 'bridge'],
+        layout: { 'symbol-placement': 'line', 'text-field': labelField(lang), 'text-font': ['Noto Sans Regular'], 'text-size': 11 },
+        paint: { 'text-color': C.labelStrong, 'text-halo-color': C.road, 'text-halo-width': 1.5 },
       },
       {
         id: 'street-name', type: 'symbol', source: 'omt', 'source-layer': 'transportation_name', minzoom: 15,
@@ -105,4 +130,4 @@ export function cityStyle(lang: Lang): StyleSpecification {
 }
 
 /** Map layers whose text follows the visitor's language. */
-export const LABEL_LAYERS = ['street-name', 'water-name', 'quarter'] as const
+export const LABEL_LAYERS = ['street-name', 'bridge-name', 'water-name', 'quarter'] as const

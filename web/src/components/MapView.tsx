@@ -5,6 +5,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import { LocateFixed, MapPin, X } from 'lucide-react'
 import type { Course } from '../course'
 import { CITY_CENTRE, metresBetween } from '../course'
+import type { WalkingRoute } from '../walking'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import { LABEL_LAYERS, cityStyle, labelField } from '../map/style'
@@ -27,8 +28,11 @@ export interface LatLon {
 }
 
 interface Props {
+  enabled: boolean
+  focusSequence: number
   statues: Statue[]
   course: Course | null
+  walkingRoute: WalkingRoute | null
   activeId: string | null
   seen: Set<string>
   lang: Lang
@@ -40,6 +44,7 @@ interface Props {
   navLine: [number, number][] | null
   /** Keep the camera on the visitor while they walk. */
   follow: boolean
+  locating: boolean
   onUserPan: () => void
   onLocate: () => void
   locateError: string | null
@@ -98,7 +103,7 @@ function clusterElement(count: number, onClick: () => void): HTMLButtonElement {
 /** Statues closer than this to a neighbour need a very close zoom to tell apart (the Art Bridge). */
 const CROWDED_M = 15
 
-export function MapView({ statues, course, activeId, seen, lang, insets, onSelect, user, navLine, follow, onUserPan, onLocate, locateError, demo, onDemo }: Props) {
+export function MapView({ enabled, focusSequence, walkingRoute, locating, statues, course, activeId, seen, lang, insets, onSelect, user, navLine, follow, onUserPan, onLocate, locateError, demo, onDemo }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MLMap | null>(null)
   const me = useRef<{ marker: maplibregl.Marker; el: HTMLDivElement } | null>(null)
@@ -117,7 +122,17 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
   const state = useRef({ activeId, seen, course, lang })
   state.current = { activeId, seen, course, lang }
 
-  const padding = () => ({ top: insetsRef.current.top + 36, bottom: insetsRef.current.bottom + 36, left: 56, right: 56 })
+  const padding = () => {
+    const container = mapRef.current?.getContainer()
+    const height = container?.clientHeight ?? window.innerHeight
+    const width = container?.clientWidth ?? window.innerWidth
+    const top = insetsRef.current.top + 36
+    const bottom = insetsRef.current.bottom + 36
+    // Keep a usable camera viewport even when panels fill a short phone screen.
+    const scale = Math.min(1, Math.max(0, height - 120) / (top + bottom))
+    const side = Math.min(56, Math.max(0, (width - 120) / 2))
+    return { top: top * scale, bottom: bottom * scale, left: side, right: side }
+  }
 
   /** Paint each pin's state: active, seen, route number. */
   const paintPins = () => {
@@ -129,6 +144,8 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       const n = order.get(id)
       node.classList.toggle('is-active', id === active)
       node.classList.toggle('is-seen', seenSet.has(id))
+      const s = byId.current.get(id)
+      if (s) node.setAttribute('aria-label', `${statueName(s, state.current.lang)} · ${t(seenSet.has(id) ? 'visited' : 'unvisited', state.current.lang)}`)
       node.querySelector<HTMLElement>('.pin__n')!.textContent = n ? String(n) : ''
       node.classList.toggle('has-n', Boolean(n))
       marker.getElement().style.zIndex = id === active ? '5' : n ? '2' : '1'
@@ -167,16 +184,26 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
           const p = f.properties as Record<string, unknown>
           if (p.cluster) {
             // Cluster ids are reused when the data changes, so key by place and size.
-            const key = `${coords[0].toFixed(6)},${coords[1].toFixed(6)},${p.point_count}`
+            const key = `${coords[0].toFixed(6)},${coords[1].toFixed(6)},${p.point_count},${p.visited},${state.current.lang}`
             if (seenClusters.has(key)) continue
             seenClusters.add(key)
             if (!clusters.current.has(key)) {
               const clusterId = Number(p.cluster_id)
               const source = map.getSource('statues') as GeoJSONSource
               const node = clusterElement(Number(p.point_count), async () => {
-                const zoom = await source.getClusterExpansionZoom(clusterId)
-                map.easeTo({ center: coords, zoom: zoom + 0.4, padding: padding() })
+                try {
+                  const zoom = await source.getClusterExpansionZoom(clusterId)
+                  if (mapRef.current === map) map.easeTo({ center: coords, zoom: zoom + 0.4, padding: padding() })
+                } catch { /* The source can change while a cluster is being expanded. */ }
               })
+              node.setAttribute('aria-label', t('clusterLabel', state.current.lang, { n: Number(p.point_count), m: Number(p.visited) }))
+              node.classList.toggle('is-seen', Number(p.visited) === Number(p.point_count))
+              if (Number(p.visited) > 0) {
+                const visited = document.createElement('span')
+                visited.className = 'cluster__visited'
+                visited.textContent = `✓ ${p.visited}/${p.point_count}`
+                node.appendChild(visited)
+              }
               source
                 .getClusterLeaves(clusterId, 12, 0)
                 .then((leaves) => {
@@ -206,7 +233,7 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
     }
 
     map.on('load', () => {
-      map.addSource('statues', { type: 'geojson', data: { type: 'FeatureCollection', features: [] }, cluster: true, clusterRadius: 38, clusterMaxZoom: 16 })
+      map.addSource('statues', { type: 'geojson', data: { type: 'FeatureCollection', features: [] }, cluster: true, clusterRadius: 38, clusterMaxZoom: 16, clusterProperties: { visited: ['+', ['get', 'visited']] } })
       // An invisible layer, so MapLibre loads the statue tiles the HTML pins are read from.
       map.addLayer({ id: 'statues-anchor', type: 'circle', source: 'statues', paint: { 'circle-radius': 1, 'circle-opacity': 0 } })
       map.addSource('route', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
@@ -226,6 +253,11 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': '#2563eb', 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 3.5, 18, 8] },
       })
+      map.addSource('route-start', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
+      map.addLayer({ id: 'route-start', type: 'circle', source: 'route-start', paint: { 'circle-radius': 7, 'circle-color': ACCENT, 'circle-stroke-color': '#f4f4f9', 'circle-stroke-width': 3 } })
+      map.addLayer({ id: 'route-start-label', type: 'symbol', source: 'route-start', layout: { 'text-field': t('walkStart', state.current.lang), 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-anchor': 'top', 'text-offset': [0, 1.1] }, paint: { 'text-color': ACCENT, 'text-halo-color': '#f4f4f9', 'text-halo-width': 2 } })
+      map.addSource('user-accuracy', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
+      map.addLayer({ id: 'user-accuracy', type: 'fill', source: 'user-accuracy', paint: { 'fill-color': '#586f7c', 'fill-opacity': 0.12, 'fill-outline-color': '#586f7c' } })
       map.on('render', syncMarkers)
       setReady(true)
     })
@@ -242,6 +274,7 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       pinMap.clear()
       clusterMap.forEach((m) => m.remove())
       clusterMap.clear()
+      if (queued) cancelAnimationFrame(queued)
       activePin.current?.marker.remove()
       activePin.current = null
       me.current?.marker.remove()
@@ -256,11 +289,9 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
     const map = mapRef.current
     if (!ready || !map) return
     for (const id of LABEL_LAYERS) map.setLayoutProperty(id, 'text-field', labelField(lang))
+    map.setLayoutProperty('route-start-label', 'text-field', t('walkStart', lang))
     map.getCanvas().setAttribute('aria-label', t('map', lang))
-    for (const [id, { el: node }] of pins.current) {
-      const s = byId.current.get(id)
-      if (s) node.setAttribute('aria-label', statueName(s, lang))
-    }
+    paintPins()
   }, [lang, ready])
 
   // The statues on the map: everything, or just the chosen route. The active one stands apart,
@@ -274,7 +305,7 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       type: 'FeatureCollection',
       features: statues
         .filter((s) => s.id !== activeId)
-        .map((s) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [s.lon, s.lat] }, properties: { id: s.id } })),
+        .map((s) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [s.lon, s.lat] }, properties: { id: s.id, visited: seen.has(s.id) ? 1 : 0 } })),
     })
     activePin.current?.marker.remove()
     activePin.current = null
@@ -285,33 +316,39 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
     }
     paintPins()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, statues, activeId])
+  }, [ready, statues, activeId, seen])
 
   // The route line, and fit the view to it when a route is chosen.
   useEffect(() => {
     const map = mapRef.current
     if (!ready || !map) return
-    const line = course?.controls.map((s) => [s.lon, s.lat]) ?? []
+    const lines = walkingRoute?.lines ?? []
     ;(map.getSource('route') as GeoJSONSource).setData({
       type: 'FeatureCollection',
-      features: line.length > 1 ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: line }, properties: {} }] : [],
+      features: lines.map(coordinates => ({ type: 'Feature', geometry: { type: 'LineString', coordinates }, properties: {} })),
+    })
+    ;(map.getSource('route-start') as GeoJSONSource).setData({
+      type: 'FeatureCollection',
+      features: course?.origin && lines.length && !walkingRoute?.originUnavailable ? [{ type: 'Feature', geometry: { type: 'Point', coordinates: [course.origin.lon, course.origin.lat] }, properties: {} }] : [],
     })
     if (course?.controls.length) {
       keepOverview.current = true
       const bounds = new maplibregl.LngLatBounds()
-      course.controls.forEach((c) => bounds.extend([c.lon, c.lat]))
+      course.controls.forEach((point) => bounds.extend([point.lon, point.lat]))
+      lines.flat().forEach((point) => bounds.extend(point))
+      if (course.origin && walkingRoute && !walkingRoute.originUnavailable) bounds.extend([course.origin.lon, course.origin.lat])
       map.fitBounds(bounds, { padding: padding(), maxZoom: 17, duration: 700 })
     }
     // padding reads the latest insets through a ref
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, course])
+  }, [ready, course, walkingRoute])
 
   useEffect(paintPins, [activeId, seen, course])
 
   // Bring the active statue into the clear part of the map.
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map || !activeId) return
+    if (!ready || !map || !activeId || navLine) return
     const s = byId.current.get(activeId) ?? statues.find((x) => x.id === activeId)
     if (!s) return
     if (keepOverview.current && course?.controls[0]?.id === activeId) {
@@ -325,12 +362,20 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
     const zoom = crowded ? Math.max(map.getZoom(), 18.3) : Math.min(Math.max(map.getZoom(), 15.8), 17.2)
     map.easeTo({ center: [s.lon, s.lat], zoom, padding: padding(), duration: 550 })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, activeId])
+  }, [ready, activeId, focusSequence])
 
   // The visitor: a blue dot, with a cone showing the way they face.
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
+    if (!ready || !map || !enabled) return
+    const ring = user && Number.isFinite(user.accuracy) ? Array.from({ length: 49 }, (_, i) => {
+      const angle = i * Math.PI / 24
+      return [user.lon + Math.cos(angle) * user.accuracy / (111320 * Math.cos(user.lat * Math.PI / 180)), user.lat + Math.sin(angle) * user.accuracy / 111320]
+    }) : null
+    ;(map.getSource('user-accuracy') as GeoJSONSource).setData({
+      type: 'FeatureCollection',
+      features: ring ? [{ type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [ring] } }] : [],
+    })
     if (!user) {
       me.current?.marker.remove()
       me.current = null
@@ -346,6 +391,7 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       node.style.zIndex = '20' // always above the statue pins
     }
     me.current.marker.setLngLat([user.lon, user.lat])
+    me.current.el.setAttribute('aria-label', t('youAreHere', lang))
     me.current.el.classList.toggle('has-heading', user.heading != null)
     if (user.heading != null) me.current.el.style.setProperty('--heading', `${user.heading}deg`)
     if (flyToUser.current) {
@@ -355,7 +401,7 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       map.easeTo({ center: [user.lon, user.lat], padding: padding(), duration: 600 })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready, user, follow])
+  }, [ready, enabled, user, follow])
 
   // The walking route: drawn, and framed once when it first appears.
   const framed = useRef<string | null>(null)
@@ -381,8 +427,8 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
   }, [ready, navLine])
 
   const locate = () => {
-    flyToUser.current = true
-    if (user) {
+    flyToUser.current = !follow
+    if (user && !follow) {
       flyToUser.current = false
       mapRef.current?.easeTo({ center: [user.lon, user.lat], zoom: Math.max(mapRef.current.getZoom(), 16.5), padding: padding(), duration: 700 })
     }
@@ -392,8 +438,10 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
   return (
     <div className="map-wrap">
       <div ref={el} className="map" role="region" aria-label={t('map', lang)} />
-      <button type="button" className="locate" onClick={locate} aria-label={t('locate', lang)} title={t('locate', lang)}>
+      <div className="map-legend" aria-label={t('statues', lang)}><span><i />{t('unvisited', lang)}</span><span><i className="is-seen">✓</i>{t('visited', lang)}</span></div>
+      <button type="button" className="locate" disabled={!ready || locating} onClick={locate} aria-pressed={follow} aria-label={t(follow ? 'stopFollowing' : 'followMe', lang)}>
         <LocateFixed aria-hidden size={20} strokeWidth={2.2} />
+        <span>{t(locating ? 'locating' : follow ? 'following' : 'followMe', lang)}</span>
       </button>
       {locateError ? (
         <div className="map-toast" role="status">
