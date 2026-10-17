@@ -356,16 +356,16 @@ h1 {
 
 /* Map discovery stays compact until a visitor opens a list. */
 .discovery { margin: 0 12px 4px; border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-float); overflow: hidden; }
-.discovery__toolbar { display: flex; border-bottom: 1px solid var(--line); }
-.discovery__toolbar button { display: flex; flex: 1; align-items: center; justify-content: center; gap: 7px; min-height: 44px; font-size: 0.85rem; font-weight: 600; }
+.discovery__toolbar { display: flex; }
+.discovery__toolbar button { display: flex; flex: 1; min-width: 0; align-items: center; justify-content: center; gap: 5px; padding: 0 6px; min-height: 44px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+.discovery__toolbar button > svg, .discovery__toolbar small { flex: none; }
+.discovery__toolbar button > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.discovery__toolbar .discovery__active-walk { flex: 1.35; background: var(--accent-wash); }
+.discovery__toolbar .discovery__next-shortcut { flex: 0 0 48px; gap: 0; padding: 0; border-left: 1px solid var(--line); }
 .discovery__toolbar button[aria-expanded='true'] { background: var(--accent-wash); }
-.discovery__next { display: flex; align-items: center; gap: 10px; padding: 10px 14px; width: 100%; text-align: left; }
-.discovery__next > span { display: grid; flex: 1; min-width: 0; }
-.discovery__next strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.95rem; }
 .discovery small { display: block; color: var(--ink-3); font-size: 0.73rem; }
-.discovery__next small:first-child { font-weight: 600; color: var(--ink-2); }
-.discovery__panel { max-height: min(44dvh, 380px); overflow-y: auto; overscroll-behavior: contain; padding: 4px 12px 12px; }
-.discovery__heading { display: flex; align-items: center; justify-content: space-between; }
+.discovery__panel { max-height: min(40dvh, 340px); overflow-y: auto; overscroll-behavior: contain; padding: 0 12px 12px; border-top: 1px solid var(--line); }
+.discovery__heading { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
 .discovery__heading h2 { margin: 0; font-size: 1rem; }
 .discovery__close, .discovery__map { flex: none; display: grid; place-items: center; width: 44px; min-height: 44px; border-radius: 12px; }
 .discovery__map { color: var(--accent); background: var(--accent-wash); }
@@ -387,8 +387,9 @@ h1 {
 .discovery__walks button { display: flex; width: 100%; align-items: center; gap: 12px; padding: 12px 8px; border-radius: 12px; text-align: left; }
 .discovery__walks button > span { flex: 1; }
 .discovery__walks button[aria-pressed='true'] { background: var(--accent-wash); }
-.discovery__walk-summary { display: flex; flex-wrap: wrap; align-items: center; padding: 6px 14px 8px; border-bottom: 1px solid var(--line); }
+.discovery__walk-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 0 0 12px; margin-bottom: 12px; border-bottom: 1px solid var(--line); }
 .discovery__walk-summary > div { flex: 1; }
+.discovery__end-walk, .discovery__retry { min-height: 44px; padding: 0 10px; border-radius: 12px; background: var(--accent-wash); font-size: 0.78rem; font-weight: 600; }
 .discovery__walk-summary strong { font-size: 0.85rem; }
 .discovery__walk-summary progress { display: block; width: 100%; height: 5px; margin: 4px 0; }
 .discovery__walk-summary > small { width: 100%; font-size: 0.68rem; }
@@ -422,16 +423,18 @@ h1 {
   .discovery { max-width: 440px; margin-left: auto; margin-right: auto; }
 }
 @media (max-height: 700px) {
-  .top .chips { display: none; }
-  .discovery__walk-summary > small, .discovery__next small:last-child { display: none; }
-  .discovery__walk-summary > .discovery__route-note.is-important { display: block; }
   .discovery__panel { max-height: 35dvh; }
-  .bottom .card { height: 88px; grid-template-columns: 64px 1fr 18px; }
-  .bottom .card__photo { width: 64px; height: 68px; }
-  .bottom .card__desc { -webkit-line-clamp: 1; }
+}
+@media (max-width: 699px), (max-height: 700px) {
+  .bottom .card { height: 72px; grid-template-columns: 52px 1fr 18px; gap: 10px; padding: 10px; border-radius: 16px; }
+  .bottom .card__photo { width: 52px; height: 52px; border-radius: 10px; }
+  .bottom .card__desc { display: none; }
+  .bottom .card__name { font-size: 0.9rem; }
+  .bottom .card__meta { font-size: 0.72rem; }
+  .bottom .card__seen { left: 0; right: 0; bottom: 0; padding: 2px 0; border-radius: 0; font-size: 0.55rem; text-align: center; }
 }
 
-/* ------------------------------------------------------------------ top: search + route chips */
+/* ------------------------------------------------------------------ top: search */
 
 .top {
   position: absolute;

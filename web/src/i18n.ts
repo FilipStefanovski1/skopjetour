@@ -16,6 +16,7 @@ const strings = {
   nextOnWalk: { mk: 'Следен непосетен споменик на прошетката', en: 'Next unvisited stop on your walk' },
   nearby: { mk: 'Во близина', en: 'Nearby' },
   themedWalks: { mk: 'Тематски прошетки', en: 'Themed walks' },
+  walksShort: { mk: 'Прошетки', en: 'Walks' },
   visited: { mk: 'Посетено', en: 'Visited' },
   unvisited: { mk: 'Непосетено', en: 'Unvisited' },
   allVisited: { mk: 'Ги посети сите споменици!', en: 'You’ve visited every monument!' },

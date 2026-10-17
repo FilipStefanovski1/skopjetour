@@ -342,12 +342,7 @@ export default function App() {
     setVisitNotice(null)
   }
 
-  // Keep the active route chip in view on narrow screens.
-  useEffect(() => {
-    topRef.current?.querySelector('.chips [aria-pressed="true"]')?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' })
-  }, [routeId, themes.length, lang, tab])
-
-  // The map pads around what floats over it: search and chips on top, cards and tab bar below.
+  // The map pads around the search above and discovery controls below.
   useLayoutEffect(() => {
     const measure = () => {
       if (!topRef.current || !bottomRef.current) return
@@ -411,19 +406,7 @@ export default function App() {
           {target ? (
             <NavBanner lang={lang} status={navStatus} locationError={locationError} progress={prog} destination={statueName(target, lang)} />
           ) : (
-          <>
           <SearchBar statues={statues ?? []} lang={lang} onLang={setLang} onPick={openStatue} />
-          <nav className="chips" aria-label={t('routes', lang)}>
-            <button type="button" aria-pressed={routeId === null} onClick={() => chooseRoute(null)}>
-              {t('all', lang)}
-            </button>
-            {themes.map((th) => (
-              <button key={th.id} type="button" aria-pressed={routeId === th.id} onClick={() => chooseRoute(th.id)}>
-                {th[lang]}
-              </button>
-            ))}
-          </nav>
-          </>
           )}
         </header>
 

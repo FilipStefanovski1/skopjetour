@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Check, ChevronRight, Footprints, List, MapPin, X } from 'lucide-react'
+import { Check, ChevronRight, CircleAlert, Footprints, List, LoaderCircle, MapPin, X } from 'lucide-react'
 import { buildCourse, CITY_CENTRE, formatDistance, metresBetween, nearbyStatues, nextStop } from '../course'
 import type { Course } from '../course'
 import { photoUrl } from '../data'
@@ -38,6 +38,8 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
   const completed = course?.controls.filter((s) => seen.has(s.id)).length ?? 0
   const show = (id: string) => { onSelect(id); setPanel(null) }
   const routed = walking.route
+  const walkName = course ? themes.find((th) => th.id === course.id)?.[lang] : null
+  const routeNotice = course && (walking.status === 'loading' ? 'walkLoading' : walking.status === 'error' ? 'walkRoutingError' : routed?.originUnavailable ? 'walkOriginUnavailable' : !routed?.complete ? 'walkPartial' : null)
 
   return <>
     <section className="discovery" aria-label={t('nearby', lang)}>
@@ -45,9 +47,12 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
         <button type="button" aria-expanded={panel === 'nearby'} aria-controls="map-discovery-panel" onClick={() => setPanel(panel === 'nearby' ? null : 'nearby')}>
           <List size={17} aria-hidden />{t('nearby', lang)}
         </button>
-        <button type="button" aria-expanded={panel === 'walks'} aria-controls="map-discovery-panel" onClick={() => setPanel(panel === 'walks' ? null : 'walks')}>
-          <Footprints size={17} aria-hidden />{t('themedWalks', lang)}
+        <button type="button" className={course ? 'discovery__active-walk' : undefined} aria-label={`${t('themedWalks', lang)}${walkName ? `: ${walkName}, ${t('walkProgress', lang, { n: completed, m: course!.controls.length })}` : ''}${routeNotice ? `. ${t(routeNotice, lang)}` : ''}`} aria-expanded={panel === 'walks'} aria-controls="map-discovery-panel" onClick={() => setPanel(panel === 'walks' ? null : 'walks')}>
+          {routeNotice ? (walking.status === 'loading' ? <LoaderCircle size={17} aria-hidden /> : <CircleAlert size={17} aria-hidden />) : <Footprints size={17} aria-hidden />}
+          <span>{walkName ?? t('walksShort', lang)}</span>
+          {course && <small aria-hidden>{completed}/{course.controls.length}</small>}
         </button>
+        {next && <button type="button" className="discovery__next-shortcut" title={`${t('nextStop', lang)}: ${statueName(next, lang)}`} aria-label={`${t('nextStop', lang)}: ${statueName(next, lang)}, ${formatDistance(metresBetween(origin, next))}`} onClick={() => show(next.id)}><MapPin size={19} aria-hidden /><ChevronRight size={13} aria-hidden /></button>}
       </div>
       {panel ? <div id="map-discovery-panel" className="discovery__panel">
         <div className="discovery__heading">
@@ -71,6 +76,15 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
           </ul>
           {!discovered.length && <p className="discovery__hint">{t('noNearby', lang)}</p>}
         </> : <>
+          {course && <div className="discovery__walk-summary">
+            <div><strong>{walkName}</strong><small>{t('walkProgress', lang, { n: completed, m: course.controls.length })}{routed?.complete && <> · {formatDistance(routed.metres)} · ≈{routed.minutes} {lang === 'en' ? 'min walking' : 'мин пешачење'}</>}</small></div>
+            <button type="button" className="discovery__end-walk" onClick={() => { onRoute(null); setPanel(null) }}>{t('endWalk', lang)}</button>
+            <progress value={completed} max={course.controls.length || 1} aria-label={t('walkProgress', lang, { n: completed, m: course.controls.length })} />
+            <p className="discovery__start-hint">{t(routed?.originUnavailable ? 'walkOriginUnavailable' : course.origin ? 'walkFromYou' : 'walkNeedsLocation', lang)}</p>
+            <small role="status">{t(walking.status === 'loading' ? 'walkLoading' : walking.status === 'error' ? 'walkRoutingError' : !routed?.complete ? 'walkPartial' : 'walkRouted', lang)}</small>
+            {walking.status === 'error' && <button type="button" className="discovery__retry" onClick={walking.retry}>{t('retry', lang)}</button>}
+            {course.beyond.length > 0 && <small>{t('outsideWalk', lang, { n: course.beyond.length })}</small>}
+          </div>}
           <p className="discovery__hint">{t('walkEstimate', lang)}</p>
           <ul className="discovery__walks">
             {walks.filter(({ walk }) => walk.controls.length > 0).map(({ theme, walk }) => <li key={theme.id}>
@@ -80,22 +94,7 @@ export function MapDiscovery({ statues, items, themes, course, walking, lang, se
             </li>)}
           </ul>
         </>}
-      </div> : <>
-        {course && <div className="discovery__walk-summary">
-          <div><strong>{themes.find((th) => th.id === course.id)?.[lang]}</strong><small>{t('walkProgress', lang, { n: completed, m: course.controls.length })}{routed?.complete && <> · {formatDistance(routed.metres)} · ≈{routed.minutes} {lang === 'en' ? 'min walking' : 'мин пешачење'}</>}</small></div>
-          <button type="button" className="discovery__close" onClick={() => onRoute(null)} aria-label={t('endWalk', lang)}><X size={18} /></button>
-          <progress value={completed} max={course.controls.length || 1} aria-label={t('walkProgress', lang, { n: completed, m: course.controls.length })} />
-          <p className="discovery__start-hint">{t(routed?.originUnavailable ? 'walkOriginUnavailable' : course.origin ? 'walkFromYou' : 'walkNeedsLocation', lang)}</p>
-          <small className={`discovery__route-note${walking.status !== 'ready' || !routed?.complete ? ' is-important' : ''}`} role="status">{t(walking.status === 'loading' ? 'walkLoading' : walking.status === 'error' ? 'walkRoutingError' : !routed?.complete ? 'walkPartial' : 'walkRouted', lang)}</small>
-          {walking.status === 'error' && <button type="button" onClick={walking.retry}>{t('retry', lang)}</button>}
-          {course.beyond.length > 0 && <small>{t('outsideWalk', lang, { n: course.beyond.length })}</small>}
-        </div>}
-        {next ? <button type="button" className="discovery__next" onClick={() => show(next.id)}>
-          <MapPin size={21} aria-hidden />
-          <span><small>{t('nextStop', lang)} · {formatDistance(metresBetween(origin, next))}</small><strong>{statueName(next, lang)}</strong><small>{t(course ? 'nextOnWalk' : userPos ? 'nearestUnvisited' : 'centreNext', lang)}</small></span>
-          <ChevronRight size={20} aria-hidden />
-        </button> : <p className="discovery__complete"><Check size={18} aria-hidden />{t(course ? 'walkComplete' : 'allVisited', lang)}</p>}
-      </>}
+      </div> : !next && <p className="discovery__complete" role="status"><Check size={18} aria-hidden />{t(course ? 'walkComplete' : 'allVisited', lang)}</p>}
     </section>
     {!panel && <Carousel items={items} activeId={activeId} lang={lang} numbers={numbers} userPos={userPos} seen={seen} onActive={onSelect} onOpen={onOpen} />}
   </>
