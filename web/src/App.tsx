@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { buildCourse, CITY_CENTRE, metresBetween } from './course'
+import { ARRIVAL_DWELL_MS, buildCourse, CITY_CENTRE, metresBetween, updateArrival, type ArrivalState, type LocationFix } from './course'
 import { loadStatues, loadThemes } from './data'
 import { t } from './i18n'
 import type { Lang, Statue, Theme } from './types'
+import { statueName } from './types'
+import { Check, X } from 'lucide-react'
 import { MapView, type Insets, type LatLon } from './components/MapView'
-import { Carousel } from './components/Carousel'
+import { MapDiscovery } from './components/MapDiscovery'
+import { useWalkingRoute } from './useWalkingRoute'
 import { SearchBar } from './components/SearchBar'
 import { StatueDetail } from './components/StatueDetail'
 import { BottomNav, type Tab } from './components/BottomNav'
@@ -67,13 +70,30 @@ export default function App() {
   const [routeId, setRouteId] = useState<string | null>(initial.route)
   const [activeId, setActiveId] = useState<string | null>(initial.statue)
   const [openId, setOpenId] = useState<string | null>(initial.statue)
-  const [justCollected, setJustCollected] = useState<string | null>(initial.statue)
+  const [justCollected, setJustCollected] = useState<string | null>(initial.tab === 'scan' ? initial.statue : null)
   const [seen, setSeen] = useState<Set<string>>(() => {
     const s = new Set(stored<string[]>('seen', []))
-    if (initial.statue) s.add(initial.statue) // arrived from a plaque
+    if (initial.statue && initial.tab === 'scan') s.add(initial.statue) // arrived from a plaque
     return s
   })
-  const [userPos, setUserPos] = useState<LatLon | null>(null)
+  const [userPos, setUserPos] = useState<LocationFix | null>(null)
+  const [routeStart, setRouteStart] = useState<{ id: string; position: LatLon | null } | null>(null)
+  const [visitNotice, setVisitNotice] = useState<{ id: string; key: number } | null>(null)
+  const arrival = useRef<ArrivalState>({ candidateId: null, since: 0, blocked: new Set() })
+  const seenRef = useRef(seen)
+  seenRef.current = seen
+  const markVisited = useCallback((id: string) => {
+    if (seenRef.current.has(id)) return
+    const next = new Set(seenRef.current).add(id)
+    seenRef.current = next
+    setSeen(next)
+    setVisitNotice({ id, key: Date.now() })
+  }, [])
+  const [focusSequence, setFocusSequence] = useState(0)
+  const selectOnMap = useCallback((id: string) => {
+    setActiveId(id)
+    setFocusSequence((n) => n + 1)
+  }, [])
   const [photo, setPhoto] = useState<File | null>(null)
   const [insets, setInsets] = useState<Insets>({ top: 0, bottom: 0 })
   const topRef = useRef<HTMLElement>(null)
@@ -98,30 +118,72 @@ export default function App() {
   useEffect(() => store('seen', [...seen]), [seen])
 
   useEffect(() => {
+    if (tab !== 'map' || !statues) {
+      arrival.current = { ...arrival.current, candidateId: null, since: 0 }
+      return
+    }
+    const check = () => {
+      const result = updateArrival(statues, userPos, seenRef.current, arrival.current, Date.now())
+      arrival.current = result.state
+      if (result.visit) markVisited(result.visit)
+    }
+    check()
+    // GPS fixes can be infrequent when standing still. Recheck the dwell time,
+    // but updateArrival rejects a fix once it is too old or inaccurate.
+    if (!arrival.current.candidateId) return
+    const timer = window.setTimeout(check, Math.max(0, arrival.current.since + ARRIVAL_DWELL_MS - Date.now()))
+    return () => window.clearTimeout(timer)
+  }, [userPos, statues, seen, tab, markVisited])
+
+  useEffect(() => {
+    if (!visitNotice) return
+    const timer = window.setTimeout(() => setVisitNotice(null), 12000)
+    return () => window.clearTimeout(timer)
+  }, [visitNotice])
+
+  useEffect(() => {
     const hash = writeHash({ tab, route: routeId, statue: openId })
     if (hash !== location.hash) history.replaceState(null, '', hash || location.pathname)
   }, [tab, routeId, openId])
 
   /** A scan (NFC, a plaque link or the demo): open the statue and add it to the collection. */
   const collect = useCallback((id: string) => {
-    setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
+    markVisited(id)
     setActiveId(id)
     setOpenId(id)
     setJustCollected(id)
-  }, [])
+  }, [markVisited])
 
   // A plaque scanned while the app is already open arrives as a new hash.
   useEffect(() => {
     const onHash = () => {
       const place = readHash()
-      if (place.statue) collect(place.statue)
+      setTab(place.tab)
+      setRouteId(place.route)
+      if (place.statue && place.tab === 'scan') collect(place.statue)
+      else {
+        setOpenId(place.statue)
+        setActiveId(place.statue)
+        setJustCollected(null)
+      }
     }
     addEventListener('hashchange', onHash)
     return () => removeEventListener('hashchange', onHash)
   }, [collect])
 
   const theme = themes.find((th) => th.id === routeId) ?? null
-  const course = useMemo(() => (statues && theme ? buildCourse(theme.id, statues) : null), [statues, theme])
+  // Freeze the starting point for this walk so moving GPS fixes do not shuffle
+  // its numbered stops. A walk chosen before GPS is available adopts the first fix.
+  useEffect(() => {
+    if (!routeId || !userPos) return
+    setRouteStart((previous) => previous?.id === routeId && previous.position
+      ? previous : { id: routeId, position: { lat: userPos.lat, lon: userPos.lon } })
+  }, [routeId, userPos])
+  const course = useMemo(() => (statues && theme ? buildCourse(theme.id, statues, routeStart?.id === theme.id ? routeStart.position : null) : null), [statues, theme, routeStart])
+  const walking = useWalkingRoute(course)
+  useEffect(() => {
+    if (course?.controls.length) setActiveId(course.controls[0].id)
+  }, [course])
 
   // What the map cards show: the route in walking order, or every statue nearest first.
   const items = useMemo(() => {
@@ -159,7 +221,9 @@ export default function App() {
   }
 
   const chooseRoute = (id: string | null) => {
+    if (id === routeId) return
     setRouteId(id)
+    setRouteStart(id ? { id, position: userPos ? { lat: userPos.lat, lon: userPos.lon } : null } : null)
     setActiveId(null)
   }
 
@@ -168,13 +232,15 @@ export default function App() {
     setJustCollected(null)
   }, [])
 
-  const toggleSeen = (id: string) =>
-    setSeen((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+  const unvisit = (id: string) => {
+    arrival.current.blocked.add(id)
+    const next = new Set(seenRef.current)
+    next.delete(id)
+    seenRef.current = next
+    setSeen(next)
+    setVisitNotice(null)
+  }
+  const toggleSeen = (id: string) => seen.has(id) ? unvisit(id) : markVisited(id)
 
   // Keep the active route chip in view on narrow screens.
   useEffect(() => {
@@ -205,13 +271,16 @@ export default function App() {
     <div className="app" data-tab={tab} style={{ '--top-h': `${insets.top}px`, '--bottom-h': `${insets.bottom}px` } as React.CSSProperties}>
       <div className="screen screen--map" aria-hidden={tab !== 'map'}>
         <MapView
+          enabled={tab === 'map'}
+          focusSequence={focusSequence}
           statues={course ? items : statues ?? []}
           course={course}
+          walkingRoute={walking.route}
           activeId={activeId}
           seen={seen}
           lang={lang}
           insets={insets}
-          onSelect={setActiveId}
+          onSelect={selectOnMap}
           onUserPosition={setUserPos}
         />
 
@@ -242,15 +311,20 @@ export default function App() {
               <p>{t('loading', lang)}</p>
             </div>
           ) : (
-            <Carousel
+            <MapDiscovery
+              statues={statues}
+              themes={themes}
+              course={course}
+              walking={walking}
               items={items}
               activeId={activeId}
               lang={lang}
               numbers={numbers}
               userPos={userPos}
               seen={seen}
-              onActive={setActiveId}
+              onSelect={selectOnMap}
               onOpen={openStatue}
+              onRoute={chooseRoute}
             />
           )}
         </div>
@@ -286,6 +360,13 @@ export default function App() {
       )}
 
       <BottomNav tab={tab} lang={lang} seenCount={seen.size} onTab={setTab} />
+
+      {visitNotice && <div className="visit-toast" key={visitNotice.key}>
+        <Check size={22} aria-hidden />
+        <div role="status"><strong>{t('markedVisited', lang)}</strong><span>{statues?.find((s) => s.id === visitNotice.id) ? statueName(statues.find((s) => s.id === visitNotice.id)!, lang) : t('visited', lang)}</span></div>
+        <button type="button" onClick={() => unvisit(visitNotice.id)}>{t('undo', lang)}</button>
+        <button type="button" aria-label={t('close', lang)} onClick={() => setVisitNotice(null)}><X size={18} /></button>
+      </div>}
 
       {photo && statues && (
         <PhotoMatch

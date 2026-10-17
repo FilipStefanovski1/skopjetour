@@ -18,6 +18,7 @@ Every statue in the city on one map, in Macedonian and English, grouped into the
 - Swipeable cards along the bottom (photo, who they were, distance or stop number) synced with the map
 - Full-screen story: big photo, one-line description, Wikipedia story in MK or EN, "mark as seen", next/previous (buttons or sideways swipe)
 - Five themed routes as chips; a route draws as a dotted walking line with numbered photo pins
+- Themed walks follow a bundled OpenStreetMap pedestrian network, including bridge crossings. Distance/time use the routed path; GPS starts snap to a nearby walking path. Routing runs locally without an API key.
 - Search by name; shareable links per route and statue (`#/route/<id>/s/<id>`), ready for NFC/QR plaques
 - Installable offline web app (PWA): viewed map tiles, fonts, photos and stories are cached
 
@@ -53,6 +54,14 @@ npm run embed   # writes public/embeddings.json from each statue's Commons photo
 ### Themes
 
 Edit `data/themes.json`. A statue joins a theme when any `match` string appears in its Macedonian or English name, or when its `group` is listed in `groups`.
+
+### Walking paths
+
+`web/src/map/walking-network.json` is a derived OpenStreetMap database, licensed **ODbL-1.0**, with its source timestamp and coverage bounds included. Attribution is linked on the map. It covers central Skopje (41.967–42.025° N, 21.390–21.470° E). It is loaded on the first themed walk and included in the PWA cache; visitors' GPS coordinates are not sent to a routing service.
+
+Refresh with `cd web && npm run data:walking`, or rebuild the downloaded cache with `npm run data:walking:offline`. The raw response is cached locally in `data/raw/walking-network.json` (not committed). `OVERPASS_URL` can select another Overpass endpoint if the default is busy. Rebuild the app after refreshing.
+
+The router preserves OSM node connectivity, pedestrian access and explicit pedestrian one-way rules. It uses mapped ways and pedestrian-area perimeters; it does not invent crossings or shortcuts across open areas. Known Art Bridge statues snap to the bridge deck rather than paths underneath. Stops/start positions must be within 60 m of a mapped path. Unreachable sections are omitted with a notice; an unsupported starting location leaves the route between monuments visible. This is route planning, not turn-by-turn or wheelchair-accessible navigation. It may include stairs and does not know about temporary closures.
 
 ## Generated stories and audio
 
