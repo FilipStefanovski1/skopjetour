@@ -24,6 +24,10 @@ export function photoUrl(file: string, width = 640): string {
   return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=${width}`
 }
 
+export function photoPageUrl(file: string): string {
+  return `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file.replace(/ /g, '_'))}`
+}
+
 export function wikiUrl(lang: Lang, title: string): string {
   return `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, '_'))}`
 }

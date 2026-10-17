@@ -6,10 +6,10 @@ Hackathon: Hacktoberfest 2026 "Fix My City", Base42, Sat 17 Oct 2026. Build 12:0
 
 - [x] Research: problems, open data, open models, judging context (shared doc)
 - [x] Data pipeline `data/build_statues.py`: merges OpenStreetMap, Wikidata, Wikimedia Commons and the Art Bridge list; caches raw data for offline rebuilds
-- [x] **132 statues and monuments** across Skopje, de-duplicated across sources (Cyrillic/Latin transliteration, reviewed pairs in `data/same.json`)
+- [x] **128 statues and monuments** across Skopje, de-duplicated across sources (Cyrillic/Latin transliteration, reviewed pairs in `data/same.json`)
 - [x] All 27 named Art Bridge statues placed along the real bridge (approximate order) with photos of the statues themselves
 - [x] Five themed routes: Antiquity, Letters and faith, Revolutionaries, Artists, Everyday Skopje (91 statues in a route)
-- [x] Web app: Vite + React PWA, Leaflet city map with clustering, route filter, MK/EN toggle
+- [x] Web app: Vite + React PWA, MapLibre sprint-orienteering city map, routes, MK/EN toggle
 - [x] Statue card: Commons photo, depicted person, routes, Wikipedia summary in MK or EN, position notes
 - [x] Works offline after first load (viewed tiles, photos and summaries cached)
 - [x] Public-repo basics: MIT licence, README, git history under your name
@@ -17,7 +17,7 @@ Hackathon: Hacktoberfest 2026 "Fix My City", Base42, Sat 17 Oct 2026. Build 12:0
 
 ## Tonight (before the event)
 
-- [ ] **Pick the visual direction** in the design picker, then redesign the UI (currently generic)
+- [x] Redesign: orienteering-course world (sprint-map basemap, purple courses, numbered stops, description sheet), MK + EN
 - [ ] **Art Bridge walk** (~40 min): count statues, record each one's order and side in `data/art_bridge_walk.json`, take 3–5 photos per statue, check whether pedestals carry names, note GPS at both ends
 - [ ] Photograph 2–3 headline statues for 3D (front, clean background)
 - [ ] Pull models: `qwen3.5:9b`, domestic-yak-8B (GGUF), Kokoro (English TTS); download SigLIP 2
@@ -34,15 +34,15 @@ Hackathon: Hacktoberfest 2026 "Fix My City", Base42, Sat 17 Oct 2026. Build 12:0
 - [ ] **Camera recognition (Art Bridge)**: SigLIP 2 embeddings of the reference photos; phone photo + GPS → top 3 matches; pedestal name as tie-breaker
 - [ ] **Walk-through mode**: after one scan, "on your left… / on your right…", next/previous, audio autoplay, using bridge order
 - [ ] **3D and AR** for the headline statues with `<model-viewer>`
-- [ ] Route view: draw each themed route as a walking line with minutes per leg and a total
-- [ ] Statue list view (accessible alternative to the map; search by name)
+- [x] Route view: each theme drawn as a walking course with minutes per leg and a total
+- [x] Statue list view with search (accessible alternative to the map)
 - [ ] First-visit setup: language, interests, short or long stories
 - [ ] Deploy on HTTPS (Cloudflare Pages / Vercel / GitHub Pages) and push the public repo
 
 ## Demo and pitch
 
 - [ ] 3 slides: problem (statues nobody can identify; Art Bridge on no open map), live demo, models + licences + what's next
-- [ ] Rehearse the 90-second flow: scan a statue photo → walk-through audio → 3D/AR on the table → map with all 132
+- [ ] Rehearse the 90-second flow: scan a statue photo → walk-through audio → 3D/AR on the table → map with all 128
 - [ ] Record a 60-second backup video
 - [ ] README: model and licence table, data sources, how to run
 

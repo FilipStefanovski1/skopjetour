@@ -1,0 +1,91 @@
+import type { Statue } from './types'
+
+/** Macedonia Square: every course starts at the control nearest to it. */
+export const CITY_CENTRE: [number, number] = [41.9961, 21.4314]
+/** Controls further than this from the square are listed but not put on the course. */
+const COURSE_RADIUS_M = 1500
+/** Streets add roughly a quarter to straight-line distance in the centre. */
+const STREET_FACTOR = 1.25
+const WALK_M_PER_MIN = 75
+
+export interface Leg {
+  from: Statue
+  to: Statue
+  metres: number
+  minutes: number
+}
+
+export interface Course {
+  id: string
+  controls: Statue[]
+  legs: Leg[]
+  metres: number
+  minutes: number
+  /** Statues on this theme too far out to walk as part of the course. */
+  beyond: Statue[]
+}
+
+export function metresBetween(a: { lat: number; lon: number }, b: { lat: number; lon: number }): number {
+  const R = 6371000
+  const toRad = (d: number) => (d * Math.PI) / 180
+  const dLat = toRad(b.lat - a.lat)
+  const dLon = toRad(b.lon - a.lon)
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(h))
+}
+
+function tourLength(order: Statue[]): number {
+  let total = 0
+  for (let i = 1; i < order.length; i++) total += metresBetween(order[i - 1], order[i])
+  return total
+}
+
+/** Nearest-neighbour walk from the start, then 2-opt until no swap shortens it. */
+function walkingOrder(points: Statue[], start: Statue): Statue[] {
+  const rest = points.filter((p) => p !== start)
+  const order = [start]
+  while (rest.length) {
+    const last = order[order.length - 1]
+    let best = 0
+    for (let i = 1; i < rest.length; i++) {
+      if (metresBetween(last, rest[i]) < metresBetween(last, rest[best])) best = i
+    }
+    order.push(rest.splice(best, 1)[0])
+  }
+  let improved = true
+  while (improved) {
+    improved = false
+    for (let i = 1; i < order.length - 2; i++) {
+      for (let j = i + 1; j < order.length - 1; j++) {
+        const before = metresBetween(order[i - 1], order[i]) + metresBetween(order[j], order[j + 1])
+        const after = metresBetween(order[i - 1], order[j]) + metresBetween(order[i], order[j + 1])
+        if (after + 0.5 < before) {
+          order.splice(i, j - i + 1, ...order.slice(i, j + 1).reverse())
+          improved = true
+        }
+      }
+    }
+  }
+  return order
+}
+
+export function buildCourse(id: string, statues: Statue[]): Course {
+  const centre = { lat: CITY_CENTRE[0], lon: CITY_CENTRE[1] }
+  const onTheme = statues.filter((s) => s.themes.includes(id))
+  const near = onTheme.filter((s) => metresBetween(centre, s) <= COURSE_RADIUS_M)
+  const beyond = onTheme.filter((s) => metresBetween(centre, s) > COURSE_RADIUS_M)
+  if (near.length === 0) return { id, controls: [], legs: [], metres: 0, minutes: 0, beyond }
+
+  const start = near.reduce((a, b) => (metresBetween(centre, a) <= metresBetween(centre, b) ? a : b))
+  const controls = walkingOrder(near, start)
+  const legs = controls.slice(1).map((to, i) => {
+    const metres = metresBetween(controls[i], to) * STREET_FACTOR
+    return { from: controls[i], to, metres, minutes: Math.max(1, Math.round(metres / WALK_M_PER_MIN)) }
+  })
+  const metres = tourLength(controls) * STREET_FACTOR
+  return { id, controls, legs, metres, minutes: Math.max(1, Math.round(metres / WALK_M_PER_MIN)), beyond }
+}
+
+export function formatDistance(metres: number): string {
+  return metres < 1000 ? `${Math.round(metres / 10) * 10} m` : `${(metres / 1000).toFixed(1)} km`
+}

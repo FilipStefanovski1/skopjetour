@@ -1,6 +1,5 @@
 # Product
 
-<!-- impeccable:product-schema 1 -->
 
 ## Platform
 
@@ -12,7 +11,7 @@ Tourists walking Skopje's centre, on a phone, standing near or between statues a
 
 ## Product Purpose
 
-A personal tourist guide to the statues of Skopje. The city centre holds well over a hundred statues and monuments, most with no explanation a visitor can read. The app puts every one on a map, says who each figure is in Macedonian or English, and groups them into themed routes. Success: a visitor standing in front of a statue finds out who it is and why it matters in under ten seconds.
+A personal tourist guide to the statues of Skopje. The city holds well over a hundred statues and monuments, most with no explanation a visitor can read. The app puts every one on a map, says who each figure is in Macedonian or English, and groups them into themed routes. Success: a visitor standing in front of a statue finds out who it is and why it matters in under ten seconds.
 
 ## Positioning
 
@@ -24,13 +23,13 @@ Outdoors, one-handed, in sunlight, often on roaming data or none. Visitors move 
 
 ## Capabilities and Constraints
 
-- City map of 114 statues and monuments merged by `data/build_statues.py` from OSM, Wikidata and English Wikipedia's Art Bridge list.
+- City map of 128 statues and monuments merged by `data/build_statues.py` from OSM, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list.
 - Themed routes: Antiquity, Letters and faith, Revolutionaries, Artists, Everyday Skopje.
 - Statue card: Wikimedia Commons photo, name, depicted person, themes, and the Wikipedia summary in MK or EN; pre-generated biographies and audio in `public/content/` override the summary when present.
 - Languages: Macedonian and English only.
 - Art Bridge positions are approximate until the on-site walk fills `data/art_bridge_walk.json`.
 - Planned, not built: camera recognition, left/right walk-through mode, 3D/AR for three statues, generated biographies and audio.
-- Stack: Vite + React + TypeScript, Leaflet + leaflet.markercluster, vite-plugin-pwa.
+- Stack: Vite + React + TypeScript, MapLibre GL with OpenFreeMap vector tiles, vite-plugin-pwa.
 
 ## Brand Commitments
 

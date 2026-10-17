@@ -6,13 +6,15 @@ Every statue in the city on one map, in Macedonian and English, grouped into the
 
 ## What works now
 
-- City map of **132 statues and monuments** merged from OpenStreetMap, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list
+- City map of **128 statues and monuments** merged from OpenStreetMap, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list
 - All 27 named Art Bridge statues, with photos of the statues themselves
+- The city drawn as a sprint-orienteering map (MapLibre + OpenFreeMap vector tiles); every statue is a control
+- Five themed routes drawn as walkable courses: numbered stops, start triangle, finish circle, metres and minutes per leg
+- Statue card: Commons photo, control-description table, Wikipedia summary in MK or EN, "mark as seen", next stop
+- Search across all statues; shareable links per route and statue (`#/route/<id>/s/<id>`), ready for NFC/QR plaques
+- Installable offline web app (PWA): viewed map tiles, fonts, photos and summaries are cached
 
 See [TODO.md](TODO.md) for what's done and what's left.
-- Five themed routes: Antiquity, Letters and faith, Revolutionaries, Artists, Everyday Skopje
-- Statue card with a Wikimedia Commons photo and the Wikipedia summary in MK or EN
-- Installable offline web app (PWA): viewed map tiles, photos and summaries are cached
 
 ## Run it
 

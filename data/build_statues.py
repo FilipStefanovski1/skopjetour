@@ -16,6 +16,7 @@ import subprocess
 import sys
 import time
 import unicodedata
+import urllib.parse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -225,7 +226,8 @@ def norm(name):
         s = s.replace(a, b)
     s = re.sub(r"[„“”\"'()\-–—,.]", " ", s)
     s = re.sub(r"\((skopje|bridge of arts)\)|, skopje", " ", s)
-    s = re.sub(r"\b(споменик на|споменик|спомен-обележје на|statue of|statue|monument of|monument to|monument|"
+    # Names are Latin by now, so the Macedonian words appear transliterated (споменик на -> spomenik na).
+    s = re.sub(r"\b(spomenik na|spomenik|spomen obelezje na|statue of|statue|monument of|monument to|monument|"
                r"bust of|sculpture of|the)\b", " ", s)
     return re.sub(r"\s+", " ", s).strip()
 
@@ -237,14 +239,25 @@ def dist_m(a, b):
 
 
 def commons_file(value):
-    """Commons file name from an OSM image/wikimedia_commons tag or a Wikidata P18 URL/value."""
+    """Commons file name from an OSM image/wikimedia_commons tag or a Wikidata P18 value.
+    Categories, local-wiki files and other sites' images are not usable photos."""
     if not value:
         return None
-    value = value.split("Special:FilePath/")[-1].split("/wiki/")[-1]
+    value = value.strip()
+    if value.startswith(("Category:", "category:")):
+        return None
+    if "upload.wikimedia.org/wikipedia/commons/" in value:
+        parts = value.split("?")[0].split("/")
+        name = parts[-2] if "/thumb/" in value else parts[-1]
+        return urllib.parse.unquote(name).replace("_", " ")
+    if "commons.wikimedia.org" in value or "Special:FilePath/" in value:
+        value = value.split("Special:FilePath/")[-1].split("/wiki/")[-1]
+    elif value.startswith("http"):
+        return None  # another site's image: don't hotlink it
     value = re.sub(r"^(File|Image):", "", value)
-    if value.startswith("http"):
-        return None  # a non-Commons image URL; skip rather than hotlink
-    return value.replace("%20", " ")
+    if not re.search(r"\.(jpe?g|png|gif|tiff?|webp|svg)$", value, re.I):
+        return None
+    return urllib.parse.unquote(value).replace("_", " ")
 
 
 def wiki_title(url):
@@ -434,6 +447,49 @@ def merge(base, extra):
             base[key] = value
 
 
+LATIN_DIGRAPHS = [("dž", "џ"), ("lj", "љ"), ("nj", "њ"), ("dz", "ѕ")]
+LATIN_TO_MK = dict(zip("čćḱǵđžšabcdefghijklmnoprstuvzyw",
+                       "чќќѓѓжшабцдефгхијклмнопрстувзјв"))
+MK_TO_LATIN_TITLE = {**MK_TO_LATIN, "ж": "zh", "ч": "ch", "ш": "sh", "џ": "dzh", "ѕ": "dz", "ц": "c"}
+
+
+def to_cyrillic(name):
+    """A person's name in Macedonian Cyrillic from its Latin spelling (Stale Popov -> Стале Попов)."""
+    out, i, low = [], 0, name.lower()
+    while i < len(name):
+        pair = low[i:i + 2]
+        hit = next((mk for lat, mk in LATIN_DIGRAPHS if pair == lat), None)
+        ch = hit or LATIN_TO_MK.get(low[i], name[i])
+        upper = name[i].isupper()
+        out.append(ch.upper() if upper else ch)
+        i += 2 if hit else 1
+    return "".join(out)
+
+
+def to_latin(name):
+    """Official Macedonian romanisation (Петар Богданов -> Petar Bogdanov)."""
+    out = []
+    for c in name:
+        lat = MK_TO_LATIN_TITLE.get(c.lower())
+        out.append(c if lat is None else (lat.capitalize() if c.isupper() else lat))
+    return "".join(out)
+
+
+def fill_names(statues):
+    """Reviewed names first (data/names.json), then transliteration where it is reliable."""
+    reviewed = json.loads((ROOT / "names.json").read_text())
+    for s in statues:
+        for lang, value in reviewed.get(s["id"], {}).items():
+            s[f"name_{lang}"] = value
+        # People's names transliterate faithfully; titles like "Horse fountain" do not.
+        if not s["name_mk"] and s["group"] == "art-bridge" and s["name_en"]:
+            s["name_mk"] = to_cyrillic(s["name_en"])
+            s["subject_mk"] = s["subject_mk"] or s["name_mk"]
+        if not s["name_en"] and s["name_mk"]:
+            cyrillic = re.search(r"[а-шѓќѕјљњџ]", s["name_mk"], re.I)
+            s["name_en"] = to_latin(s["name_mk"]) if cyrillic else s["name_mk"]
+
+
 def apply_themes(statues):
     themes = json.loads((ROOT / "themes.json").read_text())
     for s in statues:
@@ -470,6 +526,9 @@ def main():
         else:
             statues.append(s)
     statues = [s for s in statues if s["lat"] is not None]  # an unmatched, unlocated photo category
+    excluded = json.loads((ROOT / "exclude.json").read_text())
+    statues = [s for s in statues if s["id"] not in excluded]
+    fill_names(statues)
     apply_themes(statues)
 
     features = [{"type": "Feature",

@@ -13,19 +13,19 @@ export default defineConfig({
         short_name: 'Statues',
         description: 'Your personal guide to the statues of Skopje',
         lang: 'mk',
-        theme_color: '#1f2a37',
-        background_color: '#f6f3ee',
+        theme_color: '#7b2cbf',
+        background_color: '#ffffff',
         display: 'standalone',
         icons: [{ src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,json,geojson}'],
+        globPatterns: ['**/*.{js,css,html,svg,json,geojson,woff2}'],
         runtimeCaching: [
           {
-            // Map tiles the visitor has already seen stay available offline.
-            urlPattern: /^https:\/\/tile\.openstreetmap\.org\//,
+            // Vector tiles and map fonts the visitor has already seen stay available offline.
+            urlPattern: /^https:\/\/tiles\.openfreemap\.org\/(planet\/|fonts\/)/,
             handler: 'CacheFirst',
-            options: { cacheName: 'tiles', expiration: { maxEntries: 600, maxAgeSeconds: 60 * 60 * 24 * 30 } },
+            options: { cacheName: 'map', expiration: { maxEntries: 1500, maxAgeSeconds: 60 * 60 * 24 * 30 } },
           },
           {
             urlPattern: /^https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\//,

@@ -3,5 +3,4 @@ web/dist/
 web/dev-dist/
 .DS_Store
 __pycache__/
-.impeccable/
 *.tsbuildinfo
