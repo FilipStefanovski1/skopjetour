@@ -89,3 +89,27 @@ test('a disconnected GPS approach leaves the routed monument walk intact', () =>
   assert.equal(route.originUnavailable, true)
   assert.deepEqual(route.lines, [[c, d]])
 })
+
+test('a nearby isolated path does not hide a connected route from the visitor', () => {
+  const nearA = [a[0], a[1] + 0.0001], nearB = [b[0], b[1] + 0.0001]
+  const local = createWalkingRouter(graph([a, b, nearA, nearB], [[0, 1, 0], [2, 3, 0]]))
+  const course = { origin: position(a), controls: [{ ...position(nearB) }] }
+  assert.equal(local.snap(course.origin).edge.a, 0)
+  const route = local.route(course)
+  assert.equal(route.originUnavailable, false)
+  assert.equal(route.complete, true)
+  assert.deepEqual(route.lines, [[nearA, nearB]])
+})
+
+test('every themed walk includes an approach from Macedonia Square and western Skopje', () => {
+  for (const origin of [{ lat: 41.9955, lon: 21.432 }, { lat: 41.998, lon: 21.399 }]) {
+    for (const theme of themes) {
+      const course = buildCourse(theme.id, statues, origin)
+      const route = router.route(course)
+      assert.equal(route.originUnavailable, false, `${theme.id}: ${JSON.stringify(origin)}`)
+      assert.equal(route.complete, true, theme.id)
+      const start = position(route.lines[0][0])
+      assert.ok(metresBetween(start, origin) < 60, theme.id)
+    }
+  }
+})

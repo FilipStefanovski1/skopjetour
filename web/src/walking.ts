@@ -62,13 +62,32 @@ export function createWalkingRouter(network: WalkingNetwork) {
     if (direction !== 1) adjacency[b].push({ to: a, metres })
     return { a, b, direction, metres, bridge: Boolean(bridge) }
   })
+  // A nearby fountain outline or isolated courtyard must not swallow the start.
+  // Preserve OSM connectivity and snap the origin onto the first stop's network.
+  const component = new Int32Array(nodes.length).fill(-1)
+  const neighbours: number[][] = nodes.map(() => [])
+  for (const { a, b } of edges) { neighbours[a].push(b); neighbours[b].push(a) }
+  for (let root = 0; root < nodes.length; root++) {
+    if (component[root] !== -1) continue
+    const pending = [root]
+    component[root] = root
+    while (pending.length) {
+      const node = pending.pop()!
+      for (const next of neighbours[node]) {
+        if (component[next] !== -1) continue
+        component[next] = root
+        pending.push(next)
+      }
+    }
+  }
   const [south, west, north, east] = network.bounds
-  function snap(p: Position, maxDistance = 60, bridgeOnly = false): Snap | null {
+  function snap(p: Position, maxDistance = 60, bridgeOnly = false, connectedTo?: Snap): Snap | null {
     if (!Number.isFinite(p.lat) || !Number.isFinite(p.lon) || p.lat < south || p.lat > north || p.lon < west || p.lon > east) return null
     let best: Snap | null = null
     const xScale = Math.cos(p.lat * Math.PI / 180)
     for (const edge of edges) {
       if (bridgeOnly && !edge.bridge) continue
+      if (connectedTo && component[edge.a] !== component[connectedTo.edge.a]) continue
       const a = nodes[edge.a], b = nodes[edge.b]
       const dx = (b[0] - a[0]) * xScale, dy = b[1] - a[1]
       const fraction = Math.max(0, Math.min(1, (((p.lon - a[0]) * xScale * dx + (p.lat - a[1]) * dy) / (dx * dx + dy * dy)) || 0))
@@ -122,7 +141,7 @@ export function createWalkingRouter(network: WalkingNetwork) {
   function route(course: Course): WalkingRoute {
     // These statues stand on the deck, not the riverside paths underneath it.
     const stops = course.controls.map(s => snap(s, 60, s.group === 'art-bridge'))
-    const origin = course.origin ? snap(course.origin) : null
+    const origin = course.origin ? snap(course.origin, 60, false, stops[0] ?? undefined) : null
     let originUnavailable = Boolean(course.origin && !origin)
     const points = origin ? [origin, ...stops] : stops
     const lines: Point[][] = []
