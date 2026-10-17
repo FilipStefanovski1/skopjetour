@@ -1,4 +1,5 @@
 import type { Lang, Statue, StatueProps, Theme } from './types'
+import { NARRATION } from './extras'
 
 interface Feature {
   geometry: { coordinates: [number, number] }
@@ -35,14 +36,16 @@ export function wikiUrl(lang: Lang, title: string): string {
 export interface Story {
   text: string
   audio?: string
-  source: 'generated' | 'wikipedia'
+  source: 'curated' | 'generated' | 'wikipedia'
 }
 
 /**
- * A statue's story in the visitor's language. Pre-generated biographies in
- * /content/<id>.<lang>.json win; until those exist, fall back to the Wikipedia summary.
+ * Use the bundled tour story when available so reading and listening tell the same story.
+ * Otherwise try /content/<id>.<lang>.json, then the Wikipedia summary.
  */
 export async function loadStory(s: Statue, lang: Lang): Promise<Story | null> {
+  const scripted = s.statue_qid ? NARRATION[s.statue_qid]?.[lang] : undefined
+  if (scripted) return { text: scripted, source: 'curated' }
   try {
     const res = await fetch(`/content/${s.id}.${lang}.json`)
     if (res.ok && res.headers.get('content-type')?.includes('json')) {
