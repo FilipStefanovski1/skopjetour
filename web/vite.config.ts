@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite'
+import basicSsl from '@vitejs/plugin-basic-ssl'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-export default defineConfig({
+// `npm run dev:phone` serves over HTTPS on the network: phones only share location, the camera
+// and NFC with secure pages. The certificate is self-signed, so the phone asks once to trust it.
+export default defineConfig(({ mode }) => ({
   plugins: [
+    mode === 'phone' && basicSsl({ name: 'skopje-statues' }),
     react(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -41,4 +45,4 @@ export default defineConfig({
       },
     }),
   ],
-})
+}))

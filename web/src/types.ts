@@ -21,6 +21,14 @@ export interface StatueProps {
   desc_mk?: string | null
   desc_en?: string | null
   person_image?: string | null
+  /** Collection number, like a field guide's. */
+  no: number
+  /** From the plaque details mapped in OpenStreetMap, where there are any. */
+  year: number | null
+  height: number | null
+  material: string | null
+  artist_mk: string | null
+  artist_en: string | null
 }
 
 export interface Statue extends StatueProps {
@@ -40,6 +48,11 @@ const MONUMENT_PREFIX = /^(споменик на|споменик|спомен-�
 function displayName(raw: string): string {
   const stripped = raw.replace(MONUMENT_PREFIX, '').replace(/^[„"“]|[“"”]$/g, '').trim()
   return stripped ? stripped.charAt(0).toUpperCase() + stripped.slice(1) : raw
+}
+
+/** The picture for a statue's thumbnail: a photo of it, else a portrait of the person it shows. */
+export function coverFile(s: Statue): string | null {
+  return s.image ?? s.person_image ?? null
 }
 
 export function statueName(s: Statue, lang: Lang): string {

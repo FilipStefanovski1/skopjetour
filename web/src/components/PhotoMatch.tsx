@@ -1,10 +1,10 @@
 import { Camera, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import { certainty, recognise, type Match } from '../recognize'
 import type { Lang, Statue } from '../types'
-import { describe, statueName } from '../types'
+import { coverFile, describe, statueName } from '../types'
 import { StatueGlyph } from './StatueGlyph'
 
 interface Props {
@@ -64,7 +64,7 @@ export function PhotoMatch({ photo, statues, near, lang, onPick, onRetake, onClo
             <h2 id="match-title">{progress !== null && progress < 1 ? t('loadingModel', lang, { p: Math.round(progress * 100) }) : t('recognising', lang)}</h2>
             <p className="muted">{t('recognisingBody', lang)}</p>
             <div className="progress progress--live">
-              <span style={{ width: `${Math.round((progress ?? 0.15) * 100)}%` }} />
+              <span style={{ '--p': progress ?? 0.15 } as CSSProperties} />
             </div>
           </>
         ) : (
@@ -78,7 +78,7 @@ export function PhotoMatch({ photo, statues, near, lang, onPick, onRetake, onClo
                 return (
                   <li key={m.id}>
                     <button type="button" className="guess" data-score={m.score.toFixed(3)} onClick={() => onPick(m.id)}>
-                      <span className="guess__photo">{s.image ? <img src={photoUrl(s.image, 200)} alt="" /> : <StatueGlyph size={26} />}</span>
+                      <span className="guess__photo">{coverFile(s) ? <img src={photoUrl(coverFile(s)!, 200)} alt="" /> : <StatueGlyph size={26} />}</span>
                       <span className="guess__text">
                         <strong>{statueName(s, lang)}</strong>
                         {describe(s, lang) && <span>{describe(s, lang)}</span>}

@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, ChevronLeft, ExternalLink, Image as ImageIcon, Pause, Rotate3d, Sparkles, UserRound, Volume2 } from 'lucide-react'
+import { ArrowLeft, Camera, Check, ChevronLeft, ExternalLink, Image as ImageIcon, Navigation2, Pause, Rotate3d, Sparkles, UserRound, Volume2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { formatDistance, metresBetween } from '../course'
 import { loadStory, photoPageUrl, photoUrl, wikiUrl, type Story } from '../data'
@@ -6,7 +6,7 @@ import { MODELS, NARRATION } from '../extras'
 import { t } from '../i18n'
 import { canSpeak, pickVoice, speak, voicesReady, type Narration } from '../narrator'
 import type { Lang, Statue, Theme } from '../types'
-import { describe, statueName } from '../types'
+import { coverFile, describe, statueName } from '../types'
 import type { LatLon } from './MapView'
 import { StatueGlyph } from './StatueGlyph'
 
@@ -19,14 +19,18 @@ interface Props {
   numbers: Map<string, number> | null
   userPos: LatLon | null
   seen: boolean
+  /** The photo the visitor took to collect it, if they did. */
+  myPhoto?: string
   /** Just scanned: celebrate the new find, show the 3D model and start the guide. */
   collected?: boolean
-  onToggleSeen: () => void
+  /** Take a photo of the statue: one of the two ways to collect it, with a plaque scan. */
+  onSnap: () => void
   onNavigate: (id: string) => void
+  onDirections: () => void
   onClose: () => void
 }
 
-type Media = 'photo' | '3d' | 'person'
+type Media = 'photo' | '3d' | 'person' | 'mine'
 
 let modelViewerLoading: Promise<unknown> | null = null
 function loadModelViewer() {
@@ -34,15 +38,49 @@ function loadModelViewer() {
   return modelViewerLoading
 }
 
+const MATERIALS: Record<string, Record<Lang, string>> = {
+  bronze: { mk: 'Бронза', en: 'Bronze' },
+  marble: { mk: 'Мермер', en: 'Marble' },
+  metal: { mk: 'Метал', en: 'Metal' },
+  steel: { mk: 'Челик', en: 'Steel' },
+  copper: { mk: 'Бакар', en: 'Copper' },
+  concrete: { mk: 'Бетон', en: 'Concrete' },
+  stone: { mk: 'Камен', en: 'Stone' },
+  granite: { mk: 'Гранит', en: 'Granite' },
+}
+
+/** Pokémon GO-style sparkles around the model: [left %, top %, size px, delay s]. */
+const SPARKLES = [
+  [16, 22, 18, 0],
+  [80, 16, 13, 0.9],
+  [86, 52, 20, 1.6],
+  [10, 60, 12, 2.3],
+  [70, 34, 9, 0.4],
+] as const
+
+function Sparkle({ x, y, size, delay }: { x: number; y: number; size: number; delay: number }) {
+  return (
+    <svg className="sparkle" viewBox="0 0 24 24" style={{ left: `${x}%`, top: `${y}%`, width: size, height: size, animationDelay: `${delay}s` }} aria-hidden>
+      <path d="M12 0c.9 6.6 4.8 10.6 12 12-7.2 1.4-11.1 5.4-12 12-.9-6.6-4.8-10.6-12-12C7.2 10.6 11.1 6.6 12 0z" />
+    </svg>
+  )
+}
+
+/** The 3D model when there is one, else a photo of the statue, else a portrait of the person. */
+function firstMedia(s: Statue, hasModel: boolean): Media {
+  return hasModel ? '3d' : s.image ? 'photo' : s.person_image ? 'person' : 'photo'
+}
+
 function fileCaption(file: string): string {
   return file.replace(/\.[a-z]+$/i, '').replace(/\s*\((cropped|\d+)\)/gi, '').replace(/_/g, ' ')
 }
 
 /** One statue, full screen: photo, 3D or the person, who they were, the guide's voice, and the way on. */
-export function StatueDetail({ statue, lang, themes, list, numbers, userPos, seen, collected, onToggleSeen, onNavigate, onClose }: Props) {
+export function StatueDetail({ statue, lang, themes, list, numbers, userPos, seen, myPhoto, collected, onSnap, onNavigate, onDirections, onClose }: Props) {
   const model = statue.statue_qid ? MODELS[statue.statue_qid] : undefined
   const [story, setStory] = useState<Story | null | undefined>(undefined)
-  const [media, setMedia] = useState<Media>(model && collected ? '3d' : 'photo')
+  // A statue with a model opens on it, turning slowly, the way a Pokémon GO entry does.
+  const [media, setMedia] = useState<Media>(firstMedia(statue, Boolean(model)))
   const [speaking, setSpeaking] = useState(false)
   const [voiceNote, setVoiceNote] = useState<string | null>(null)
   const narration = useRef<Narration | null>(null)
@@ -60,9 +98,9 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
     }
   }, [statue, lang])
 
-  // A new statue starts on its photo (or its 3D model right after a scan), with the guide quiet.
+  // A new statue starts on its 3D model when it has one, its photo otherwise, with the guide quiet.
   useEffect(() => {
-    setMedia(model && collected ? '3d' : 'photo')
+    setMedia(firstMedia(statue, Boolean(model)))
     return () => {
       narration.current?.stop()
       setSpeaking(false)
@@ -127,15 +165,28 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
   const n = numbers?.get(statue.id)
   const route = statue.themes.map((id) => themes.find((th) => th.id === id)?.[lang]).filter(Boolean)[0]
   const where = n ? t('stopOf', lang, { n, m: numbers!.size }) : userPos ? t('away', lang, { d: formatDistance(metresBetween(userPos, statue)) }) : null
-  const meta = [route, where].filter(Boolean).join(' · ')
+  const meta = [`№ ${String(statue.no).padStart(3, '0')}`, where].filter(Boolean).join(' · ')
+  // Up to three facts under the name, the plaque's first: year, height, material, then theme and distance.
+  const material = statue.material ? MATERIALS[statue.material]?.[lang] : undefined
+  const stats = [
+    statue.year && { label: t('statYear', lang), value: String(statue.year) },
+    statue.height && { label: t('statHeight', lang), value: `${statue.height.toLocaleString(lang)} m` },
+    material && { label: t('statMaterial', lang), value: material },
+    route && { label: t('statTheme', lang), value: route },
+    userPos && !n && { label: t('statAway', lang), value: formatDistance(metresBetween(userPos, statue)) },
+  ]
+    .filter((x): x is { label: string; value: string } => Boolean(x))
+    .slice(0, 3)
+  const artist = lang === 'en' ? statue.artist_en : statue.artist_mk
   const wikiLang: Lang = (lang === 'en' ? statue.wiki_en : statue.wiki_mk) ? lang : lang === 'en' ? 'mk' : 'en'
   const wikiTitle = wikiLang === 'en' ? statue.wiki_en : statue.wiki_mk
   const note = statue.position === 'approximate' ? t(statue.group === 'art-bridge' ? 'approximate' : 'estimated', lang) : null
 
   const modes: { id: Media; label: string; icon: typeof ImageIcon }[] = [
-    { id: 'photo', label: t('mediaStatue', lang), icon: ImageIcon },
     ...(model ? [{ id: '3d' as const, label: '3D', icon: Rotate3d }] : []),
+    ...(statue.image || !statue.person_image ? [{ id: 'photo' as const, label: t('mediaStatue', lang), icon: ImageIcon }] : []),
     ...(statue.person_image ? [{ id: 'person' as const, label: t('mediaPerson', lang), icon: UserRound }] : []),
+    ...(myPhoto ? [{ id: 'mine' as const, label: t('yourPhoto', lang), icon: Camera }] : []),
   ]
 
   // A sideways swipe moves along the list, like turning a page; not while turning the 3D model.
@@ -158,25 +209,39 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
       <div ref={scrollRef} className="detail__scroll" onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
         <figure className={`detail__hero detail__hero--${media}`}>
           {media === '3d' && model ? (
-            <model-viewer
-              key={model.src}
-              src={model.src}
-              alt={name}
-              camera-controls=""
-              auto-rotate=""
-              auto-rotate-delay="600"
-              rotation-per-second="18deg"
-              interaction-prompt="auto"
-              touch-action="pan-y"
-              ar=""
-              ar-modes="webxr scene-viewer quick-look"
-              shadow-intensity="1"
-              shadow-softness="0.8"
-              exposure="1.05"
-              environment-image="neutral"
-              camera-orbit="205deg 78deg auto"
-              class="detail__model"
-            />
+            <>
+              <svg className="stage__facets" viewBox="0 0 400 520" preserveAspectRatio="xMidYMid slice" aria-hidden>
+                <path d="M0 0h210L0 190z" />
+                <path d="M400 70v260L240 0h90z" />
+                <path d="M0 330l150 190H0z" />
+                <path d="M400 380v140H270z" />
+              </svg>
+              {SPARKLES.map(([x, y, size, delay], i) => (
+                <Sparkle key={i} x={x} y={y} size={size} delay={delay} />
+              ))}
+              <model-viewer
+                key={model.src}
+                src={model.src}
+                alt={name}
+                camera-controls=""
+                auto-rotate=""
+                auto-rotate-delay="0"
+                rotation-per-second="14deg"
+                interaction-prompt="auto"
+                touch-action="pan-y"
+                ar=""
+                ar-modes="webxr scene-viewer quick-look"
+                shadow-intensity="1"
+                shadow-softness="0.8"
+                exposure="1.05"
+                environment-image="neutral"
+                camera-orbit="205deg 78deg 135%"
+                max-camera-orbit="auto auto 180%"
+                class="detail__model"
+              />
+            </>
+          ) : media === 'mine' && myPhoto ? (
+            <img key="mine" src={myPhoto} alt={t('yourPhoto', lang)} decoding="async" />
           ) : media === 'person' && statue.person_image ? (
             <>
               <img key={statue.person_image} src={photoUrl(statue.person_image, 1080)} alt={desc ?? name} decoding="async" />
@@ -199,16 +264,11 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
               {t('addedToCollection', lang)}
             </p>
           )}
-          <button
-            type="button"
-            className={`round round--seen${seen ? ' is-on' : ''}`}
-            onClick={onToggleSeen}
-            aria-pressed={seen}
-            aria-label={seen ? t('seen', lang) : t('markSeen', lang)}
-            title={seen ? t('seen', lang) : t('markSeen', lang)}
-          >
-            <Check aria-hidden size={22} strokeWidth={2.6} />
-          </button>
+          {seen && (
+            <span className="round round--seen" role="img" aria-label={t('inCollection', lang)} title={t('inCollection', lang)}>
+              <Check aria-hidden size={22} strokeWidth={2.6} />
+            </span>
+          )}
 
           {modes.length > 1 && (
             <div className="media-tabs" role="tablist" aria-label={t('view', lang)}>
@@ -226,6 +286,38 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
           {meta && <p className="detail__meta">{meta}</p>}
           <h1 id="detail-title">{name}</h1>
           {desc && <p className="detail__desc">{desc}</p>}
+
+          {stats.length > 0 && (
+            <dl className="dex-stats">
+              {stats.map((st) => (
+                <div key={st.label}>
+                  <dd>{st.value}</dd>
+                  <dt>{st.label}</dt>
+                </div>
+              ))}
+            </dl>
+          )}
+          {artist && (
+            <p className="detail__artist">
+              {t('sculptor', lang)}: <strong>{artist}</strong>
+            </p>
+          )}
+
+          {!seen && (
+            <div className="uncollected">
+              <p>{t('notCollected', lang)}</p>
+              <button type="button" className="btn btn--quiet" onClick={onSnap}>
+                <Camera aria-hidden size={19} strokeWidth={2.3} />
+                {t('snapToCollect', lang)}
+              </button>
+            </div>
+          )}
+
+          <button type="button" className="directions" onClick={onDirections}>
+            <Navigation2 aria-hidden size={18} strokeWidth={2.4} />
+            {t('directions', lang)}
+            {userPos && <span>· {formatDistance(metresBetween(userPos, statue))}</span>}
+          </button>
 
           {canSpeak && guideText && (
             <button type="button" className={`guide${speaking ? ' is-on' : ''}`} onClick={speaking ? stopGuide : startGuide} aria-pressed={speaking}>
@@ -302,7 +394,7 @@ export function StatueDetail({ statue, lang, themes, list, numbers, userPos, see
             <button type="button" className="nav-next" onClick={() => onNavigate(next.id)}>
               <span className="nav-next__label">{t('next', lang)}</span>
               <span className="nav-next__name">{statueName(next, lang)}</span>
-              {next.image ? <img src={photoUrl(next.image, 120)} alt="" /> : <StatueGlyph size={22} />}
+              {coverFile(next) ? <img src={photoUrl(coverFile(next)!, 120)} alt="" /> : <StatueGlyph size={22} />}
             </button>
           ) : (
             <button type="button" className="nav-next nav-next--done" onClick={onClose}>

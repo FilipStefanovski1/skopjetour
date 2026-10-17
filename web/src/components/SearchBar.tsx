@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import type { Lang, Statue } from '../types'
-import { describe, statueName } from '../types'
+import { coverFile, describe, statueName } from '../types'
 import { StatueGlyph } from './StatueGlyph'
 
 interface Props {
@@ -91,7 +91,7 @@ export function SearchBar({ statues, lang, onLang, onPick }: Props) {
                   close()
                 }}
               >
-                <span className="result__photo">{s.image ? <img src={photoUrl(s.image, 120)} alt="" loading="lazy" /> : <StatueGlyph size={20} />}</span>
+                <span className="result__photo">{coverFile(s) ? <img src={photoUrl(coverFile(s)!, 120)} alt="" loading="lazy" /> : <StatueGlyph size={20} />}</span>
                 <span className="result__text">
                   <span className="result__name">{statueName(s, lang)}</span>
                   {describe(s, lang) && <span className="result__desc">{describe(s, lang)}</span>}

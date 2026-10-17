@@ -1,5 +1,5 @@
 /**
- * NFC plaques hold a link like https://<site>/#/s/<statue-id>.
+ * NFC plaques hold a link like https://<site>/#/tag/<statue-id>.
  * - iPhone: iOS reads the tag itself and opens that link; no button needed.
  * - Android Chrome: the page can read tags itself through Web NFC (NDEFReader).
  */
@@ -21,9 +21,9 @@ interface NDEFReaderLike {
 export const canScanInPage = typeof window !== 'undefined' && 'NDEFReader' in window
 export const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/.test(navigator.userAgent)
 
-/** The statue a tag or link points at: `…/#/s/<id>` or a bare id. */
+/** The statue a tag points at: `…/#/tag/<id>` (or an older `…/#/s/<id>`), or a bare id. */
 export function statueIdFrom(text: string): string | null {
-  const link = text.match(/\/s\/([^/?#\s]+)/)
+  const link = text.match(/\/(?:tag|s)\/([^/?#\s]+)/)
   if (link) return decodeURIComponent(link[1])
   const bare = text.trim()
   return /^[a-z]{2}-[\w-]+$/i.test(bare) ? bare : null

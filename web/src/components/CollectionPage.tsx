@@ -1,9 +1,9 @@
-import { Nfc } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { Camera, Nfc, UserRound } from 'lucide-react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import type { Lang, Statue, Theme } from '../types'
-import { statueName } from '../types'
+import { coverFile, statueName } from '../types'
 import { LangSwitch } from './LangSwitch'
 import { StatueGlyph } from './StatueGlyph'
 
@@ -11,6 +11,8 @@ interface Props {
   statues: Statue[]
   themes: Theme[]
   seen: Set<string>
+  /** The visitor's own photos of statues they collected by taking one. */
+  myPhotos: Record<string, string>
   lang: Lang
   onLang: (l: Lang) => void
   onOpen: (id: string) => void
@@ -18,7 +20,7 @@ interface Props {
 }
 
 /** Every statue as a tile: the ones you've found in colour, the rest still waiting in grey. */
-export function CollectionPage({ statues, themes, seen, lang, onLang, onOpen, onScan }: Props) {
+export function CollectionPage({ statues, themes, seen, myPhotos, lang, onLang, onOpen, onScan }: Props) {
   const [theme, setTheme] = useState<string | null>(null)
 
   const tiles = useMemo(() => {
@@ -29,7 +31,7 @@ export function CollectionPage({ statues, themes, seen, lang, onLang, onOpen, on
       const sa = order.indexOf(a.id)
       const sb = order.indexOf(b.id)
       if (sa !== -1 || sb !== -1) return (sa === -1 ? 1e9 : sa) - (sb === -1 ? 1e9 : sb)
-      return Number(Boolean(b.image)) - Number(Boolean(a.image))
+      return Number(Boolean(coverFile(b))) - Number(Boolean(coverFile(a)))
     })
   }, [statues, theme, seen])
 
@@ -45,7 +47,7 @@ export function CollectionPage({ statues, themes, seen, lang, onLang, onOpen, on
         </div>
         <p className="collection__count">{t('foundOf', lang, { n: found, m: tiles.length })}</p>
         <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={tiles.length} aria-valuenow={found}>
-          <span style={{ width: `${Math.max(share * 100, found ? 3 : 0)}%` }} />
+          <span style={{ '--p': Math.max(share, found ? 0.03 : 0) } as CSSProperties} />
         </div>
         <nav className="chips chips--light" aria-label={t('routes', lang)}>
           <button type="button" aria-pressed={theme === null} onClick={() => setTheme(null)}>
@@ -72,11 +74,32 @@ export function CollectionPage({ statues, themes, seen, lang, onLang, onOpen, on
       <ul className="tiles">
         {tiles.map((s) => {
           const got = seen.has(s.id)
+          const mine = got ? myPhotos[s.id] : undefined
+          const cover = coverFile(s)
           return (
             <li key={s.id}>
               <button type="button" className={`tile${got ? ' is-found' : ''}`} onClick={() => onOpen(s.id)}>
                 <span className="tile__photo">
-                  {s.image ? <img src={photoUrl(s.image, 300)} alt="" loading="lazy" decoding="async" /> : <StatueGlyph size={30} />}
+                  {mine ? (
+                    <img src={mine} alt="" decoding="async" />
+                  ) : cover ? (
+                    <img src={photoUrl(cover, 300)} alt="" loading="lazy" decoding="async" />
+                  ) : (
+                    <StatueGlyph size={30} />
+                  )}
+                  {mine ? (
+                    <span className="tile__badge" title={t('yourPhoto', lang)} aria-label={t('yourPhoto', lang)}>
+                      <Camera aria-hidden size={13} strokeWidth={2.6} />
+                    </span>
+                  ) : (
+                    !s.image &&
+                    cover && (
+                      // No photo of the statue yet: this is the person it shows.
+                      <span className="tile__badge" title={t('mediaPerson', lang)} aria-label={t('mediaPerson', lang)}>
+                        <UserRound aria-hidden size={13} strokeWidth={2.6} />
+                      </span>
+                    )
+                  )}
                 </span>
                 <span className="tile__name">{statueName(s, lang)}</span>
               </button>

@@ -274,7 +274,7 @@ def blank(source):
     return {"id": None, "name_mk": None, "name_en": None, "subject_qid": None, "subject_mk": None,
             "subject_en": None, "statue_qid": None, "image": None, "wiki_mk": None, "wiki_en": None,
             "group": None, "order": None, "side": None, "position": "mapped", "themes": [], "aliases": [], "photos": [],
-            "sources": [source]}
+            "year": None, "height": None, "material": None, "artist": None, "sources": [source]}
 
 
 # ---------------------------------------------------------------- per source
@@ -297,8 +297,21 @@ def from_osm(osm):
                  statue_qid=tags.get("wikidata"), subject_qid=tags.get("subject:wikidata"),
                  image=commons_file(tags.get("wikimedia_commons") or tags.get("image")))
         s["photos"] = [s["image"]] if s["image"] else []
+        s.update(osm_facts(tags))
         statues.append(s)
     return statues, bridge
+
+
+def osm_facts(tags):
+    """The plaque details mappers recorded: when it went up, how tall, what it's made of, by whom."""
+    year = re.search(r"\b(1[5-9]\d\d|20\d\d)\b", tags.get("start_date", ""))
+    try:
+        height = round(float(tags.get("height", "").replace(",", ".").removesuffix("m").strip()), 1)
+    except ValueError:
+        height = None
+    material = tags.get("material", "").split(";")[0].strip().lower() or None
+    return {"year": int(year.group(1)) if year else None, "height": height if height and height < 100 else None,
+            "material": material, "artist": tags.get("artist_name") or None}
 
 
 def from_wikidata(wd):
@@ -572,6 +585,128 @@ def enrich(statues, offline):
                 s[f"wiki_{lang}"] = statue.get("wiki", {}).get(lang) or subject.get("wiki", {}).get(lang)
 
 
+# Words in statue names and photo titles that say nothing about which statue it is.
+GENERIC = set("spomenik spomen obelezje statue monument bust sculpture skulptura skopje makedonija macedonia "
+              "north severna centar center park gradski city square ploshtad plostad memorial complex kompleks".split())
+
+
+def photo_matches(statue, title):
+    """How many of the statue's distinctive name words a photo's file name carries."""
+    words = {w for n in (statue["name_mk"], statue["name_en"], statue.get("subject_en"), statue.get("subject_mk"))
+             for w in norm(n).split() if len(w) >= 4 and w not in GENERIC}
+    t = norm(title)
+    return sum(1 for w in words if w in t)
+
+
+def find_photos(statues, offline):
+    """Photos for statues that came without one: Commons files geotagged right beside the statue,
+    or found by its name, kept only when the file name names the statue too."""
+    lonely = [s for s in statues if not s["image"]]
+
+    def fetch():
+        found = {}
+        for s in lonely:
+            near = commons(action="query", list="geosearch", gscoord=f"{s['lat']}|{s['lon']}", gsradius=100,
+                           gsnamespace=6, gslimit=50).get("query", {}).get("geosearch", [])
+            named = []
+            for name in {s["name_mk"], s["name_en"]} - {None}:
+                hits = commons(action="query", list="search", srsearch=f"{name} Skopje", srnamespace=6, srlimit=20)
+                named += [h["title"] for h in hits.get("query", {}).get("search", [])]
+                time.sleep(0.3)
+            found[s["id"]] = {"near": [n["title"] for n in near], "named": named}
+            time.sleep(0.3)
+        return found
+
+    # New since the last online run: fetched even in --offline mode, then cached like the rest.
+    found = cached("photos", fetch, offline and (RAW / "photos.json").exists())
+
+    # Where the photos found by name were taken, so one from another town doesn't slip in.
+    named = sorted({t for f in found.values() for t in f["named"]})
+
+    def fetch_coords():
+        out = {}
+        for i in range(0, len(named), 10):  # long Cyrillic titles: small batches keep the URL short
+            res = commons(action="query", titles="|".join(named[i:i + 10]), prop="coordinates", coprimary="all")
+            for page in res.get("query", {}).get("pages", {}).values():
+                co = (page.get("coordinates") or [None])[0]
+                out[page["title"]] = co and [co["lat"], co["lon"]]
+            time.sleep(0.3)
+        return out
+
+    coords = cached("photo_coords", fetch_coords, offline and (RAW / "photo_coords.json").exists())
+    statue_word = re.compile(r"spomen|споменик|статуа|statue|bust|биста|bista|sculpture|скулптура|skulptura|"
+                             r"monument|memorial|fountain|фонтана|porta|порта", re.I)
+    # A church, school or building named after the person is not their statue.
+    named_after = re.compile(r"crkva|црква|church|kirche|cathedral|соборна|school|училиште|седиште|sediste|\bо\.?у\.?\b|сугс|"
+                             r"gimnazija|гимназија|зграда|zgrada|building|ploca|плоча|delegat|zrelost", re.I)
+    # Busts of the same people stand in other towns too.
+    towns = {"struga", "ohrid", "bitola", "prilep", "radovis", "kumanovo", "veles", "stip", "tetovo", "kicevo",
+             "strumica", "gostivar", "krusevo", "resen", "kavadarci", "kocani", "negotino", "berovo",
+             "sofia", "sofija", "beograd", "belgrade", "krnjevo"}
+    rejects = json.loads((ROOT / "photo_rejects.json").read_text())
+    for s in lonely:
+        f = found.get(s["id"], {"near": [], "named": []})
+        own = set(norm(f"{s['name_mk']} {s['name_en']}").split())
+
+        def elsewhere(t):
+            # Another town, or the Art Bridge when this statue stands elsewhere in the city.
+            other_bridge = s["group"] != "art-bridge" and re.search(r"мостот на уметноста|art bridge|bridge of arts", t, re.I)
+            return bool((set(norm(t).split()) & towns) - own) or bool(other_bridge)
+
+        def ok_named(t):
+            at = coords.get(t)
+            if at and dist_m((s["lat"], s["lon"]), at) > 400:
+                return False
+            return statue_word.search(t) and (photo_matches(s, t) >= 2 or (at and photo_matches(s, t) >= 1))
+
+        # Beside the statue, one name word is enough; found by name, the file must also say it is
+        # a statue (or bust, monument…) and not have been taken somewhere else.
+        picks = [t for t in f["near"] if photo_matches(s, t) >= 1]
+        picks += [t for t in f["named"] if ok_named(t)]
+        picks = [t for t in dict.fromkeys(picks)
+                 if re.search(r"\.(jpe?g|png)$", t, re.I) and not named_after.search(t)
+                 and not elsewhere(t) and t not in rejects]
+        if picks:
+            s["image"] = commons_file(picks[0])
+            s["photos"] = [commons_file(t) for t in picks[:4]]
+            s["sources"] = sorted(set(s["sources"]) | {"commons-search"})
+
+
+def apply_people(statues):
+    """Reviewed descriptions and English stories (data/people.json) over Wikidata's and Wikipedia's."""
+    reviewed = json.loads((ROOT / "people.json").read_text())
+    content = OUT.parent / "content"
+    content.mkdir(parents=True, exist_ok=True)
+    for old in content.glob("*.en.json"):
+        old.unlink()
+    for s in statues:
+        r = reviewed.get(s["id"]) or reviewed.get(s["subject_qid"] or "")
+        if not r:
+            continue
+        if r.get("unlink"):  # matched to the wrong person by name
+            s["subject_qid"] = s["person_image"] = None
+            s["wiki_en"] = r.get("wiki_en")
+        for lang in ("mk", "en"):
+            if r.get(lang):
+                s[f"desc_{lang}"] = r[lang]
+        if r.get("story_en"):
+            (content / f"{s['id']}.en.json").write_text(json.dumps({"bio": r["story_en"]}, ensure_ascii=False))
+
+
+def number(statues):
+    """A collection number for each statue, like a field guide: by theme, the photographed ones first."""
+    order = [t["id"] for t in json.loads((ROOT / "themes.json").read_text())]
+    rank = lambda s: (s["statue_qid"] != "Q3497603",  # № 001 is the Warrior on Horseback, the city's emblem
+                      min((order.index(t) for t in s["themes"] if t in order), default=len(order)),
+                      not s["image"], (s["name_en"] or s["name_mk"] or "").lower())
+    for i, s in enumerate(sorted(statues, key=rank), 1):
+        s["no"] = i
+        # Artists are recorded in Cyrillic; English readers get the Latin spelling.
+        artist = (s.pop("artist") or "").strip(" .").replace(" - ", "-") or None
+        s["artist_mk"] = to_cyrillic(artist) if artist and not re.search("[а-ш]", artist) else artist
+        s["artist_en"] = to_latin(artist) if artist and re.search("[а-ш]", artist) else artist
+
+
 def fill_names(statues):
     """Reviewed names first (data/names.json), then transliteration where it is reliable."""
     reviewed = json.loads((ROOT / "names.json").read_text())
@@ -627,7 +762,10 @@ def main():
     statues = [s for s in statues if s["id"] not in excluded]
     fill_names(statues)
     enrich(statues, args.offline)
+    find_photos(statues, args.offline)
+    apply_people(statues)
     apply_themes(statues)
+    number(statues)
 
     features = [{"type": "Feature",
                  "geometry": {"type": "Point", "coordinates": [round(s.pop("lon"), 6), round(s.pop("lat"), 6)]},

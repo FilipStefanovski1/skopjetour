@@ -1,0 +1,94 @@
+{
+  "_comment": "Reviewed one-liners and English stories for the people the statues depict, keyed by the person's Wikidata QID (or a statue id). They replace Wikidata's descriptions and the English Wikipedia summary, which call these Macedonian figures Bulgarian. Macedonian stories still come from mk.wikipedia.",
+  "Q983917": {
+    "en": "Macedonian revolutionary, a founder of the MRO (1871–1906)",
+    "story_en": "Dame Gruev was a teacher from Smilevo, near Bitola, and one of the founders of the Macedonian Revolutionary Organisation in Thessaloniki in 1893. He built its network of committees village by village and was one of the leaders of the Ilinden Uprising in 1903. He was killed fighting Ottoman troops near Rusinovo in December 1906, and is remembered as one of the fathers of the Macedonian liberation movement."
+  },
+  "Q360160": {
+    "en": "Macedonian revolutionary, leader of the MRO (1872–1903)",
+    "story_en": "Goce Delčev, born in Kukuš in 1872, was the leading figure of the Macedonian Revolutionary Organisation and its best-known ideologue. He travelled across Macedonia as a teacher and organiser, building the movement for an autonomous Macedonia. He was killed by Ottoman troops at Banica in May 1903, weeks before the Ilinden Uprising. In 1946 his remains were brought to Skopje and laid in the courtyard of the Church of the Holy Saviour."
+  },
+  "osm-n367860262": {
+    "mk": "македонски револуционер",
+    "en": "Macedonian revolutionary, leader of the MRO (1872–1903)",
+    "story_en": "Goce Delčev, born in Kukuš in 1872, was the leading figure of the Macedonian Revolutionary Organisation and its best-known ideologue. He travelled across Macedonia as a teacher and organiser, building the movement for an autonomous Macedonia. He was killed by Ottoman troops at Banica in May 1903, weeks before the Ilinden Uprising. In 1946 his remains were brought to Skopje and laid in the courtyard of the Church of the Holy Saviour."
+  },
+  "Q983638": {
+    "en": "Macedonian revolutionary, leader of the Serres region (1872–1915)",
+    "story_en": "Jane Sandanski was a Macedonian revolutionary who led the organisation's Serres district and the left wing of the movement, which fought for an autonomous Macedonia shared by all its peoples. He became famous worldwide in 1901 for the kidnapping of the American missionary Ellen Stone, whose ransom paid for weapons. He was killed in an ambush near the Rožen Monastery in 1915."
+  },
+  "Q1396875": {
+    "en": "Macedonian revolutionary, president of the Kruševo Republic (1877–1905)",
+    "story_en": "Nikola Karev was a teacher and socialist from Kruševo. During the Ilinden Uprising in August 1903 the insurgents took the town and declared the Kruševo Republic, with Karev as its president; it lasted ten days before Ottoman forces retook it. He was killed in an ambush in 1905. Kruševo's Ilinden is celebrated every 2 August, and Karev is a national hero of Macedonia."
+  },
+  "Q3393353": {
+    "en": "Macedonian revolutionary, hero of Mečkin Kamen (1865–1903)",
+    "story_en": "Pitu Guli was a Macedonian revolutionary of Vlach descent from Kruševo and a voivode of the organisation. When Ottoman forces marched on the Kruševo Republic in August 1903, he and his men held the position of Mečkin Kamen above the town and fought to the last. He died there, and Mečkin Kamen became a symbol of the Ilinden Uprising, sung about in the Macedonian anthem."
+  },
+  "Q785607": {
+    "en": "Macedonian doctor and revolutionary, a founder of the MRO (1869–1952)",
+    "story_en": "Hristo Tatarčev was a doctor from Resen and one of the founders of the Macedonian Revolutionary Organisation in Thessaloniki in 1893. He became the first president of its Central Committee and wrote some of its first rules. Arrested and exiled by the Ottoman authorities in 1901, he later wrote memoirs that are among the main sources on how the organisation began."
+  },
+  "Q2466136": {
+    "en": "Macedonian revolutionary, leader of the MRO (1881–1924)",
+    "story_en": "Todor Aleksandrov was a teacher from Novo Selo near Štip who became a voivode and, after the First World War, the leader of the Internal Macedonian Revolutionary Organisation. He fought for a free Macedonia through years of wars and changing borders, and his methods remain debated. He was assassinated in the Pirin mountains in 1924."
+  },
+  "Q3396878": {
+    "en": "Macedonian revolutionary, voivode of the Kostur region (1874–1913)",
+    "story_en": "Vasil Čakalarov was a Macedonian revolutionary from Smrdeš in the Kostur region, and one of the organisation's most capable voivodes. During the Ilinden Uprising of 1903 he led the insurgents in the Kostur district, where they took several towns and villages. He was killed in 1913."
+  },
+  "Q3541070": {
+    "en": "Macedonian revolutionary and ideologue of the MRO (1865–1912)",
+    "story_en": "Pere Tošev was a teacher from Prilep and one of the leading minds of the Macedonian Revolutionary Organisation, serving on its Central Committee. A close ally of Goce Delčev and Gjorče Petrov, he argued for an autonomous Macedonia won by its own people. He was killed near Gostivar in 1912."
+  },
+  "Q3396549": {
+    "en": "Macedonian revolutionary, leader of the Razlovci Uprising (1840–1907)",
+    "story_en": "Dimitar Pop-Georgiev Berovski was a priest's son from Berovo and one of the earliest Macedonian revolutionaries. In 1876 he led the Razlovci Uprising against Ottoman rule, and two years later he fought in the Kresna Uprising. Both were crushed, but they began the struggle the Macedonian Revolutionary Organisation took up after him."
+  },
+  "Q2497361": {
+    "en": "Macedonian revolutionary and ideologue of the MRO (1865–1921)",
+    "story_en": "Gjorče Petrov, from Varoš near Prilep, was a teacher, geographer and one of the leading ideologues of the Macedonian Revolutionary Organisation. He helped write its statutes and argued all his life for an independent Macedonia. He was murdered in Sofia in 1921. The Skopje municipality of Gjorče Petrov carries his name."
+  },
+  "Q674532": {
+    "en": "Macedonian revolutionary and voivode (1872–1907)",
+    "story_en": "Boris Sarafov was a Macedonian revolutionary from Libjahovo, near Nevrokop. A bold voivode and organiser, he led fighters in the Ilinden Uprising of 1903 and raised money and arms for the cause abroad. He was killed in Sofia in 1907."
+  },
+  "Q3409676": {
+    "en": "Macedonian playwright, father of Macedonian drama (1875–1951)",
+    "story_en": "Vojdan Pop Georgiev Černodrinski, from Selci near Struga, is considered the father of Macedonian drama. His play Macedonian Bloody Wedding, first staged in 1900, tells of a village girl taken by force and has been performed in Macedonia ever since. He took his pen name from the river Crn Drim."
+  },
+  "Q3067865": {
+    "en": "Macedonian enlightener and teacher from Veles (1821–1882)",
+    "story_en": "Jordan Hadži Konstantinov Džinot was a teacher and writer from Veles, and one of the main figures of the Macedonian national revival. He opened modern secular schools, taught for years in Skopje, and wrote in the language spoken by the people. He staged some of the first theatre performances in Macedonia."
+  },
+  "Q1284754": {
+    "en": "Macedonian enlighteners and folklorists from Struga",
+    "story_en": "Dimitar and Konstantin Miladinov were brothers from Struga and leading figures of the Macedonian revival. They collected hundreds of folk songs, published in Zagreb in 1861, which preserved the oral poetry of Macedonia. Konstantin also wrote T'ga za jug, a poem of longing for home that every Macedonian schoolchild learns. Both died in a Constantinople prison in 1862."
+  },
+  "Q1363141": {
+    "en": "Macedonian poet from Ohrid (1830–1893)",
+    "story_en": "Grigor Prličev was a poet and teacher from Ohrid. In 1860 his epic The Serdar won the poetry contest in Athens and earned him the name 'the second Homer'. He returned to Ohrid to teach, translated Homer into the Slavic language of his people, and wrote an autobiography that is a classic of Macedonian literature."
+  },
+  "Q956441": {
+    "en": "Macedonian poet (1909–1942)",
+    "story_en": "Nikola Vapcarov was a poet from Bansko, in the Pirin region of Macedonia. His only book, Motor Songs (1940), wrote about workers, machines and hope in plain, modern verse. He was arrested for his anti-fascist resistance and executed in 1942, at the age of 32."
+  },
+  "Q158504": {
+    "en": "Slavic enlightener and saint, founder of the Ohrid Literary School",
+    "story_en": "Saint Clement of Ohrid was a disciple of Cyril and Methodius. Around 886 he came to Ohrid, where he founded the Ohrid Literary School and taught thousands of students to read and write in the Slavic language. He became the first bishop to preach in Slavic, and he is the patron saint of Ohrid and of the Macedonian Orthodox Church."
+  },
+  "Q239925": {
+    "en": "Enlighteners from Thessaloniki who created the first Slavic alphabet",
+    "story_en": "Cyril and Methodius were brothers from Thessaloniki. In 863 they created the Glagolitic alphabet, the first written script for the Slavic language, and translated the scriptures into it. Their disciples, Clement and Naum of Ohrid among them, carried their work on, and the Cyrillic alphabet used in Macedonia today grew out of it. The university in Skopje is named after them."
+  },
+  "Q270740": {
+    "en": "Medieval tsar who ruled from Prespa and Ohrid (997–1014)",
+    "story_en": "Tsar Samuel ruled a powerful medieval state from Prespa and Ohrid and fought the Byzantine Empire for decades. In 1014 the Byzantine emperor Basil II defeated his army at Belasica and blinded thousands of captured soldiers. When they returned, Samuel is said to have died of grief. His fortress above Ohrid still bears his name."
+  },
+  "osm-n9078062190": {
+    "unlink": true,
+    "mk": "Скопски надбискуп и писател од 17 век",
+    "en": "Archbishop of Skopje and writer, 17th century",
+    "wiki_en": "Pjetër Bogdani"
+  }
+}

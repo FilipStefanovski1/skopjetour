@@ -3,7 +3,11 @@ import { buildCourse, CITY_CENTRE, metresBetween } from './course'
 import { loadStatues, loadThemes } from './data'
 import { t } from './i18n'
 import type { Lang, Statue, Theme } from './types'
-import { MapView, type Insets, type LatLon } from './components/MapView'
+import { statueName as statueNameOf } from './types'
+import { MapView, type Insets } from './components/MapView'
+import { NavBanner, NavPanel, type NavStatus } from './components/Navigation'
+import { fetchRoute, progress as routeProgress, type Route } from './directions'
+import { enableCompass, locationErrorText, useCompass, useDemoLocation, useLiveLocation } from './location'
 import { Carousel } from './components/Carousel'
 import { SearchBar } from './components/SearchBar'
 import { StatueDetail } from './components/StatueDetail'
@@ -11,6 +15,7 @@ import { BottomNav, type Tab } from './components/BottomNav'
 import { ScanPage } from './components/ScanPage'
 import { CollectionPage } from './components/CollectionPage'
 import { PhotoMatch } from './components/PhotoMatch'
+import { loadMyPhotos, saveMyPhoto } from './myPhotos'
 
 function stored<T>(key: string, fallback: T): T {
   try {
@@ -33,18 +38,30 @@ interface Place {
   tab: Tab
   route: string | null
   statue: string | null
+  /** Arrived from a plaque's NFC tag: the visitor is standing at the statue. */
+  tagged?: boolean
 }
 
 /**
- * `#/map`, `#/collection`, `#/route/<theme>` and `#/s/<statue>`. A plaque's NFC tag holds a
- * `#/s/<statue>` link: opening one is a scan, so it lands on the statue and collects it.
+ * `#/map`, `#/collection`, `#/route/<theme>` and `#/s/<statue>`, which only opens a statue.
+ * A plaque's NFC tag holds `#/tag/<statue>`: opening that is a scan, so it collects the statue.
  */
 function readHash(): Place {
   const h = location.hash
   const route = h.match(/#\/(?:map\/)?route\/([^/]+)/)
-  const statue = h.match(/\/s\/([^/?#]+)/)
+  const statue = h.match(/\/(s|tag)\/([^/?#]+)/)
   const tab: Tab = h.startsWith('#/collection') ? 'collection' : h.startsWith('#/map') || route ? 'map' : 'scan'
-  return { tab, route: route ? decodeURIComponent(route[1]) : null, statue: statue ? decodeURIComponent(statue[1]) : null }
+  return {
+    tab,
+    route: route ? decodeURIComponent(route[1]) : null,
+    statue: statue ? decodeURIComponent(statue[2]) : null,
+    tagged: statue?.[1] === 'tag',
+  }
+}
+
+/** Once a tag's scan is counted, its address becomes a plain link, so a reload isn't another scan. */
+function forgetTag() {
+  if (location.hash.includes('/tag/')) history.replaceState(null, '', location.hash.replace('/tag/', '/s/'))
 }
 
 function writeHash({ tab, route, statue }: Place): string {
@@ -58,7 +75,11 @@ function writeHash({ tab, route, statue }: Place): string {
 }
 
 export default function App() {
-  const initial = useMemo(readHash, [])
+  const initial = useMemo(() => {
+    const place = readHash()
+    forgetTag()
+    return place
+  }, [])
   const [statues, setStatues] = useState<Statue[] | null>(null)
   const [themes, setThemes] = useState<Theme[]>([])
   const [failed, setFailed] = useState(false)
@@ -67,14 +88,33 @@ export default function App() {
   const [routeId, setRouteId] = useState<string | null>(initial.route)
   const [activeId, setActiveId] = useState<string | null>(initial.statue)
   const [openId, setOpenId] = useState<string | null>(initial.statue)
-  const [justCollected, setJustCollected] = useState<string | null>(initial.statue)
+  const [justCollected, setJustCollected] = useState<string | null>(initial.tagged ? initial.statue : null)
+  // Only being there counts: a plaque scanned or a photo taken. There's no ticking it off by hand.
   const [seen, setSeen] = useState<Set<string>>(() => {
     const s = new Set(stored<string[]>('seen', []))
-    if (initial.statue) s.add(initial.statue) // arrived from a plaque
+    if (initial.tagged && initial.statue) s.add(initial.statue)
     return s
   })
-  const [userPos, setUserPos] = useState<LatLon | null>(null)
+  // Live location: on while the visitor asked "where am I" or is walking somewhere.
+  const [locating, setLocating] = useState(false)
+  const [navTo, setNavTo] = useState<string | null>(null)
+  const [route, setRoute] = useState<Route | null>(null)
+  const [routeFailed, setRouteFailed] = useState(false)
+  const [follow, setFollow] = useState(true)
+  // On stage, far from the statues, a pretend position on Macedonia Square (also `?demo` in the link).
+  const [demoLoc, setDemoLoc] = useState(() => new URLSearchParams(location.search).has('demo') || stored('demoLocation', false))
+  const live = useLiveLocation((locating || navTo !== null) && !demoLoc)
+  const compass = useCompass()
+  const target = statues?.find((s) => s.id === navTo) ?? null
+  // The demo walker follows the route, then steps up to the statue itself.
+  const demoPath = useMemo<[number, number][] | null>(() => (route && target ? [...route.line, [target.lon, target.lat]] : null), [route]) // eslint-disable-line react-hooks/exhaustive-deps
+  const demoFix = useDemoLocation(demoLoc, demoPath)
+  const fix = demoLoc ? demoFix : live.fix
+  const locationError = demoLoc ? null : live.error
+  const userPos = useMemo(() => (fix ? { lat: fix.lat, lon: fix.lon } : null), [fix])
   const [photo, setPhoto] = useState<File | null>(null)
+  // Photos the visitor took to collect statues: their own picture on those tiles.
+  const [myPhotos, setMyPhotos] = useState<Record<string, string>>(loadMyPhotos)
   const [insets, setInsets] = useState<Insets>({ top: 0, bottom: 0 })
   const topRef = useRef<HTMLElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -96,13 +136,14 @@ export default function App() {
     store('lang', lang)
   }, [lang])
   useEffect(() => store('seen', [...seen]), [seen])
+  useEffect(() => store('demoLocation', demoLoc), [demoLoc])
 
   useEffect(() => {
     const hash = writeHash({ tab, route: routeId, statue: openId })
     if (hash !== location.hash) history.replaceState(null, '', hash || location.pathname)
   }, [tab, routeId, openId])
 
-  /** A scan (NFC, a plaque link or the demo): open the statue and add it to the collection. */
+  /** A scan (NFC, a plaque's link, a photo or the demo): open the statue and add it to the collection. */
   const collect = useCallback((id: string) => {
     setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
     setActiveId(id)
@@ -114,7 +155,14 @@ export default function App() {
   useEffect(() => {
     const onHash = () => {
       const place = readHash()
-      if (place.statue) collect(place.statue)
+      if (!place.statue) return
+      if (place.tagged) {
+        forgetTag()
+        collect(place.statue)
+      } else {
+        setActiveId(place.statue)
+        setOpenId(place.statue)
+      }
     }
     addEventListener('hashchange', onHash)
     return () => removeEventListener('hashchange', onHash)
@@ -141,6 +189,54 @@ export default function App() {
   }, [items])
 
   const open = statues?.find((s) => s.id === openId) ?? null
+
+  // ---------------------------------------------------------------- walking directions
+
+  /** Directions to a statue: off to the map, following the visitor along a walking route. */
+  const startDirections = (id: string) => {
+    enableCompass() // iPhones only allow this during a tap
+    setNavTo(id)
+    setRoute(null)
+    setRouteFailed(false)
+    setFollow(true)
+    setActiveId(id)
+    setOpenId(null)
+    setTab('map')
+  }
+
+  const endDirections = () => {
+    setNavTo(null)
+    setRoute(null)
+    setRouteFailed(false)
+  }
+
+  const prog = useMemo(() => (route && fix ? routeProgress(route, fix) : null), [route, fix])
+  const arrived = Boolean(target && fix && metresBetween(fix, target) < 25)
+
+  // Fetch the route once a position is known, and again if the walker strays well off it.
+  const lastFetch = useRef(0)
+  const fetching = useRef(false)
+  useEffect(() => {
+    if (!target || !fix || arrived || fetching.current) return
+    const stray = prog ? prog.off > Math.max(40, fix.accuracy) : false
+    if (route && !stray) return
+    if (route && Date.now() - lastFetch.current < 15000) return
+    fetching.current = true
+    lastFetch.current = Date.now()
+    const ctrl = new AbortController()
+    fetchRoute(fix, target, ctrl.signal)
+      .then((r) => {
+        setRoute(r)
+        setRouteFailed(false)
+      })
+      .catch(() => !ctrl.signal.aborted && setRouteFailed(true))
+      .finally(() => (fetching.current = false))
+    return () => ctrl.abort()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target, fix, prog?.off, arrived])
+
+  const navStatus: NavStatus = arrived ? 'arrived' : !fix ? 'locating' : routeFailed ? 'error' : route ? 'ready' : 'routing'
+  const heading = compass ?? fix?.course ?? null
   // In the story, next/previous follow the map's list; elsewhere, nearest first.
   const storyList = items
 
@@ -168,13 +264,12 @@ export default function App() {
     setJustCollected(null)
   }, [])
 
-  const toggleSeen = (id: string) =>
-    setSeen((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
+  // One camera for the whole app: a photo from the story, or another try after a poor match.
+  const camera = useRef<HTMLInputElement>(null)
+  const snap = () => {
+    camera.current?.click()
+    import('./recognize').then((m) => m.loadRecognizer()).catch(() => {})
+  }
 
   // Keep the active route chip in view on narrow screens.
   useEffect(() => {
@@ -212,10 +307,27 @@ export default function App() {
           lang={lang}
           insets={insets}
           onSelect={setActiveId}
-          onUserPosition={setUserPos}
+          user={fix ? { lat: fix.lat, lon: fix.lon, accuracy: fix.accuracy, heading } : null}
+          navLine={target ? route?.line ?? null : null}
+          follow={Boolean(target) && follow}
+          onUserPan={() => setFollow(false)}
+          onLocate={() => {
+            enableCompass()
+            setLocating(true)
+          }}
+          locateError={locating && !target && locationError ? t(locationErrorText(locationError), lang) : null}
+          demo={demoLoc}
+          onDemo={(on) => {
+            setDemoLoc(on)
+            setRoute(null) // routes are planned again from wherever the visitor now is
+          }}
         />
 
-        <header ref={topRef} className="top">
+        <header ref={topRef} className={`top${target ? ' top--nav' : ''}`}>
+          {target ? (
+            <NavBanner lang={lang} status={navStatus} locationError={locationError} progress={prog} destination={statueNameOf(target, lang)} />
+          ) : (
+          <>
           <SearchBar statues={statues ?? []} lang={lang} onLang={setLang} onPick={openStatue} />
           <nav className="chips" aria-label={t('routes', lang)}>
             <button type="button" aria-pressed={routeId === null} onClick={() => chooseRoute(null)}>
@@ -227,10 +339,29 @@ export default function App() {
               </button>
             ))}
           </nav>
+          </>
+          )}
         </header>
 
         <div ref={bottomRef} className="bottom">
-          {failed ? (
+          {target ? (
+            <NavPanel
+              lang={lang}
+              target={target}
+              status={navStatus}
+              route={route}
+              progress={prog}
+              following={follow}
+              onDemo={locationError ? () => setDemoLoc(true) : null}
+              onRecenter={() => setFollow(true)}
+              onEnd={endDirections}
+              onOpenStory={() => {
+                const id = target.id
+                endDirections()
+                openStatue(id) // collecting it still takes a scan or a photo
+              }}
+            />
+          ) : failed ? (
             <div className="notice">
               <p>{t('loadError', lang)}</p>
               <button type="button" onClick={load}>
@@ -277,6 +408,7 @@ export default function App() {
             statues={statues ?? []}
             themes={themes}
             seen={seen}
+            myPhotos={myPhotos}
             lang={lang}
             onLang={setLang}
             onOpen={openStatue}
@@ -287,6 +419,18 @@ export default function App() {
 
       <BottomNav tab={tab} lang={lang} seenCount={seen.size} onTab={setTab} />
 
+      <input
+        ref={camera}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        hidden
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          e.target.value = ''
+          if (file) setPhoto(file)
+        }}
+      />
       {photo && statues && (
         <PhotoMatch
           photo={photo}
@@ -294,12 +438,14 @@ export default function App() {
           near={userPos}
           lang={lang}
           onPick={(id) => {
+            const taken = photo
             setPhoto(null)
             collect(id)
+            saveMyPhoto(id, taken).then((url) => url && setMyPhotos((prev) => ({ ...prev, [id]: url })))
           }}
           onRetake={() => {
             setPhoto(null)
-            document.querySelector<HTMLInputElement>('.scan input[type=file]')?.click()
+            snap()
           }}
           onClose={() => setPhoto(null)}
         />
@@ -314,9 +460,11 @@ export default function App() {
           numbers={tab === 'map' ? numbers : null}
           userPos={userPos}
           seen={seen.has(open.id)}
+          myPhoto={myPhotos[open.id]}
           collected={justCollected === open.id}
-          onToggleSeen={() => toggleSeen(open.id)}
+          onSnap={snap}
           onNavigate={openStatue}
+          onDirections={() => startDirections(open.id)}
           onClose={closeDetail}
         />
       )}

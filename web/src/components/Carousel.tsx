@@ -4,7 +4,7 @@ import { formatDistance, metresBetween } from '../course'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import type { Lang, Statue } from '../types'
-import { describe, statueName } from '../types'
+import { coverFile, describe, statueName } from '../types'
 import type { LatLon } from './MapView'
 import { StatueGlyph } from './StatueGlyph'
 
@@ -82,7 +82,7 @@ export function Carousel({ items, activeId, lang, numbers, userPos, seen, onActi
               onClick={() => onOpen(s.id)}
             >
               <span className="card__photo">
-                {s.image ? <img src={photoUrl(s.image, 240)} alt="" loading="lazy" decoding="async" /> : <StatueGlyph />}
+                {coverFile(s) ? <img src={photoUrl(coverFile(s)!, 240)} alt="" loading="lazy" decoding="async" /> : <StatueGlyph />}
                 {seen.has(s.id) && <span className="card__seen">{t('seen', lang)}</span>}
               </span>
               <span className="card__text">

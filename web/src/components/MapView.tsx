@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import * as maplibregl from 'maplibre-gl'
 import type { GeoJSONSource, Map as MLMap } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
-import { LocateFixed } from 'lucide-react'
+import { LocateFixed, MapPin, X } from 'lucide-react'
 import type { Course } from '../course'
 import { CITY_CENTRE, metresBetween } from '../course'
 import { photoUrl } from '../data'
 import { t } from '../i18n'
 import { LABEL_LAYERS, cityStyle, labelField } from '../map/style'
 import type { Lang, Statue } from '../types'
-import { statueName } from '../types'
+import { coverFile, statueName } from '../types'
 
 // Vite moves MapLibre's code during bundling, so point it at its worker explicitly.
 maplibregl.setWorkerUrl(workerUrl)
@@ -34,7 +34,18 @@ interface Props {
   lang: Lang
   insets: Insets
   onSelect: (id: string) => void
-  onUserPosition: (p: LatLon) => void
+  /** The visitor's live position and the way they face. */
+  user: (LatLon & { heading: number | null; accuracy: number }) | null
+  /** The walking route being followed, as [lon, lat] pairs. */
+  navLine: [number, number][] | null
+  /** Keep the camera on the visitor while they walk. */
+  follow: boolean
+  onUserPan: () => void
+  onLocate: () => void
+  locateError: string | null
+  /** Pretending to stand on Macedonia Square, for demos away from the statues. */
+  demo: boolean
+  onDemo: (on: boolean) => void
 }
 
 const STATUE_SVG =
@@ -53,8 +64,9 @@ function pinElement(s: Statue, lang: Lang, onClick: () => void): HTMLButtonEleme
   el.type = 'button'
   el.className = 'pin'
   el.setAttribute('aria-label', statueName(s, lang))
-  el.innerHTML = s.image
-    ? `<img src="${photoUrl(s.image, 160)}" alt="" loading="lazy" decoding="async" draggable="false">`
+  const cover = coverFile(s)
+  el.innerHTML = cover
+    ? `<img src="${photoUrl(cover, 160)}" alt="" loading="lazy" decoding="async" draggable="false">`
     : `<span class="pin__blank">${STATUE_SVG}</span>`
   const badge = document.createElement('span')
   badge.className = 'pin__n'
@@ -86,10 +98,11 @@ function clusterElement(count: number, onClick: () => void): HTMLButtonElement {
 /** Statues closer than this to a neighbour need a very close zoom to tell apart (the Art Bridge). */
 const CROWDED_M = 15
 
-export function MapView({ statues, course, activeId, seen, lang, insets, onSelect, onUserPosition }: Props) {
+export function MapView({ statues, course, activeId, seen, lang, insets, onSelect, user, navLine, follow, onUserPan, onLocate, locateError, demo, onDemo }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MLMap | null>(null)
-  const geolocate = useRef<maplibregl.GeolocateControl | null>(null)
+  const me = useRef<{ marker: maplibregl.Marker; el: HTMLDivElement } | null>(null)
+  const flyToUser = useRef(false)
   const pins = useRef(new Map<string, { marker: maplibregl.Marker; el: HTMLButtonElement }>())
   const clusters = useRef(new Map<string, maplibregl.Marker>())
   const activePin = useRef<{ id: string; marker: maplibregl.Marker; el: HTMLButtonElement } | null>(null)
@@ -97,9 +110,8 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
   const keepOverview = useRef(false)
   const byId = useRef(new Map<string, Statue>())
   const [ready, setReady] = useState(false)
-  const [locateError, setLocateError] = useState(false)
-  const cb = useRef({ onSelect, onUserPosition })
-  cb.current = { onSelect, onUserPosition }
+  const cb = useRef({ onSelect, onUserPan })
+  cb.current = { onSelect, onUserPan }
   const insetsRef = useRef(insets)
   insetsRef.current = insets
   const state = useRef({ activeId, seen, course, lang })
@@ -138,14 +150,8 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       pitchWithRotate: false,
     })
     map.touchZoomRotate.disableRotation()
-    const geo = new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: true, showAccuracyCircle: false })
-    geo.on('error', () => setLocateError(true))
-    geo.on('geolocate', (e: { coords: GeolocationCoordinates }) => {
-      setLocateError(false)
-      cb.current.onUserPosition({ lat: e.coords.latitude, lon: e.coords.longitude })
-    })
-    map.addControl(geo, 'top-left')
-    geolocate.current = geo
+    // A drag or pinch by the visitor means "let me look around": stop following them.
+    map.on('dragstart', () => cb.current.onUserPan())
 
     // HTML photo pins for single statues and count bubbles for groups, rebuilt as the view changes.
     let queued = 0
@@ -174,8 +180,10 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
               source
                 .getClusterLeaves(clusterId, 12, 0)
                 .then((leaves) => {
-                  const withPhoto = leaves.map((l) => byId.current.get(String(l.properties?.id))).find((x) => x?.image)
-                  if (withPhoto?.image) node.querySelector('.cluster__photo')!.innerHTML = `<img src="${photoUrl(withPhoto.image, 160)}" alt="" draggable="false">`
+                  const members = leaves.map((l) => byId.current.get(String(l.properties?.id)))
+                  // A statue's own photo on the cluster if any member has one, else a portrait.
+                  const cover = members.find((x) => x?.image)?.image ?? members.map((x) => x && coverFile(x)).find(Boolean)
+                  if (cover) node.querySelector('.cluster__photo')!.innerHTML = `<img src="${photoUrl(cover, 160)}" alt="" draggable="false">`
                 })
                 .catch(() => {})
               clusters.current.set(key, new maplibregl.Marker({ element: wrap(node) }).setLngLat(coords).addTo(map))
@@ -207,6 +215,17 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: { 'line-color': ACCENT, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 2, 18, 4], 'line-dasharray': [0.1, 1.8], 'line-opacity': 0.9 },
       })
+      map.addSource('nav', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
+      map.addLayer({
+        id: 'nav-casing', type: 'line', source: 'nav',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#ffffff', 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 6, 18, 13] },
+      })
+      map.addLayer({
+        id: 'nav', type: 'line', source: 'nav',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#2563eb', 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 3.5, 18, 8] },
+      })
       map.on('render', syncMarkers)
       setReady(true)
     })
@@ -225,6 +244,8 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       clusterMap.clear()
       activePin.current?.marker.remove()
       activePin.current = null
+      me.current?.marker.remove()
+      me.current = null
       map.remove()
       mapRef.current = null
       setReady(false)
@@ -306,9 +327,66 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, activeId])
 
+  // The visitor: a blue dot, with a cone showing the way they face.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!ready || !map) return
+    if (!user) {
+      me.current?.marker.remove()
+      me.current = null
+      return
+    }
+    if (!me.current) {
+      const node = document.createElement('div')
+      node.className = 'me'
+      node.setAttribute('role', 'img')
+      node.setAttribute('aria-label', t('youAreHere', lang))
+      node.innerHTML = '<span class="me__cone"></span><span class="me__pulse"></span><span class="me__dot"></span>'
+      me.current = { el: node, marker: new maplibregl.Marker({ element: node }).setLngLat([user.lon, user.lat]).addTo(map) }
+      node.style.zIndex = '20' // always above the statue pins
+    }
+    me.current.marker.setLngLat([user.lon, user.lat])
+    me.current.el.classList.toggle('has-heading', user.heading != null)
+    if (user.heading != null) me.current.el.style.setProperty('--heading', `${user.heading}deg`)
+    if (flyToUser.current) {
+      flyToUser.current = false
+      map.easeTo({ center: [user.lon, user.lat], zoom: Math.max(map.getZoom(), 16.5), padding: padding(), duration: 700 })
+    } else if (follow) {
+      map.easeTo({ center: [user.lon, user.lat], padding: padding(), duration: 600 })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, user, follow])
+
+  // The walking route: drawn, and framed once when it first appears.
+  const framed = useRef<string | null>(null)
+  useEffect(() => {
+    const map = mapRef.current
+    if (!ready || !map) return
+    el.current?.classList.toggle('is-navigating', Boolean(navLine && navLine.length > 1))
+    ;(map.getSource('nav') as GeoJSONSource).setData({
+      type: 'FeatureCollection',
+      features: navLine && navLine.length > 1 ? [{ type: 'Feature', geometry: { type: 'LineString', coordinates: navLine }, properties: {} }] : [],
+    })
+    if (!navLine || navLine.length < 2) {
+      framed.current = null
+      return
+    }
+    const key = `${navLine[0]}|${navLine[navLine.length - 1]}`
+    if (framed.current?.split('|')[1] === key.split('|')[1]) return // a reroute to the same place keeps the view
+    framed.current = key
+    const bounds = new maplibregl.LngLatBounds()
+    navLine.forEach((c) => bounds.extend(c))
+    map.fitBounds(bounds, { padding: padding(), maxZoom: 17.5, duration: 700 })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, navLine])
+
   const locate = () => {
-    const ok = geolocate.current?.trigger()
-    if (ok === false) setLocateError(true)
+    flyToUser.current = true
+    if (user) {
+      flyToUser.current = false
+      mapRef.current?.easeTo({ center: [user.lon, user.lat], zoom: Math.max(mapRef.current.getZoom(), 16.5), padding: padding(), duration: 700 })
+    }
+    onLocate()
   }
 
   return (
@@ -317,10 +395,21 @@ export function MapView({ statues, course, activeId, seen, lang, insets, onSelec
       <button type="button" className="locate" onClick={locate} aria-label={t('locate', lang)} title={t('locate', lang)}>
         <LocateFixed aria-hidden size={20} strokeWidth={2.2} />
       </button>
-      {locateError && (
-        <p className="map-toast" role="status">
-          {t('locateError', lang)}
-        </p>
+      {locateError ? (
+        <div className="map-toast" role="status">
+          <p>{locateError}</p>
+          <button type="button" onClick={() => onDemo(true)}>
+            <MapPin aria-hidden size={16} strokeWidth={2.4} />
+            {t('useDemoLocation', lang)}
+          </button>
+        </div>
+      ) : (
+        demo && (
+          <button type="button" className="demo-pill" onClick={() => onDemo(false)} aria-label={t('demoLocationOff', lang)}>
+            {t('demoLocationOn', lang)}
+            <X aria-hidden size={15} strokeWidth={2.6} />
+          </button>
+        )
       )}
     </div>
   )

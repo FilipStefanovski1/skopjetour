@@ -9,7 +9,7 @@ Every statue in the city on one map, in Macedonian and English, grouped into the
 - City map of **127 statues and monuments** merged from OpenStreetMap, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list
 - All 27 named Art Bridge statues, with photos of the statues themselves
 - Three tabs: **Scan** (home: hold the phone to a statue's NFC plaque; demo scan for tryouts), **Map**, and **Collection** (every statue as a tile, found ones in colour)
-- NFC: plaques hold a `#/s/<statue-id>` link; iPhones open it natively, Android Chrome can also scan in-page (Web NFC). Opening a plaque link collects the statue
+- NFC: plaques hold a `#/tag/<statue-id>` link; iPhones open it natively, Android Chrome can also scan in-page (Web NFC). Opening a plaque link collects the statue
 - **Snap a statue**: on-phone photo recognition with an open model (DINOv2-small via transformers.js) against 318 reference photos of 85 statues, nudged by GPS; the visitor confirms the match
 - **3D**: the Warrior on Horseback (Alexander the Great) as a rotatable 3D model with AR (`<model-viewer>`), opened straight after a scan
 - **Tour-guide voice**: a written tour for the headline statue and the Wikipedia story for the rest, spoken by the phone (Web Speech API, MK or EN)
