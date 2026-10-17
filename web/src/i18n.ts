@@ -1,8 +1,6 @@
 import type { Lang } from './types'
 
 const strings = {
-  markedVisited: { mk: 'Означено како посетено', en: 'Marked as visited' },
-  undo: { mk: 'Врати', en: 'Undo' },
   walkStart: { mk: 'Почеток', en: 'Start' },
   walkFromYou: { mk: 'Почнува од твојата локација при изборот на прошетката.', en: 'Starts from your location when you chose this walk.' },
   walkNeedsLocation: { mk: 'Вклучи „Следи ме“ за прошетката да почне од твојата локација.', en: 'Turn on Follow me to start this walk from your location.' },

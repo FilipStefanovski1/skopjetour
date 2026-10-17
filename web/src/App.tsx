@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { ARRIVAL_DWELL_MS, buildCourse, CITY_CENTRE, metresBetween, updateArrival, type ArrivalState } from './course'
+import { buildCourse, CITY_CENTRE, metresBetween } from './course'
 import { loadStatues, loadThemes } from './data'
 import { t } from './i18n'
 import type { Lang, Statue, Theme } from './types'
@@ -116,17 +116,6 @@ export default function App() {
   const locationError = demoLoc ? null : live.error
   const userPos = fix
   const [routeStart, setRouteStart] = useState<{ id: string; position: LatLon | null } | null>(null)
-  const [visitNotice, setVisitNotice] = useState<{ id: string; key: number } | null>(null)
-  const arrival = useRef<ArrivalState>({ candidateId: null, since: 0, blocked: new Set() })
-  const seenRef = useRef(seen)
-  seenRef.current = seen
-  const markVisited = useCallback((id: string) => {
-    if (seenRef.current.has(id)) return
-    const next = new Set(seenRef.current).add(id)
-    seenRef.current = next
-    setSeen(next)
-    setVisitNotice({ id, key: Date.now() })
-  }, [])
   const [focusSequence, setFocusSequence] = useState(0)
   const selectOnMap = useCallback((id: string) => {
     setFollow(false)
@@ -160,41 +149,18 @@ export default function App() {
   useEffect(() => store('demoLocation', demoLoc), [demoLoc])
 
   useEffect(() => {
-    if (tab !== 'map' || !statues || demoLoc) {
-      arrival.current = { ...arrival.current, candidateId: null, since: 0 }
-      return
-    }
-    const check = () => {
-      const result = updateArrival(statues, userPos, seenRef.current, arrival.current, Date.now())
-      arrival.current = result.state
-      if (result.visit) markVisited(result.visit)
-    }
-    check()
-    // GPS fixes can be infrequent when standing still. Recheck the dwell time,
-    // but updateArrival rejects a fix once it is too old or inaccurate.
-    if (!arrival.current.candidateId) return
-    const timer = window.setTimeout(check, Math.max(0, arrival.current.since + ARRIVAL_DWELL_MS - Date.now()))
-    return () => window.clearTimeout(timer)
-  }, [userPos, statues, seen, tab, demoLoc, markVisited])
-
-  useEffect(() => {
-    if (!visitNotice) return
-    const timer = window.setTimeout(() => setVisitNotice(null), 12000)
-    return () => window.clearTimeout(timer)
-  }, [visitNotice])
-
-  useEffect(() => {
     const hash = writeHash({ tab, route: routeId, statue: openId })
     if (hash !== location.hash) history.replaceState(null, '', hash || location.pathname)
   }, [tab, routeId, openId])
 
   /** A scan (NFC, a plaque's link, a photo or the demo): open the statue and add it to the collection. */
+  // Only these collect a statue; being near it on the map does not.
   const collect = useCallback((id: string) => {
-    markVisited(id)
+    setSeen((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
     setActiveId(id)
     setOpenId(id)
     setJustCollected(id)
-  }, [markVisited])
+  }, [])
 
   // A plaque scanned while the app is already open arrives as a new hash.
   useEffect(() => {
@@ -332,14 +298,6 @@ export default function App() {
   const snap = () => {
     camera.current?.click()
     import('./recognize').then((m) => m.loadRecognizer()).catch(() => {})
-  }
-  const unvisit = (id: string) => {
-    arrival.current.blocked.add(id)
-    const next = new Set(seenRef.current)
-    next.delete(id)
-    seenRef.current = next
-    setSeen(next)
-    setVisitNotice(null)
   }
 
   // Keep the active route chip in view on narrow screens.
@@ -520,12 +478,6 @@ export default function App() {
           if (file) setPhoto(file)
         }}
       />
-      {visitNotice && <div className="visit-toast" key={visitNotice.key}>
-        <Check size={22} aria-hidden />
-        <div role="status"><strong>{t('markedVisited', lang)}</strong><span>{statues?.find((s) => s.id === visitNotice.id) ? statueName(statues.find((s) => s.id === visitNotice.id)!, lang) : t('visited', lang)}</span></div>
-        <button type="button" onClick={() => unvisit(visitNotice.id)}>{t('undo', lang)}</button>
-        <button type="button" aria-label={t('close', lang)} onClick={() => setVisitNotice(null)}><X size={18} /></button>
-      </div>}
 
       {photo && statues && (
         <PhotoMatch

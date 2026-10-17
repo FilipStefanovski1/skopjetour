@@ -101,33 +101,6 @@ export function nextStop(nearby: Statue[], seen: Set<string>, course: Course | n
   return (course ? course.controls : nearby).find((s) => !seen.has(s.id)) ?? null
 }
 
-export interface LocationFix { lat: number; lon: number; accuracy: number; timestamp: number }
-export interface ArrivalState { candidateId: string | null; since: number; blocked: Set<string> }
-export const ARRIVAL_DWELL_MS = 6000
-
-/** Only the closest monument can be collected; standing still must not collect a whole cluster. */
-export function updateArrival(statues: Statue[], fix: LocationFix | null, seen: Set<string>, previous: ArrivalState, now: number): { state: ArrivalState; visit: string | null } {
-  const reset = { ...previous, candidateId: null, since: 0 }
-  if (!fix || ![fix.lat, fix.lon, fix.accuracy, fix.timestamp].every(Number.isFinite) ||
-    fix.accuracy < 0 || fix.accuracy > 25 || now - fix.timestamp > 15000 || fix.timestamp > now + 1000) {
-    return { state: reset, visit: null }
-  }
-  const blocked = new Set([...previous.blocked].filter((id) => {
-    const s = statues.find((s) => s.id === id)
-    return s && metresBetween(fix, s) < 50
-  }))
-  const nearest = nearbyStatues(statues, fix)[0]
-  if (!nearest || metresBetween(fix, nearest) > 25 || seen.has(nearest.id) || blocked.has(nearest.id)) {
-    return { state: { ...reset, blocked }, visit: null }
-  }
-  if (previous.candidateId !== nearest.id) {
-    return { state: { candidateId: nearest.id, since: now, blocked }, visit: null }
-  }
-  if (now - previous.since < ARRIVAL_DWELL_MS) return { state: { ...previous, blocked }, visit: null }
-  blocked.add(nearest.id)
-  return { state: { candidateId: null, since: 0, blocked }, visit: nearest.id }
-}
-
 export function courseCoordinates(course: Course): [number, number][] {
   if (!course.controls.length) return []
   return [
