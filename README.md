@@ -8,6 +8,12 @@ Every statue in the city on one map, in Macedonian and English, grouped into the
 
 - City map of **127 statues and monuments** merged from OpenStreetMap, Wikidata, Wikimedia Commons and English Wikipedia's Art Bridge list
 - All 27 named Art Bridge statues, with photos of the statues themselves
+- Three tabs: **Scan** (home: hold the phone to a statue's NFC plaque; demo scan for tryouts), **Map**, and **Collection** (every statue as a tile, found ones in colour)
+- NFC: plaques hold a `#/s/<statue-id>` link; iPhones open it natively, Android Chrome can also scan in-page (Web NFC). Opening a plaque link collects the statue
+- **Snap a statue**: on-phone photo recognition with an open model (DINOv2-small via transformers.js) against 318 reference photos of 85 statues, nudged by GPS; the visitor confirms the match
+- **3D**: the Warrior on Horseback (Alexander the Great) as a rotatable 3D model with AR (`<model-viewer>`), opened straight after a scan
+- **Tour-guide voice**: a written tour for the headline statue and the Wikipedia story for the rest, spoken by the phone (Web Speech API, MK or EN)
+- **The real person**: portraits from Wikidata beside the statue photo (61 statues)
 - Every statue is a round photo of itself on a calm light map (MapLibre + OpenFreeMap vector tiles); nearby statues group into photo bubbles
 - Swipeable cards along the bottom (photo, who they were, distance or stop number) synced with the map
 - Full-screen story: big photo, one-line description, Wikipedia story in MK or EN, "mark as seen", next/previous (buttons or sideways swipe)
@@ -33,7 +39,12 @@ npm run data          # fetch OSM, Wikidata and Wikipedia; caches raw responses 
 npm run data:offline  # rebuild from the cache only
 ```
 
-The script writes `web/public/statues.geojson` and `web/public/themes.json`. Statues found in several sources are merged by Wikidata ID, by name (Cyrillic and Latin spellings are folded together) within 150 m, or by a reviewed pair in `data/same.json`. Positions estimated from Commons photos are marked `"position": "approximate"`.
+The script writes `web/public/statues.geojson` and `web/public/themes.json`. Then rebuild the photo-recognition index:
+
+```bash
+cd web
+npm run embed   # writes public/embeddings.json from each statue's Commons photos
+``` Statues found in several sources are merged by Wikidata ID, by name (Cyrillic and Latin spellings are folded together) within 150 m, or by a reviewed pair in `data/same.json`. Positions estimated from Commons photos are marked `"position": "approximate"`.
 
 ### After the Art Bridge walk
 

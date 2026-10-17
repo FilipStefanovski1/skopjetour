@@ -52,16 +52,19 @@ export async function loadStory(s: Statue, lang: Lang): Promise<Story | null> {
   } catch {
     // no generated content yet
   }
-  const title = lang === 'en' ? s.wiki_en : s.wiki_mk
-  if (!title) return null
-  try {
-    const res = await fetch(
-      `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, '_'))}`,
-    )
-    if (!res.ok) return null
-    const summary: { extract?: string } = await res.json()
-    return summary.extract ? { text: summary.extract, source: 'wikipedia' } : null
-  } catch {
-    return null
+  // The visitor's language first; if that Wikipedia has no article, the other one.
+  const other: Lang = lang === 'en' ? 'mk' : 'en'
+  for (const l of [lang, other]) {
+    const title = l === 'en' ? s.wiki_en : s.wiki_mk
+    if (!title) continue
+    try {
+      const res = await fetch(`https://${l}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, '_'))}`)
+      if (!res.ok) continue
+      const summary: { extract?: string } = await res.json()
+      if (summary.extract) return { text: summary.extract, source: 'wikipedia' }
+    } catch {
+      // offline or blocked: try the other language, then give up
+    }
   }
+  return null
 }

@@ -6,7 +6,8 @@
   },
   "wiki": {
    "mk": "Даме Крапчев"
-  }
+  },
+  "image": "Dane Krapcev.JPG"
  },
  "Q12288012": {
   "desc": {
@@ -16,7 +17,8 @@
   "wiki": {
    "en": "Nevena Georgieva",
    "mk": "Невена Георгиева-Дуња"
-  }
+  },
+  "image": "Nevena Georgieva - Dunja.jpg"
  },
  "Q12288547": {
   "desc": {
@@ -24,7 +26,8 @@
   },
   "wiki": {
    "mk": "Никола Петров Русински"
-  }
+  },
+  "image": "Nikola Rusinov IMARO.jpg"
  },
  "Q12289741": {
   "desc": {
@@ -32,14 +35,16 @@
   },
   "wiki": {
    "mk": "Споменик на Скендербег (Скопје)"
-  }
+  },
+  "image": "Споменик Скендербег Скопје.jpg"
  },
  "Q12296806": {
   "desc": {},
   "wiki": {
    "en": "Trajko Prokopiev",
    "mk": "Трајко Прокопиев"
-  }
+  },
+  "image": "Trajko Prokopiev na Mostot na umetnosta (2).JPG"
  },
  "Q1284754": {
   "desc": {
@@ -49,7 +54,8 @@
   "wiki": {
    "en": "Miladinov brothers",
    "mk": "Браќа Миладиновци"
-  }
+  },
+  "image": null
  },
  "Q1289578": {
   "desc": {
@@ -59,7 +65,8 @@
   "wiki": {
    "en": "Hristijan Todorovski Karpoš",
    "mk": "Христијан Тодоровски-Карпош"
-  }
+  },
+  "image": "Hristijan Todorovski.jpg"
  },
  "Q12905165": {
   "desc": {
@@ -68,7 +75,8 @@
   },
   "wiki": {
    "mk": "Бесконечна циркулација (скулптура во Скопје)"
-  }
+  },
+  "image": "Скопје-Skulptura.jpg"
  },
  "Q12906239": {
   "desc": {
@@ -77,7 +85,8 @@
   },
   "wiki": {
    "mk": "Дрво (скулптура во Скопје)"
-  }
+  },
+  "image": "Skopje $ (61).JPG"
  },
  "Q12908768": {
   "desc": {
@@ -86,7 +95,8 @@
   },
   "wiki": {
    "mk": "Музиканти (скулптура во Скопје)"
-  }
+  },
+  "image": "Vesela družina - panoramio.jpg"
  },
  "Q12909479": {
   "desc": {
@@ -95,7 +105,8 @@
   },
   "wiki": {
    "mk": "Пајонска свештеничка (скулптура)"
-  }
+  },
+  "image": "Пајонска свештеничка.jpg"
  },
  "Q12909806": {
   "desc": {
@@ -104,7 +115,8 @@
   },
   "wiki": {
    "mk": "Просјак (скулптура во Скопје)"
-  }
+  },
+  "image": "Skopje prosjačko blještavilo.jpg"
  },
  "Q12909988": {
   "desc": {
@@ -113,7 +125,8 @@
   },
   "wiki": {
    "mk": "Риба (скулптура во Скопје)"
-  }
+  },
+  "image": "Riba na ulica Makedonija.JPG"
  },
  "Q12910338": {
   "desc": {
@@ -122,7 +135,8 @@
   },
   "wiki": {
    "mk": "Споменик „Сила, Слава и Победа“ - Скопје"
-  }
+  },
+  "image": "Skopje kale spomenik.jpg"
  },
  "Q12910613": {
   "desc": {
@@ -131,7 +145,8 @@
   },
   "wiki": {
    "mk": "Споменик на Ѓорѓија Пулевски (Скопје)"
-  }
+  },
+  "image": "Monument of Ǵorǵija Pulevski in Skopje, Macedonia.JPG"
  },
  "Q12910616": {
   "desc": {
@@ -140,7 +155,8 @@
   },
   "wiki": {
    "mk": "Споменик на Ѓорче Петров (Скопје-Ѓорче Петров)"
-  }
+  },
+  "image": "Споменик Ѓорче Петров 2.jpg"
  },
  "Q12910626": {
   "desc": {
@@ -148,7 +164,8 @@
   },
   "wiki": {
    "mk": "Споменик на Јустинијан I"
-  }
+  },
+  "image": "Monument of Iustinianus I (Skopje).jpg"
  },
  "Q12910627": {
   "desc": {
@@ -157,7 +174,8 @@
   },
   "wiki": {
    "mk": "Споменик на Гемиџиите (Скопје)"
-  }
+  },
+  "image": null
  },
  "Q12910628": {
   "desc": {
@@ -165,7 +183,8 @@
   },
   "wiki": {
    "mk": "Споменик на Бранителите (Скопје)"
-  }
+  },
+  "image": "Monument of the Defenders of Macedonia.JPG"
  },
  "Q12910630": {
   "desc": {
@@ -174,13 +193,15 @@
   },
   "wiki": {
    "mk": "Споменик на Питу Гули (Скопје)"
-  }
+  },
+  "image": "Споменик - Питу Гули.JPG"
  },
  "Q12910631": {
   "desc": {},
   "wiki": {
    "mk": "Споменик на Цар Самоил (Скопје)"
-  }
+  },
+  "image": null
  },
  "Q12910632": {
   "desc": {
@@ -189,7 +210,8 @@
   },
   "wiki": {
    "mk": "Споменик на г.г. Доситеј (Скопје)"
-  }
+  },
+  "image": "Споменик - Господин Господин Доситеј 1.JPG"
  },
  "Q12912155": {
   "desc": {
@@ -198,7 +220,8 @@
   },
   "wiki": {
    "mk": "Шмизла (скулптура во Скопје)"
-  }
+  },
+  "image": "\"Smizla\", Makedonija Street.jpg"
  },
  "Q130650": {
   "desc": {
@@ -208,7 +231,8 @@
   "wiki": {
    "en": "Philip II of Macedon",
    "mk": "Филип II Македонски"
-  }
+  },
+  "image": "Filip II Macedonia.jpg"
  },
  "Q134958": {
   "desc": {
@@ -217,7 +241,8 @@
   "wiki": {
    "en": "Taras Shevchenko",
    "mk": "Тарас Шевченко"
-  }
+  },
+  "image": "Taras Shevchenko selfportrait oil 1840.jpg"
  },
  "Q1363141": {
   "desc": {
@@ -227,7 +252,8 @@
   "wiki": {
    "en": "Grigor Parlichev",
    "mk": "Григор Прличев"
-  }
+  },
+  "image": "Grigor Parlichev cropped.jpg"
  },
  "Q1388772": {
   "desc": {
@@ -236,7 +262,8 @@
   "wiki": {
    "en": "Dimitar Avramovski-Pandilov",
    "mk": "Димитар Пандилов"
-  }
+  },
+  "image": "Dimitar Pandilov na Mostot na umetnosta (2).JPG"
  },
  "Q1396875": {
   "desc": {
@@ -246,7 +273,8 @@
   "wiki": {
    "en": "Nikola Karev",
    "mk": "Никола Карев"
-  }
+  },
+  "image": "Nikola Karev.jpg"
  },
  "Q139770561": {
   "desc": {
@@ -255,7 +283,8 @@
   },
   "wiki": {
    "mk": "Споменик на Павел Шатев"
-  }
+  },
+  "image": "Споменик на Павел Шатев.jpg"
  },
  "Q139784985": {
   "desc": {
@@ -264,7 +293,8 @@
   },
   "wiki": {
    "mk": "Споменик на Христо Татарчев"
-  }
+  },
+  "image": "Споменик на Христо Татарчев.jpg"
  },
  "Q139785043": {
   "desc": {
@@ -273,14 +303,16 @@
   },
   "wiki": {
    "mk": "Споменик на Христо Узунов"
-  }
+  },
+  "image": "Hristo Uzunov.JPG"
  },
  "Q141204382": {
   "desc": {
    "en": "Active mosque in the Old Bazaar in Skopje",
    "mk": "Активна џамија во Старата скопска чаршија"
   },
-  "wiki": {}
+  "wiki": {},
+  "image": null
  },
  "Q15241217": {
   "desc": {
@@ -289,7 +321,8 @@
   },
   "wiki": {
    "mk": "Споменик „Ослободители на Скопје“"
-  }
+  },
+  "image": "Monument of Skopje's Liberators 5.JPG"
  },
  "Q158504": {
   "desc": {
@@ -299,13 +332,15 @@
   "wiki": {
    "en": "Clement of Ohrid",
    "mk": "Свети Климент Охридски"
-  }
+  },
+  "image": "Saint Clement of Ohrid (icon, 13th-14th century).jpg"
  },
  "Q16087907": {
   "desc": {},
   "wiki": {
    "mk": "Споменик на Президиумот на АСНОМ"
-  }
+  },
+  "image": null
  },
  "Q1890632": {
   "desc": {
@@ -315,7 +350,8 @@
   "wiki": {
    "en": "Millennium Cross",
    "mk": "Милениумски крст"
-  }
+  },
+  "image": "Skopje Millennium Cross 1.jpg"
  },
  "Q205634": {
   "desc": {
@@ -324,7 +360,8 @@
   "wiki": {
    "en": "Slavko Janevski",
    "mk": "Славко Јаневски"
-  }
+  },
+  "image": "Slavko Janevski - Žena Park (2).JPG"
  },
  "Q20566163": {
   "desc": {
@@ -332,7 +369,8 @@
   },
   "wiki": {
    "mk": "Споменик на Даме Груев (плоштад Македонија)"
-  }
+  },
+  "image": "Gruev, spomenik u Skoplju.JPG"
  },
  "Q20569889": {
   "desc": {
@@ -340,7 +378,8 @@
   },
   "wiki": {
    "mk": "Споменик на Гоце Делчев (плоштад Македонија)"
-  }
+  },
+  "image": "Goce Delčev, spomenik u Skoplju.JPG"
  },
  "Q20570659": {
   "desc": {
@@ -349,7 +388,8 @@
   },
   "wiki": {
    "mk": "Споменик на Борис Сарафов (Скопје)"
-  }
+  },
+  "image": "Spomenik na Boris Sarafov.JPG"
  },
  "Q20570662": {
   "desc": {
@@ -358,7 +398,8 @@
   },
   "wiki": {
    "mk": "Споменик на Гоце Делчев (Градски парк, Скопје)"
-  }
+  },
+  "image": "Delcevstatue-cityparkskopje.JPG"
  },
  "Q20570666": {
   "desc": {
@@ -367,19 +408,22 @@
   },
   "wiki": {
    "mk": "Споменик на Методија Андонов Ченто (Скопје)"
-  }
+  },
+  "image": null
  },
  "Q20570668": {
   "desc": {},
   "wiki": {
    "mk": "Споменик на основачите на ВМРО"
-  }
+  },
+  "image": "Споменик - Основачи на ВМРО.JPG"
  },
  "Q20570672": {
   "desc": {},
   "wiki": {
    "mk": "Споменик на Св. Климент и Наум (Скопје)"
-  }
+  },
+  "image": "SK 20170809 093235 (36321381811).jpg"
  },
  "Q20570676": {
   "desc": {
@@ -388,19 +432,22 @@
   },
   "wiki": {
    "mk": "Споменик на Тешкото (Скопје)"
-  }
+  },
+  "image": "Споменик - Тешкото.JPG"
  },
  "Q20570678": {
   "desc": {},
   "wiki": {
    "mk": "Споменик на Филип II Македонски (Автокоманда)"
-  }
+  },
+  "image": "Споменик на Филип (Скопје - Автокоманда).jpg"
  },
  "Q20966633": {
   "desc": {},
   "wiki": {
    "mk": "Роберт Гајдик"
-  }
+  },
+  "image": "Robert-Gajdik.jpg"
  },
  "Q220645": {
   "desc": {
@@ -410,7 +457,8 @@
   "wiki": {
    "en": "Toše Proeski",
    "mk": "Тоше Проески"
-  }
+  },
+  "image": "Toseproeskiskopje.jpg"
  },
  "Q223134": {
   "desc": {
@@ -420,7 +468,8 @@
   "wiki": {
    "en": "Olympias",
    "mk": "Олимпијада (кралица)"
-  }
+  },
+  "image": "Coin olympias mus theski.JPG"
  },
  "Q2349366": {
   "desc": {
@@ -429,7 +478,8 @@
   "wiki": {
    "en": "Vera Jocić",
    "mk": "Вера Јоциќ"
-  }
+  },
+  "image": "Narodni heroj Vera Jocić.jpg"
  },
  "Q239925": {
   "desc": {
@@ -439,7 +489,8 @@
   "wiki": {
    "en": "Cyril and Methodius",
    "mk": "Свети Кирил и Методиј"
-  }
+  },
+  "image": "Cyril and Methodius.jpg"
  },
  "Q2466136": {
   "desc": {
@@ -449,7 +500,8 @@
   "wiki": {
    "en": "Todor Aleksandrov",
    "mk": "Тодор Александров"
-  }
+  },
+  "image": "BASA-10K-3-714-3(1)-Todor Alexandrov, Nice.jpg"
  },
  "Q2497361": {
   "desc": {
@@ -459,7 +511,8 @@
   "wiki": {
    "en": "Gyorche Petrov",
    "mk": "Ѓорче Петров"
-  }
+  },
+  "image": "Georche Pertov by Dimitar Karastoyanov.jpg"
  },
  "Q2586864": {
   "desc": {
@@ -469,7 +522,8 @@
   "wiki": {
    "en": "Krste Misirkov",
    "mk": "Крсте Петков Мисирков"
-  }
+  },
+  "image": "Krste P.Misirkov- portret.PNG"
  },
  "Q259539": {
   "desc": {
@@ -479,7 +533,8 @@
   "wiki": {
    "en": "Dositej II of Ohrid and Macedonia",
    "mk": "Архиепископ Охридски и Македонски г.г. Доситеј II"
-  }
+  },
+  "image": "Dositheus II crop.JPG"
  },
  "Q2625112": {
   "desc": {
@@ -489,7 +544,8 @@
   "wiki": {
    "en": "Metodija Andonov-Čento",
    "mk": "Методија Андонов-Ченто"
-  }
+  },
+  "image": "Metodija Andonov.jpg"
  },
  "Q2662030": {
   "desc": {
@@ -498,7 +554,8 @@
   "wiki": {
    "en": "Živko Čingo",
    "mk": "Живко Чинго"
-  }
+  },
+  "image": "Živko Čingo na Mostot na umetnosta (1).JPG"
  },
  "Q270740": {
   "desc": {
@@ -508,7 +565,8 @@
   "wiki": {
    "en": "Samuel of Bulgaria",
    "mk": "Цар Самоил"
-  }
+  },
+  "image": "Samuil of bolgaria reconstruction.jpg"
  },
  "Q3028100": {
   "desc": {
@@ -517,7 +575,8 @@
   "wiki": {
    "en": "Dimitar Kondovski",
    "mk": "Димитар Кондовски"
-  }
+  },
+  "image": "Димитар Кондовски.jpg"
  },
  "Q3028173": {
   "desc": {
@@ -526,7 +585,8 @@
   "wiki": {
    "en": "Dimitrija Čupovski",
    "mk": "Димитрија Чуповски"
-  }
+  },
+  "image": "Димитрија Чуповски.jpg"
  },
  "Q30547": {
   "desc": {
@@ -535,7 +595,8 @@
   "wiki": {
    "en": "Mother Teresa",
    "mk": "Мајка Тереза"
-  }
+  },
+  "image": "MotherTeresa 090.jpg"
  },
  "Q3067865": {
   "desc": {
@@ -545,7 +606,8 @@
   "wiki": {
    "en": "Yordan Hadzhikonstantinov-Dzhinot",
    "mk": "Јордан Хаџи Константинов-Џинот"
-  }
+  },
+  "image": "Dzinot.jpg"
  },
  "Q3078453": {
   "desc": {
@@ -555,7 +617,8 @@
   "wiki": {
    "en": "Porta Macedonia",
    "mk": "Порта Македонија"
-  }
+  },
+  "image": "Porta Macedonia, Skopie, Macedonia del Norte, 2014-04-16, DD 105.jpg"
  },
  "Q3081365": {
   "desc": {
@@ -565,7 +628,8 @@
   "wiki": {
    "en": "List of World War II monuments and memorials in North Macedonia",
    "mk": "Список на споменици на НОБ во Македонија"
-  }
+  },
+  "image": null
  },
  "Q3103765": {
   "desc": {
@@ -575,7 +639,8 @@
   "wiki": {
    "en": "Georgi Pulevski",
    "mk": "Ѓорѓија Пулевски"
-  }
+  },
+  "image": "Georgi Pulevski.jpg"
  },
  "Q3133559": {
   "desc": {
@@ -585,7 +650,8 @@
   "wiki": {
    "en": "Petar Mazev",
    "mk": "Петар Мазев"
-  }
+  },
+  "image": "Петар Мазев.jpg"
  },
  "Q3393353": {
   "desc": {
@@ -595,7 +661,8 @@
   "wiki": {
    "en": "Pitu Guli",
    "mk": "Питу Гули"
-  }
+  },
+  "image": "PitoGuli.jpg"
  },
  "Q3396549": {
   "desc": {
@@ -605,7 +672,8 @@
   "wiki": {
    "en": "Dimitar Popgeorgiev",
    "mk": "Димитар Поп-Георгиев Беровски"
-  }
+  },
+  "image": "Dimitar-Popgeorgiev-portrait.jpg"
  },
  "Q3396878": {
   "desc": {
@@ -615,7 +683,8 @@
   "wiki": {
    "en": "Vasil Chekalarov",
    "mk": "Васил Чакаларов"
-  }
+  },
+  "image": "Vasil Chakalarov.jpg"
  },
  "Q3397086": {
   "desc": {
@@ -624,7 +693,8 @@
   "wiki": {
    "en": "Jordan Nikolov Orce",
    "mk": "Орце Николов"
-  }
+  },
+  "image": "Jordan Nikolov Orce.jpg"
  },
  "Q3397220": {
   "desc": {
@@ -634,7 +704,8 @@
   "wiki": {
    "en": "Kuzman Josifovski Pitu",
    "mk": "Кузман Јосифоски-Питу"
-  }
+  },
+  "image": "Kuzman Josifoski.jpg"
  },
  "Q3398805": {
   "desc": {
@@ -644,7 +715,8 @@
   "wiki": {
    "en": "Petre Prličko",
    "mk": "Петре Прличко"
-  }
+  },
+  "image": "Petre Prličko na Mostot na umetnosta (1).JPG"
  },
  "Q3399128": {
   "desc": {
@@ -653,7 +725,8 @@
   "wiki": {
    "en": "Todor Skalovski",
    "mk": "Тодор Скаловски"
-  }
+  },
+  "image": "Todor Skalovski na Mostot na umetnosta (1).JPG"
  },
  "Q3401191": {
   "desc": {
@@ -663,7 +736,8 @@
   "wiki": {
    "en": "Petar Chaulev",
    "mk": "Петар Чаулев"
-  }
+  },
+  "image": "Петър Чауев от Димитър Карастоянов в 1907.jpg"
  },
  "Q3403199": {
   "desc": {
@@ -673,7 +747,8 @@
   "wiki": {
    "en": "Vasil Iljoski",
    "mk": "Васил Иљоски"
-  }
+  },
+  "image": "Vasil Iljoski na Mostot na umetnosta (2).JPG"
  },
  "Q3407157": {
   "desc": {
@@ -683,7 +758,8 @@
   "wiki": {
    "en": "Pavel Shatev",
    "mk": "Павел Шатев"
-  }
+  },
+  "image": "Pavel Shatev.jpg"
  },
  "Q3407165": {
   "desc": {
@@ -693,7 +769,8 @@
   "wiki": {
    "en": "Hristo Uzunov",
    "mk": "Христо Узунов"
-  }
+  },
+  "image": "Hristo uzunov.jpg"
  },
  "Q3408205": {
   "desc": {
@@ -702,7 +779,8 @@
   "wiki": {
    "en": "Lazar Ličenoski",
    "mk": "Лазар Личеноски"
-  }
+  },
+  "image": "Lazar Ličenoski na Mostot na umetnosta (2).JPG"
  },
  "Q3409676": {
   "desc": {
@@ -712,7 +790,8 @@
   "wiki": {
    "en": "Voydan Popgeorgiev – Chernodrinski",
    "mk": "Војдан Чернодрински"
-  }
+  },
+  "image": "Войдан Чернодрински.jpg"
  },
  "Q34100": {
   "desc": {
@@ -721,7 +800,8 @@
   },
   "wiki": {
    "mk": "Васил Антевски - Дрен"
-  }
+  },
+  "image": "Dren-bista.JPG"
  },
  "Q342010": {
   "desc": {
@@ -730,7 +810,8 @@
   "wiki": {
    "en": "Aco Šopov",
    "mk": "Ацо Шопов"
-  }
+  },
+  "image": "Ацо Шопов 6.JPG"
  },
  "Q3497603": {
   "desc": {
@@ -739,7 +820,8 @@
   "wiki": {
    "en": "Warrior on Horseback",
    "mk": "Воин на коњ (Скопје)"
-  }
+  },
+  "image": "Skopje - Warrior on a Horse (9451253725).jpg"
  },
  "Q3541070": {
   "desc": {
@@ -749,7 +831,8 @@
   "wiki": {
    "en": "Pere Toshev",
    "mk": "Пере Тошев"
-  }
+  },
+  "image": "Pere toshev Almanah.JPG"
  },
  "Q360160": {
   "desc": {
@@ -759,11 +842,13 @@
   "wiki": {
    "en": "Gotse Delchev",
    "mk": "Гоце Делчев"
-  }
+  },
+  "image": "Gotze.jpeg"
  },
  "Q40107334": {
   "desc": {},
-  "wiki": {}
+  "wiki": {},
+  "image": "Mustafa Pasina Dzamija-Skopje 1 (11).JPG"
  },
  "Q41866": {
   "desc": {
@@ -772,7 +857,8 @@
   "wiki": {
    "en": "Justinian I",
    "mk": "Јустинијан I"
-  }
+  },
+  "image": "Mosaic of Justinianus I - Basilica San Vitale (Ravenna).jpg"
  },
  "Q4680067": {
   "desc": {
@@ -782,7 +868,8 @@
   "wiki": {
    "en": "Adam of Macedonia",
    "mk": "Адам од Македонија"
-  }
+  },
+  "image": null
  },
  "Q472110": {
   "desc": {
@@ -792,19 +879,22 @@
   "wiki": {
    "en": "Blaže Koneski",
    "mk": "Блаже Конески"
-  }
+  },
+  "image": "Blaže Koneski 1968.jpg"
  },
  "Q61119880": {
   "desc": {},
   "wiki": {
    "mk": "Споменик на жената-борец (Скопје)"
-  }
+  },
+  "image": "Споменик во Жена Парк - Скопје 1.JPG"
  },
  "Q61119888": {
   "desc": {},
   "wiki": {
    "mk": "Спомен-куќа - музеј на НОВ и револуција"
-  }
+  },
+  "image": "Spomenik na revolucijata Skopje.jpg"
  },
  "Q674532": {
   "desc": {
@@ -814,7 +904,8 @@
   "wiki": {
    "en": "Boris Sarafov",
    "mk": "Борис Сарафов"
-  }
+  },
+  "image": "Boris Sarafov.jpg"
  },
  "Q7171683": {
   "desc": {
@@ -822,7 +913,8 @@
   },
   "wiki": {
    "en": "Petar Bogdanov"
-  }
+  },
+  "image": null
  },
  "Q7327": {
   "desc": {
@@ -831,7 +923,8 @@
   "wiki": {
    "en": "Yuri Gagarin",
    "mk": "Јуриј Гагарин"
-  }
+  },
+  "image": "Yuri Gagarin portrait.png"
  },
  "Q785607": {
   "desc": {
@@ -841,7 +934,8 @@
   "wiki": {
    "en": "Hristo Tatarchev",
    "mk": "Христо Татарчев"
-  }
+  },
+  "image": "Hristo Tatarčev.jpg"
  },
  "Q797666": {
   "desc": {
@@ -851,13 +945,15 @@
   "wiki": {
    "en": "Kočo Racin",
    "mk": "Кочо Рацин"
-  }
+  },
+  "image": "Kočo Racin.jpg"
  },
  "Q83365913": {
   "desc": {},
   "wiki": {
    "mk": "Француски воени гробишта (Скопје)"
-  }
+  },
+  "image": "Cimetiere Militaire Franceis (28409355437).jpg"
  },
  "Q8409": {
   "desc": {
@@ -867,7 +963,8 @@
   "wiki": {
    "en": "Alexander the Great",
    "mk": "Александар III Македонски"
-  }
+  },
+  "image": "Alexander the Great mosaic (cropped).jpg"
  },
  "Q9161": {
   "desc": {
@@ -877,7 +974,8 @@
   "wiki": {
    "en": "Josip Broz Tito",
    "mk": "Јосип Броз-Тито"
-  }
+  },
+  "image": "Josip Broz Tito uniform portrait.jpg"
  },
  "Q924865": {
   "desc": {
@@ -887,11 +985,13 @@
   "wiki": {
    "en": "Nikola Martinoski",
    "mk": "Никола Мартиноски"
-  }
+  },
+  "image": "Nikola Martinoski 1967.jpg"
  },
  "Q9377389": {
   "desc": {},
-  "wiki": {}
+  "wiki": {},
+  "image": "Warrior Monument Skopje.jpg"
  },
  "Q956441": {
   "desc": {
@@ -901,7 +1001,8 @@
   "wiki": {
    "en": "Nikola Vaptsarov",
    "mk": "Никола Вапцаров"
-  }
+  },
+  "image": "Vapcarov Varna.jpg"
  },
  "Q983638": {
   "desc": {
@@ -911,7 +1012,8 @@
   "wiki": {
    "en": "Yane Sandanski",
    "mk": "Јане Сандански"
-  }
+  },
+  "image": "Jane Sandanski.jpg"
  },
  "Q983917": {
   "desc": {
@@ -921,6 +1023,7 @@
   "wiki": {
    "en": "Dame Gruev",
    "mk": "Даме Груев"
-  }
+  },
+  "image": "Dame Gruev by Dimitar Karastoyanov.jpg"
  }
 }

@@ -20,6 +20,7 @@ export interface StatueProps {
   sources: string[]
   desc_mk?: string | null
   desc_en?: string | null
+  person_image?: string | null
 }
 
 export interface Statue extends StatueProps {

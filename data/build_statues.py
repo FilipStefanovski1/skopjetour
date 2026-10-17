@@ -186,6 +186,8 @@ def fetch_commons():
                         gcmlimit=40, prop="coordinates", coprimary="all", colimit="max")
         pages = sorted(files.get("query", {}).get("pages", {}).values(), key=lambda p: p["title"])
         r["image"] = pages[0]["title"] if pages else None
+        # A few more views of the statue: reference photos for camera recognition.
+        r["images"] = [p["title"] for p in pages if re.search(r"\.(jpe?g|png)$", p["title"], re.I)][:4]
         if r["lat"] is None:
             pts = [(c["lat"], c["lon"]) for p in pages for c in p.get("coordinates", [])]
             if pts:
@@ -261,7 +263,7 @@ def commons_file(value):
 
 
 def wiki_title(url):
-    return url.rsplit("/wiki/", 1)[-1].replace("_", " ") if url else None
+    return urllib.parse.unquote(url.rsplit("/wiki/", 1)[-1]).replace("_", " ") if url else None
 
 
 def qid(url_or_id):
@@ -271,7 +273,7 @@ def qid(url_or_id):
 def blank(source):
     return {"id": None, "name_mk": None, "name_en": None, "subject_qid": None, "subject_mk": None,
             "subject_en": None, "statue_qid": None, "image": None, "wiki_mk": None, "wiki_en": None,
-            "group": None, "order": None, "side": None, "position": "mapped", "themes": [], "aliases": [],
+            "group": None, "order": None, "side": None, "position": "mapped", "themes": [], "aliases": [], "photos": [],
             "sources": [source]}
 
 
@@ -294,6 +296,7 @@ def from_osm(osm):
                  name_mk=tags.get("name:mk") or tags["name"], name_en=tags.get("name:en"),
                  statue_qid=tags.get("wikidata"), subject_qid=tags.get("subject:wikidata"),
                  image=commons_file(tags.get("wikimedia_commons") or tags.get("image")))
+        s["photos"] = [s["image"]] if s["image"] else []
         statues.append(s)
     return statues, bridge
 
@@ -309,6 +312,7 @@ def from_wikidata(wd):
             s.update(id=f"wd-{q}", statue_qid=q, lat=float(v["lat"]), lon=float(v["lon"]),
                      name_mk=v.get("mk"), name_en=v.get("en"), image=commons_file(v.get("img")),
                      wiki_mk=wiki_title(v.get("wmk")), wiki_en=wiki_title(v.get("wen")))
+            s["photos"] = [s["image"]] if s["image"] else []
             items[q] = s
         if v.get("depicts") and not s["subject_qid"]:
             s.update(subject_qid=qid(v["depicts"]), subject_mk=v.get("depMk"), subject_en=v.get("depEn"))
@@ -387,6 +391,7 @@ def from_commons(records):
                  statue_qid=r["qid"], image=commons_file(r["image"]),
                  group="art-bridge" if on_bridge else None,
                  position="mapped" if r["located_by"] == "category" else "approximate")
+        s["photos"] = [f for f in (commons_file(x) for x in r.get("images", [])) if f]
         statues.append(s)
     return statues
 
@@ -437,6 +442,8 @@ def merge(base, extra):
     for key, value in extra.items():
         if key == "aliases":
             base["aliases"] = sorted(set(base["aliases"]) | set(value))
+        elif key == "photos":
+            base["photos"] = list(dict.fromkeys(base["photos"] + value))[:6]
         elif key == "sources":
             base["sources"] = sorted(set(base["sources"]) | set(value))
         elif key in ("lat", "lon", "id", "position") and base["lat"] is not None:
@@ -482,12 +489,14 @@ def fetch_entities(qids):
     for i in range(0, len(qids), 50):
         ents = curl(["-G", "https://www.wikidata.org/w/api.php", "--data-urlencode", "action=wbgetentities",
                      "--data-urlencode", "ids=" + "|".join(qids[i:i + 50]),
-                     "--data-urlencode", "props=descriptions|sitelinks", "--data-urlencode", "languages=mk|en",
+                     "--data-urlencode", "props=descriptions|sitelinks|claims", "--data-urlencode", "languages=mk|en",
                      "--data-urlencode", "sitefilter=mkwiki|enwiki", "--data-urlencode", "format=json"])["entities"]
         for q, e in ents.items():
+            p18 = e.get("claims", {}).get("P18", [])
             out[q] = {
                 "desc": {l: v["value"] for l, v in e.get("descriptions", {}).items()},
                 "wiki": {k[:2]: v["title"] for k, v in e.get("sitelinks", {}).items()},
+                "image": p18[0]["mainsnak"].get("datavalue", {}).get("value") if p18 else None,
             }
     return out
 
@@ -554,6 +563,9 @@ def enrich(statues, offline):
     ents = cached("entities", lambda: fetch_entities(qids), offline)
     for s in statues:
         subject, statue = ents.get(s["subject_qid"] or "", {}), ents.get(s["statue_qid"] or "", {})
+        # A portrait of the person themselves, when it isn't just another photo of this statue.
+        portrait = commons_file(subject.get("image"))
+        s["person_image"] = portrait if portrait and portrait != s["image"] and s["subject_qid"] != s["statue_qid"] else None
         for lang in ("mk", "en"):
             s[f"desc_{lang}"] = subject.get("desc", {}).get(lang) or statue.get("desc", {}).get(lang)
             if not s[f"wiki_{lang}"]:
